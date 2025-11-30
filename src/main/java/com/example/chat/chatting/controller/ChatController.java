@@ -19,7 +19,7 @@ public class ChatController {
 
     @GetMapping("/main")
     public String index(){
-        return "/index";
+        return "chat/chatList";
     }
 
     @GetMapping("/chatList")

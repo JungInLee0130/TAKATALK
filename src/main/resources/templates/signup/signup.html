@@ -5,26 +5,44 @@
   <title>Title</title>
 </head>
 <style>
+  body {
+    width: auto;
+    height: auto;
+    margin: 0;
+  }
   .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-image: linear-gradient(to right,#18004D,#1E55DC);
+    height: 100%;
+  }
+  .login-logo {
+    position: fixed;
+    top:30px;
+    left:30px;
+  }
+  .login-logo img {
+    object-fit: none;
   }
   .signup {
     padding: 0 32px;
     border: 1px solid black;
+    border-radius: 10px;
     width: 480px;
-    height: 100%;
+    background-color: #393A41;
   }
   .signup h2{
     text-align: center;
+    color: #FFFFFF;
   }
 
   .signup label {
     display: block;
     margin-bottom: 5px;
     font-size: 16px;
+    color: #FFFFFF;
   }
 
   .signup input {
@@ -35,37 +53,40 @@
     padding: 1px 10px;
     margin-bottom: 10px;
     font-size: 16px;
-  }
-
-  .signup .signup-checkbox {
-    display: flex;
-    flex-display: row;
-    align-items: center;
-  }
-  .signup .signup-checkbox input {
-    width: 24px;
-    height: 24px;
-  }
-
-  .signup .signup-checkbox p {
-
+    background-color: #2E2E34;
+    color:#A5A6AC;
   }
 
   .signup .signup-button-wrapper {
-    width: 384px;
-    height: 40px;
-    padding: 7px;
+    height: 45px;
+    margin-bottom: 10px;
   }
 
   .signup .signup-button-wrapper button{
-    width: 384px;
-    height: 30px;
+    float: left;
+    width: 100%;
+    -ms-box-sizing: border-box; /* ie8 */
+    -khtml-box-sizing: border-box; /* konqueror */
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+    box-sizing: border-box; /* css3 rec */
+    height: 45px;
+    padding: 7px 15px;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin: 1px 0;
     font-size: 16px;
+    background-color: #5865F2;
+    color: white;
   }
 
   .signup .signup-birthday {
     display: flex;
     flex-direction: column;
+    color: #FFFFFF;
+    margin-bottom: 10px;
   }
 
   .info#info__birth {
@@ -80,6 +101,8 @@
     font-size: 16px;
     border: 1px solid black;
     border-radius: 7px;
+    background-color: #2E2E34;
+    color: #A5A6AC;
   }
   .info#info__birth select:first-child{
     margin-left: 0px;
@@ -98,6 +121,34 @@
     border-radius: 6px;
   }
 
+  .signup .signup-checkbox {
+    display: flex;
+    flex-display: row;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  .signup .signup-checkbox input {
+    width: 24px;
+    height: 24px;
+  }
+  .signup .signup-checkbox p {
+    margin: 0;
+    color: #A5A6AC;
+  }
+
+  .signup .signup-agree {
+    color: #A5A6AC;
+    margin-bottom: 15px;
+  }
+  .signup .signup-agree p{
+    margin: 0;
+  }
+
+  .signup .signup-already a{
+    color: #5865F2;
+    text-decoration: none;
+  }
+
   .field-error {
     margin: 10px 0px;
     color: #E88985;
@@ -105,6 +156,9 @@
 </style>
 <body>
 <div class="container">
+  <div class="login-logo">
+    <img th:src="@{/images/discord-logo.svg}" class="discord-logo">
+  </div>
   <div class="signup">
     <div>
       <h2>계정만들기</h2>
@@ -155,14 +209,14 @@
         <input type="checkbox">
         <p>(선택사항)Discord 소식, 도움말, 특별할인을 이메일로 보내주세요. 언제든지 취소하실 수 있어요.</p>
       </div>
-      <div>
-        <p>"계정 만들기"를 클릭하면 Discord의 이용약관에 동의하며 개인정보 보호 정책을 읽었음을 확인하는 것으로 간주됩니다.</p>
+      <div class="signup-agree">
+        <p>"계정 만들기"를 클릭하면 Discord의 <span style="color:#5865F2;">이용약관</span>에 동의하며 <span style="color:#5865F2">개인정보 보호 정책</span>을 읽었음을 확인하는 것으로 간주됩니다.</p>
       </div>
       <div class="signup-button-wrapper">
         <button type="submit">계정만들기</button>
       </div>
     </form>
-    <div>
+    <div class="signup-already">
       <a th:href="@{/login}">이미 계정이 있나요? 로그인하세요</a>
     </div>
   </div>

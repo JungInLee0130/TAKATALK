@@ -30,6 +30,9 @@ public class LoginController {
         return "login/login";
     }
 
+    /*
+    * 로그인
+    * */
     @PostMapping
     public ResponseEntity<String> login(@Valid @RequestBody UserLoginForm userLoginForm) {
         log.info("email : {}, password : {}", userLoginForm.email(), userLoginForm.password());
@@ -40,7 +43,9 @@ public class LoginController {
         return ResponseEntity.ok("LOGIN_SUCCESS");
     }
 
-    /*비밀번호 찾기 : 이메일 전송*/
+    /*
+    * 비밀번호 찾기 : 이메일 전송
+    * */
     @PostMapping("/find-password")
     public ResponseEntity<String> findPassword(@Valid @RequestBody MailRequest mailRequest){
         if (userService.existsByEmail(mailRequest.mail())) {
@@ -51,6 +56,4 @@ public class LoginController {
             return ResponseEntity.ok("해당 이메일로 가입된 사용자가 없습니다.");
         }
     }
-
-
 }
