@@ -143,12 +143,12 @@
                 <div class="login-email">
                     <label for="email">이메일<span style="color: red;">*</span></label>
                     <input id="email" type="email" th:field="*{email}" required>
-                    <p id="emailErrorMsg" class="error-msg" th:errors="*{email}"></p>
+                    <p id="emailErrorMsg" class="error-msg"></p>
                 </div>
                 <div class="login-password">
                     <label for="password">비밀번호<span style="color: red;">*</span></label>
                     <input id="password" type="password" th:field="*{password}" required>
-                    <p id="passwordErrorMsg" class="error-msg" th:errors="*{password}"></p>
+                    <p id="passwordErrorMsg" class="error-msg"></p>
                 </div>
                 <div>
                     <p id = "globalErrorMsg" class="error-msg"></p>
@@ -169,7 +169,6 @@
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script th:inline="javascript">
-    // HTML문서가 모두 파싱되고 실행
     document.addEventListener('DOMContentLoaded', (event) => {
         // 비밀번호 찾기 : 인증번호 전송
         document.getElementById("findPasswordBtn").onclick = () => {
@@ -202,28 +201,35 @@
                                 success: function (response) {
                                     if (response === "success") {
                                         document.getElementById("emailErrorMsg").innerText = "";
+                                        document.getElementById("passwordErrorMsg").innerText = "";
                                         alert("임시 비밀번호가 이메일로 발송되었습니다. 이메일을 확인해주세요.");
                                     } else {
                                         document.getElementById("emailErrorMsg").innerText = "해당 이메일로 가입된 사용자가 없습니다.";
+                                        document.getElementById("passwordErrorMsg").innerText = "";
                                     }
                                 },
                                 error : function(request, error) {
                                     // SERVER_ERROR
                                     document.getElementById("emailErrorMsg").innerText = request.responseJSON.message;
                                     alert(request.responseJSON.message);
-                                    //alert("임시 비밀번호 발송에 실패했습니다. 다시 시도해주세요.");
+                                    alert("임시 비밀번호 발송에 실패했습니다. 다시 시도해주세요.");
                                 }
                             });
                         } else {
                             // NOT_FOUND
                             document.getElementById("emailErrorMsg").innerText = "존재하지 않는 이메일이에요.";
+                            document.getElementById("passwordErrorMsg").innerText = "";
                         }
                     },
                     error : function (request, error) {
-                        // SERVER_ERROR
-                        console.log(request.responseJSON.message);
-                        document.getElementById("emailErrorMsg").innerText = request.responseJSON.message;
-                        alert(request.responseJSON.message);
+                        if (request.responseJSON.code === "COMMON_001") {
+                            document.getElementById("emailErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
+                        } else {
+                            // SERVER_ERROR
+                            console.log("실패" + " " + request.responseJSON.message);
+                            document.getElementById("emailErrorMsg").innerText = request.responseJSON.message;
+                            alert(request.responseJSON.message);
+                        }
                     }
                 });
             }
@@ -252,10 +258,11 @@
                 error : function (request, error) {
                     console.log(request.responseJSON.code);
                     if (request.responseJSON.code == "COMMON_001") {
-                        document.getElementById("globalErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
+                        document.getElementById("emailErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
+                        document.getElementById("passwordErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
                     } else if (request.responseJSON.code == "MEMBER_001"){
                         /*"가입된 사용자가 아닙니다."*/
-                        document.getElementById("globalErrorMsg").innerText = request.responseJSON.message;
+                        document.getElementById("emailErrorMsg").innerText = request.responseJSON.message;
                     } else {
                         alert(request.responseJSON.message);
                     }
