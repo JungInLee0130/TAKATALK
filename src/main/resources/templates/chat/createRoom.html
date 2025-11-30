@@ -1,0 +1,44 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    body {
+        margin: 0;
+        background: #eee;
+    }
+    .container .left {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container .left .createRoom input{
+        width: 150px;
+        height: 25px;
+    }
+</style>
+<body>
+    <div class="container">
+        <!--**채팅방 생성**-->
+        <div class="left">
+            <h2>채팅방 생성</h2>
+            <div class="createRoom">
+                <form action="/chat/createRoom" method="post">
+                    <input type="text" name="name" placeholder="채팅방 이름">
+                    <!--이걸 이제 로그인으로 해야하긴하지-->
+                    <input type="text" name="nickname" placeholder="채팅방 닉네임">
+                    <button type="submit">생성</button>
+                </form>
+            </div>
+        </div>
+        <!--*************-->
+    </div>
+</body>
+</html>

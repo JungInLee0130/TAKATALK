@@ -1,0 +1,252 @@
+<!--채팅방 메인화면-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--<link rel="stylesheet" type="text/css" href="/css/chatList.css"/>-->
+<!--<script type="text/javascript" src="/js/chatList.js"></script>-->
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: sans-serif;
+    }
+    body {
+        margin: 0;
+        background: #eee;
+    }
+    .container {
+        display: flex;
+        width: 100%;
+        height: 680px;
+    }
+    .container .semi-container {
+        display: flex;
+        flex-direction: column;
+    }
+    .container .semi-container .left-object {
+        display: flex;
+        flex-direction: row;
+    }
+    .container .semi-container .character-info {
+        background-color: darkgray;
+        height: 80px;
+    }
+    .container .left-bar {
+        width: 60px;
+        height: 600px;
+        background-color: skyblue;
+    }
+    .container .left {
+        display: flex;
+        flex-direction: column;]
+        width: 250px;
+        height: 600px;
+        background-color: beige;
+    }
+    .container .left .chat-list {
+        border: 1px solid black;
+        margin: 0 5px;
+        padding: 0 5px;
+        border-radius: 7px;
+    }
+    .container .left .chat-list h3 {
+        text-align: center;
+    }
+    .container .left .chat-list p {
+        border: 1px solid black;
+        border-radius: 7px;
+        margin: 0;
+    }
+    .container .left .left-header {
+        width: 250px;
+    }
+    .container .left h2{
+        text-align: center;
+    }
+    .container .left .chatTable {
+        width: 410px;
+        background-color: beige;
+        border: 1px solid black;
+        border-radius: 10px;
+    }
+    /*****************************************************************/
+    /**********************채팅창 css********************************/
+    .container .center{
+        display: flex;
+        flex-direction: column;
+        width: 910px;
+        background-color: skyblue;
+        gap: 5px;
+    }
+    .container .center .center-header{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .container .center .center-header h2{
+        margin-left: 10px;
+        text-align: center;
+    }
+    .container .center .center-header p {
+        margin-right: 10px;
+    }
+    .container .center .chatBox {
+        display: flex;
+        justify-content: center;
+    }
+    .container .center textarea{
+        width: 890px;
+        height: 530px;
+
+    }
+    .container .center .chatInput{
+        display: flex;
+        flex-direction: row;
+    }
+    .container .center .chatInput input {
+        width: 890px;
+        height: 45px;
+    }
+    /*****************************************************************/
+    /**********************접속자 창 css********************************/
+    .container .right {
+        display: flex;
+        flex-direction: column;
+        background-color: darkgray;
+    }
+    .container .right h2{
+        text-align: center;
+    }
+    .chatRoom {
+        text-align: center;
+    }
+    .chatRoom .room{
+        background-color: skyblue;
+        border: 1px solid black;
+    }
+    .chatRoom .roomPeopleCount{
+        background-color: skyblue;
+        border: 1px solid black;
+    }
+    .chatRoom .roomEnterButton{
+        text-align: left;
+    }
+    .enterButton{
+        border: 1px solid black;
+        padding: 2px;
+        padding-left: 5px;
+        padding-right: 5px;
+        text-decoration: none;
+    }
+    .enterButton:hover{
+        text-decoration: underline;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:insert="~{/comm/header.html}"></div>
+    <div class="container">
+        <div class="semi-container">
+            <div class="left-object">
+                <div class="left-bar">
+                    <p>여러 그룹을 이동할수있는 바(icon 형태로 보임)</p>
+                </div>
+                <!--**채팅방 목록**-->
+                <div class="left">
+                    <div class="left-header">
+                        <h2>방제목</h2>
+                    </div>
+                    <div class="chat-list">
+                        <div class="chat-list-header" style="display:flex; flex-direction: row; justify-content: space-between">
+                            <p style="font-weight: bold">채팅 채널</p>
+                            <button style="">+</button>
+                        </div>
+                        <table class="chat-table">
+                            <tr th:each="room : ${roomList}" style="">
+                                <td>
+                                    <p th:text="${room.name}" style="box-shadow: 0 4px 40px -8px rgba(0,0,0,0.3);">테스트용</a>
+                                </td>
+                                <td>
+                                    <p th:text="${room.count}">6/8</p>
+                                </td>
+                            </tr>
+                            <tr th:each="room : ${roomList}">
+                                <td>
+                                    <p th:text="${room.name}" style="box-shadow: 0 4px 40px -8px rgba(0,0,0,0.3);">테스트용</p>
+                                </td>
+                                <td>
+                                    <p th:text="${room.count}">6/8</p>
+                                </td>
+                            </tr>
+                            <th>음성 채널</th>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="character-info">
+                <p>자신의 정보</p>
+            </div>
+        </div>
+
+        <!--*************-->
+        <!--****채팅방****-->
+        <div class="center">
+            <div class="center-header">
+                <h2>채팅 공간</h2> <!--채팅방 title-->
+                <div class="icon">
+                    <p>참가자(사람이미지)</p>
+                </div>
+            </div>
+            <div class="chatBox">
+                <textarea class="chatBox-textarea">
+                </textarea>
+            </div>
+            <div class="chatInput">
+                <p class="file-input">파일업로드 아이콘</p>
+                <input class="chat-input" placeholder="채팅 입력" autofocus>
+                <p class="send-btn">채팅 전송 버튼</input>
+            </div>
+        </div>
+        <div class="right">
+            <h2>현재 접속자</h2>
+            <p>온라인-200</p>
+            <div class="chat-participants">
+                채팅리스트
+            </div>
+            <p>오프라인-200(설정으로 보이게 안보이게 가능)</p>
+        </div>
+        <!--*************-->
+    </div>
+    </div>
+</body>
+<script th:inline="javascript">
+    onpageshow = (e) => {
+        if (e.persisted || (window.performance && window.performance.navigation.type == 2)) {
+            window.location.reload();
+        }
+    }
+
+    function enterRoom(roomId) {
+        console.log("roomId: " + roomId);
+
+        /*채팅방이 이미 닫혔는지 확인*/
+
+
+        /***********************/
+
+        let nickname = prompt("채팅방에서 사용할 닉네임을 입력해주세요.");
+
+        if (nickname === null || nickname.trim() === ""){
+            alert("닉네임이 유효하지않습니다.");
+            return;
+        }
+
+
+        const url = `/chat/chatRoom?roomId=${roomId}&nickname=${nickname.trim()}`;
+
+        window.location.href = url;
+    }
+</script>
+</html>

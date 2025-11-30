@@ -1,0 +1,33 @@
+a:link, a:visited, a:hover, a:active {
+    color:#333;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    border: 3px solid black;
+}
+
+header img {
+    height : 80px;
+}
+
+header h1 {
+    position:absolute;
+    left: -2000px;
+}
+
+.container {
+    width: 1270px;
+    margin: 0 auto;
+}
+
+header nav ul {
+    display: flex;
+    text-align: center;
+}
+
+header nav ul li {
+    padding: 20px 10px;
+    width: 88px;
+}

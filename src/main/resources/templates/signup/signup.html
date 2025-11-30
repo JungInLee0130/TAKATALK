@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .signup {
+    padding: 0 32px;
+    border: 1px solid black;
+    width: 480px;
+    height: 100%;
+  }
+  .signup h2{
+    text-align: center;
+  }
+
+  .signup label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+  }
+
+  .signup input {
+    width: 400px;
+    height: 40px;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1px 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+
+  .signup .signup-checkbox {
+    display: flex;
+    flex-display: row;
+    align-items: center;
+  }
+  .signup .signup-checkbox input {
+    width: 24px;
+    height: 24px;
+  }
+
+  .signup .signup-checkbox p {
+
+  }
+
+  .signup .signup-button-wrapper {
+    width: 384px;
+    height: 40px;
+    padding: 7px;
+  }
+
+  .signup .signup-button-wrapper button{
+    width: 384px;
+    height: 30px;
+    font-size: 16px;
+  }
+
+  .signup .signup-birthday {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .info#info__birth {
+    display:flex;
+    align-items: center;
+  }
+  .info#info__birth select{
+    margin-left: 7px;
+    width: 128px;
+    height: 44px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid black;
+    border-radius: 7px;
+  }
+  .info#info__birth select:first-child{
+    margin-left: 0px;
+  }
+  .info#info__birth select::-webkit-scrollbar{
+    width: 10px;
+  }
+  /*드래그 할수있는 스크롤 손잡이*/
+  .info#info__birth select::-webkit-scrollbar-thumb{
+    background-color: #b6b6b6;
+    border-radius: 3px;
+  }
+  /*스크롤바 트랙?*/
+  .info#info__birth select::-webkit-scrollbar-track{
+    background-color: #ebe9e9;
+    border-radius: 6px;
+  }
+
+  .field-error {
+    margin: 10px 0px;
+    color: #E88985;
+  }
+</style>
+<body>
+<div class="container">
+  <div class="signup">
+    <div>
+      <h2>계정만들기</h2>
+    </div>
+    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
+      <div class="signup-email">
+        <label for="email">이메일<span style="color:red">*</span></label>
+        <input id="email" type="email" th:field="*{email}" th:errorclass="field-error" required/>
+        <p class="field-error" th:errors="*{email}"></p>
+      </div>
+      <div class="signup-nickname">
+        <label for="nickname">별명</label>
+        <input id="nickname" type="text" th:field="*{nickname}" th:errorclass="field-error">
+        <p class="field-error" th:errors="*{nickname}"></p>
+      </div>
+      <div class="signup-username">
+        <label for="username">사용자명<span style="color:red">*</span></label>
+        <input id="username" type="text" th:field="*{username}" th:errorclass="field-error" required>
+        <p class="field-error" th:errors="*{username}"></p>
+      </div>
+      <div class="signup-password">
+        <label for="password">비밀번호<span style="color:red">*</span></label>
+        <input id="password" type="password" th:field="*{password}" th:errorclass="field-error" required>
+        <p class="field-error" th:errors="*{password}"></p>
+      </div>
+      <div class="signup-birthday">
+        <p>생년월일<span style="color:red">*</span></p>
+        <div class="info" id="info__birth">
+          <select th:field="*{birthYear}" class="birth-year" id="birth-year" onchange="birthValidation()" th:errorclass="field-error" required>
+            <option value="" disabled selected>년</option>
+          </select>
+          <select th:field="*{birthMonth}" class="birth-month" id="birth-month" onchange="birthValidation()" th:errorclass="field-error" required>
+            <option value="" disabled selected>월</option>
+          </select>
+          <select th:field="*{birthDay}" class="birth-day" id="birth-day" onchange="birthValidation()" th:errorclass="field-error" required>
+            <option value="" disabled selected>일</option>
+          </select>
+        </div>
+        <p class="field-error" th:if="${#fields.hasErrors('birthYear')} or ${#fields.hasErrors('birthMonth')} or ${#fields.hasErrors('birthDay')}" th:errors="*{birthYear}"></p>
+
+        <!-- 글로벌 에러 처리부분 -->
+        <div th:if="${#fields.hasGlobalErrors()}">
+          <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+        </div>
+        <!-- ---------------- -->
+      </div>
+      <div class="signup-checkbox">
+        <input type="checkbox">
+        <p>(선택사항)Discord 소식, 도움말, 특별할인을 이메일로 보내주세요. 언제든지 취소하실 수 있어요.</p>
+      </div>
+      <div>
+        <p>"계정 만들기"를 클릭하면 Discord의 이용약관에 동의하며 개인정보 보호 정책을 읽었음을 확인하는 것으로 간주됩니다.</p>
+      </div>
+      <div class="signup-button-wrapper">
+        <button type="submit">계정만들기</button>
+      </div>
+    </form>
+    <div>
+      <a th:href="@{/login}">이미 계정이 있나요? 로그인하세요</a>
+    </div>
+  </div>
+</div>
+</body>
+<script th:inline="javascript">
+  /***생년월일 option 추가로직****/
+  const birthYearEl = document.querySelector('#birth-year');
+  isYearOptionExisted = false;
+  birthYearEl.addEventListener('focus', function () {
+    if (!isYearOptionExisted) {
+      isYearOptionExisted = true;
+      for (var i = 2025; i >= 1900; i--) {
+        const YearOption = document.createElement('option');
+        YearOption.setAttribute('value', i);
+        YearOption.innerText = i;
+        this.appendChild(YearOption);
+      }
+    }
+  });
+
+  const birthMonthEl = document.querySelector('#birth-month');
+  isMonthOptionExisted = false;
+  birthMonthEl.addEventListener('focus', function () {
+    if (!isMonthOptionExisted) {
+      isMonthOptionExisted = true;
+      for (var i = 1; i <= 12; i++) {
+        const MonthOption = document.createElement('option');
+        MonthOption.setAttribute('value', i);
+        MonthOption.innerText = i;
+        this.appendChild(MonthOption);
+      }
+    }
+  });
+
+  const birthDayEl = document.querySelector('#birth-day');
+  isDayOptionExisted = false;
+  birthDayEl.addEventListener('focus', function () {
+    if (!isDayOptionExisted) {
+      isDayOptionExisted = true;
+      for (var i = 1; i <= 31; i++) {
+        const DayOption = document.createElement('option');
+        DayOption.setAttribute('value', i);
+        DayOption.innerText = i;
+        this.appendChild(DayOption);
+      }
+    }
+  })
+  /*******/
+  /***생일 유효성검사****/
+  function birthValidation() {
+    let birthYear = parseInt(document.querySelector('#birth-year').value);
+    let birthMonth = parseInt(document.querySelector('#birth-month').value);
+    let birthDay = parseInt(document.querySelector('#birth-day').value);
+
+    if (!isNaN(birthYear) && !isNaN(birthMonth) && !isNaN(birthDay)) {
+      isValidBirthDate = true;
+
+      switch (birthMonth) {
+        case 1:case 3:case 5:case 7:case 8:case 10:case 12:
+          break;
+        case 2:
+          if (birthYear % 400 == 0
+                  || birthYear % 4 == 0 && birthYear % 100 != 0) {
+            if (birthDay >= 30) {
+              isValidBirthDate = false;
+            }
+          } else {
+            // 28일까지
+            if (birthDay >= 29) {
+              isValidBirthDate = false;
+            }
+          }
+          break;
+        case 4:case 6:case 9:case 11:
+          if (birthDay == 31) {
+            isValidBirthDate = false;
+          }
+          break;
+      }
+
+      if (!isValidBirthDate) {
+        document.getElementById("valid-birth").innerHTML = "유효한 생년월일을 입력해주세요.";
+      } else {
+        document.getElementById("valid-birth").innerHTML = "";
+      }
+    }
+  }
+  /*****/
+</script>
+</html>

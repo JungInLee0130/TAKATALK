@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+</head>
+<style>
+    body{
+        margin: 0;
+        width: auto;
+        height: auto;
+    }
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        min-height: 80vh;
+        background-image: linear-gradient(to right,#18004D,#1E55DC);
+    }
+    .container .login-logo {
+        position: fixed;
+        top:30px;
+        left:30px;
+    }
+    .container .login-logo img {
+        object-fit: none;
+    }
+    .container .login {
+        border: 1px solid black;
+        border-radius: 10px;
+        padding: 0 40px;
+        padding-top : 10px;
+        padding-bottom: 40px;
+        width: 480px;
+        background-color: #393A41;
+    }
+    .login h2{
+        text-align: center;
+        color: #FFFFFF;
+    }
+    .login label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 16px;
+        color: #FFFFFF;
+    }
+    .login input {
+        float: left;
+        width: 100%;
+        -ms-box-sizing: border-box; /* ie8 */
+        -khtml-box-sizing: border-box; /* konqueror */
+        -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+        -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+        box-sizing: border-box;         /* Opera/IE 8+ */
+        box-sizing: border-box; /* css3 rec */
+        height: 40px;
+        border: 1px solid black;
+        border-radius: 5px;
+        padding: 1px 10px;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+    .login a {
+        display: block;
+        padding-bottom: 10px;
+        color: #6C6D74;
+    }
+    .login .find-password-button-wrapper {
+
+    }
+    .login .find-password-button-wrapper button {
+        padding: 0;
+        background: none;
+        border: none;
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #93A7FD;
+    }
+    .login .login-button-wrapper{
+
+    }
+    .login .login-button-wrapper button {
+        float: left;
+        width: 100%;
+        -ms-box-sizing: border-box; /* ie8 */
+        -khtml-box-sizing: border-box; /* konqueror */
+        -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+        -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+        box-sizing: border-box;         /* Opera/IE 8+ */
+        box-sizing: border-box; /* css3 rec */
+        height: 40px;
+        border: 1px solid black;
+        border-radius: 5px;
+        margin-right: 10px;
+        margin: 1px 0;
+        font-size: 16px;
+        background-color: #4452BB;
+        color: white;
+    }
+    .login .find-account {
+        float: left;
+        width: 100%;
+        -ms-box-sizing: border-box; /* ie8 */
+        -khtml-box-sizing: border-box; /* konqueror */
+        -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+        -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+        box-sizing: border-box;         /* Opera/IE 8+ */
+        box-sizing: border-box; /* css3 rec */
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+    }
+    .login .find-account p {
+        margin: 10px 0;
+        color: #ADAEB4;
+    }
+    .login .find-account a {
+        padding: 0;
+        color: #7380BA;
+    }
+
+    .error-msg {
+        margin: 10px 0px;
+        color: #E88985;
+    }
+    .field-error {
+        margin: 10px 0px;
+        color: #E88985;
+    }
+</style>
+<body>
+    <div class="container">
+        <div class="login-logo">
+            <img th:src="@{images/discord-logo.svg}" class="discord-logo">
+        </div>
+        <div class="login">
+            <form th:action="@{/login}" th:object="${userLoginForm}" method="post">
+                <h2>로그인</h2>
+                <div class="login-email">
+                    <label for="email">이메일<span style="color: red;">*</span></label>
+                    <input id="email" type="email" th:field="*{email}" required>
+                    <p id="emailErrorMsg" class="error-msg" th:errors="*{email}"></p>
+                </div>
+                <div class="login-password">
+                    <label for="password">비밀번호<span style="color: red;">*</span></label>
+                    <input id="password" type="password" th:field="*{password}" required>
+                    <p id="passwordErrorMsg" class="error-msg" th:errors="*{password}"></p>
+                </div>
+                <div>
+                    <p id = "globalErrorMsg" class="error-msg"></p>
+                </div>
+                <div class="find-password-button-wrapper">
+                    <button type="button" id="findPasswordBtn">비밀번호를 잊으셨나요?</button>
+                </div>
+                <div class="login-button-wrapper">
+                    <button type="button" id="loginBtn">로그인</button>
+                </div>
+                <div class="find-account">
+                    <p>계정이 필요한가요?</p>
+                    <a th:href="@{/user/signup}">가입하기</a>
+                </div>
+            </form>
+      </div>
+  </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script th:inline="javascript">
+    // HTML문서가 모두 파싱되고 실행
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // 비밀번호 찾기 : 인증번호 전송
+        document.getElementById("findPasswordBtn").onclick = () => {
+            var email = document.getElementById("email").value;
+
+            console.log(email);
+
+            // 인증번호 전송
+            if (email == '' || email == null) {
+                document.getElementById("emailErrorMsg").innerText = "필수 입력칸이에요.";
+            } else if (email == '#') {
+                // 이메일 정규표현식 만족못하면
+                console.log("이메일 형식을 다시 작성해주세요.")
+                document.getElementById("emailErrorMsg").innerText = "이메일 형식을 다시 작성해주세요.";
+            } else {
+                // 이메일 DB 확인
+                $.ajax({
+                    type: 'POST',
+                    url: '/user/find-user',
+                    contentType: 'application/json',
+                    data: JSON.stringify({mail : email}),
+                    success : function (response) {
+                        if (response === "success") {
+                            // 임시 비밀번호 전송
+                            $.ajax({
+                                type: 'POST',
+                                url: '/login/find-password',
+                                contentType: 'application/json',
+                                data: JSON.stringify({mail: email}),
+                                success: function (response) {
+                                    if (response === "success") {
+                                        document.getElementById("emailErrorMsg").innerText = "";
+                                        alert("임시 비밀번호가 이메일로 발송되었습니다. 이메일을 확인해주세요.");
+                                    } else {
+                                        document.getElementById("emailErrorMsg").innerText = "해당 이메일로 가입된 사용자가 없습니다.";
+                                    }
+                                },
+                                error : function(request, error) {
+                                    // SERVER_ERROR
+                                    document.getElementById("emailErrorMsg").innerText = request.responseJSON.message;
+                                    alert(request.responseJSON.message);
+                                    //alert("임시 비밀번호 발송에 실패했습니다. 다시 시도해주세요.");
+                                }
+                            });
+                        } else {
+                            // NOT_FOUND
+                            document.getElementById("emailErrorMsg").innerText = "존재하지 않는 이메일이에요.";
+                        }
+                    },
+                    error : function (request, error) {
+                        // SERVER_ERROR
+                        console.log(request.responseJSON.message);
+                        document.getElementById("emailErrorMsg").innerText = request.responseJSON.message;
+                        alert(request.responseJSON.message);
+                    }
+                });
+            }
+        };
+
+        document.getElementById("loginBtn").onclick = () => {
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("password").value;
+
+            $.ajax({
+                type: 'POST',
+                url: '/login',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                   email: email,
+                   password: password
+                }),
+                success: function (response) {
+                  if (response === "LOGIN_SUCCESS") {
+                      console.log("로그인 성공!")
+                      window.location.href = '/index';
+                  } else {
+                      console.log("?");
+                  }
+                },
+                error : function (request, error) {
+                    console.log(request.responseJSON.code);
+                    if (request.responseJSON.code == "COMMON_001") {
+                        document.getElementById("globalErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
+                    } else if (request.responseJSON.code == "MEMBER_001"){
+                        /*"가입된 사용자가 아닙니다."*/
+                        document.getElementById("globalErrorMsg").innerText = request.responseJSON.message;
+                    } else {
+                        alert(request.responseJSON.message);
+                    }
+                }
+            });
+        }
+    });
+</script>
+</html>

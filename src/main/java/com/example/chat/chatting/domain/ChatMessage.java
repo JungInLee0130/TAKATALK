@@ -1,28 +1,28 @@
-package com.example.chat;
+package com.example.chat.chatting.domain;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatMessageDto {
+public class ChatMessage {
     private String roomId;
     private String sender;
     private String message;
-    private MessageType messageType;
+    private MessageType type;
+
 
     public enum MessageType {
         ENTER, TALK, QUIT
     }
 
-    @Builder
-    public ChatMessageDto(String roomId, String sender, String message, MessageType messageType) {
-        this.roomId = roomId;
-        this.sender = sender;
+    public ChatMessage(String roomId, String message) {
         this.message = message;
-        this.messageType = messageType;
+    }
+
+    public void updateSender(String sender) {
+        this.sender = sender;
     }
 
     public void updateMessage(String message) {

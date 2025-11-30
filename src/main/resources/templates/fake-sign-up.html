@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+</head>
+<style>
+  #send-code-button {
+    display: none;
+  }
+  #verifyCodeSection {
+    display: none;
+  }
+  .success {
+    color: blue;
+  }
+  .error {
+    color: red;
+  }
+</style>
+<body>
+  <form th:action="@{/mail/signup}" th:object="${signupRequest}" method="post">
+    <h1>회원가입</h1>
+    <hr/>
+    <div>
+      <label for="email">이메일</label>
+      <input type="email" id="email" placeholder="이메일 입력" th:field="*{email}" required/>
+      <button type="button" id="check-email-button" class="light-button">중복확인</button>
+      <button type="button" id="send-code-button" class="light-button" hidden>인증 코드 발송</button>
+      <p id="emailCheckMessage" class="error"></p>
+    </div>
+
+    <div id="verifyCodeSection" hidden>
+      <label for="verifyCodeSection">인증 코드</label>
+      <input type="text" id="verificationCode" name="verificationCode" placeholder="인증번호 입력" required/>
+      <button type="button" id="verify-code-button" class="light-button">이메일 인증</button>
+      <p id="verificationMessage" class="error"></p>
+    </div>
+
+    <div>
+      <label for="password">비밀번호</label>
+      <input type="password" id="password" placeholder="비밀번호" th:field="*{password}"/>
+    </div>
+
+    <button type="submit" id="signup-button">회원가입</button>
+  </form>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script th:inline="javascript">
+  function validateForm() {
+    var isValid = true;
+
+    if (emailCheckMessageId.classList.contains('error')) {
+      isValid = false;
+
+      document.getElementById('signup-button').setAttribute('disable', !isValid);
+      return isValid;
+    }
+  }
+
+    // 이메일 중복검사
+    // 1. 이메일이 중복되면 인증 메일 보내기 버튼을 숨김
+    // 2. 이메일 중복이 없다면 인증 메일 보내기 버튼 활성화 됨.
+    document.getElementById('check-email-button').onclick = () => {
+      let email = document.getElementById('email').value;
+      let emailCheckMessageId = document.getElementById('emailCheckMessage');
+
+      $.ajax({
+        type: 'POST',
+        url: '/mail/check-mail',
+        contentType: "application/json",
+        data: JSON.stringify({"mail": email}),
+        success: function (response) {
+          console.log("성공")
+          if (response) {
+            emailCheckMessageId.innerText = '아이디가 이미 존재합니다.';
+            emailCheckMessageId.className = 'error';
+            document.getElementById('send-code-button').style.display = "none";
+          } else {
+            emailCheckMessageId.innerText = '사용 가능한 아이디입니다.';
+            emailCheckMessageId.className = 'success';
+            document.getElementById('send-code-button').style.display = "inline";
+          }
+          validateForm();
+        },
+        error: function (error) {
+          emailCheckMessageId.innerText = '이메일 확인 중 오류가 발생했습니다. 다시 시도해주세요.';
+          emailCheckMessageId.className = 'error'
+          document.getElementById('send-code-button').style.display = "none";
+          validateForm();
+        }
+      });
+  }
+
+  // 이메일 인증번호 전송 버튼
+  document.getElementById('send-code-button').onclick = () => {
+    let email = document.getElementById('email').value;
+
+    $.ajax({
+      type: 'POST',
+      url: '/mail',
+      contentType: 'application/json',
+      data: JSON.stringify({"mail": email}),
+      success: function (response) {
+        document.getElementById('verifyCodeSection').style.display = "block";
+        alert('인증메일이 발송되었습니다. 인증번호를 확인해주세요.');
+      },
+      error: function (error) {
+        alert('메일 발송에 실패하였습니다. 다시 시도해주세요.');
+      }
+    });
+  };
+
+
+
+  // 인증코드확인
+  document.getElementById("verify-code-button").onclick = () => {
+    let email = document.getElementById("email").value;
+    let code = document.getElementById("verificationCode").value;
+
+    $.ajax({
+      type: 'POST',
+      url: '/mail/verify-code',
+      contentType: 'application/json',
+      data: JSON.stringify({mail: email, code: code}),
+      success: function (response) {
+        console.log(response);
+        if (response == 'verified') {
+          document.getElementById("verificationMessage").className = "success";
+          document.getElementById("verificationMessage").innerText = '인증 성공';
+          document.getElementById("signup-button").removeAttribute('disabled');
+        } else {
+          document.getElementById("verificationMessage").className = "error";
+          document.getElementById("verificationMessage").innerText = '인증 실패. 올바른 코드를 입력하세요.';
+        }
+      },
+      error: function (error) {
+        document.getElementById("verificationMessage").className = "error";
+        document.getElementById("verificationMessage").innerText = '인증 실패. 다시 시도해주세요.';
+      }
+    });
+  };
+
+    // 인증코드 발송 버튼 -> 초기상태에서는 비활성화
+    document.getElementById('send-code-button').style.display = "none";
+
+    // 인증 코드 입력란 숨기기
+    document.getElementById('verifyCodeSection').style.display = "none";
+
+    document.getElementById("signup-button").setAttribute('disabled', "");
+</script>
+</html>

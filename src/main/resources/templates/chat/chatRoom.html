@@ -1,0 +1,180 @@
+<!--채팅방 내부화면-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        margin: 20px;
+        padding: 0px 100px;
+        height: 850px;
+    }
+    .mainTitle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: skyblue;
+        height: 40px;
+        padding: 0px 10px;
+    }
+    .quit {
+        width : 80px;
+        margin-bottom: 5px;
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+
+    /* 메시지 Body */
+    .msgBody {
+        font-size: 20px;
+        width: 100%;
+        text-align: center;
+    }
+
+    /* textarea */
+    .msgBody textarea {
+        margin: 10px 0px 0px 0px;
+        font-family: Arial;
+        font-size: 20px;
+        line-height: 30px;
+        width: 95%;
+        height : 500px;
+        background-color: beige;
+        padding: 10px;
+        resize: none;
+        border-radius: 10px;
+    }
+
+    /* 메시지 입력 공간 */
+    .sendMsgDiv {
+        margin-top: 2px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .sendMsgDiv .content {
+        width : 90%;
+        height : 50px;
+        background-color: floralwhite;
+        font-family: Arial;
+        margin-left: 10px;
+        border: 1px solid black;
+        border-radius: 10px;
+    }
+
+    /* 메시지 전송 버튼 */
+    .sendMsgDiv .sendBtn {
+        width : 80px;
+        height : 50px;
+        margin-right: 0px;
+        font-family: Arial;
+        border: 1px solid black;
+        border-radius: 10px;
+    }
+</style>
+<!--<link rel="stylesheet" type="text/css" href="/css/chatRoom.css"/>-->
+<!--<script type="text/javascript" src="/js/chatRoom.js"></script>-->
+<body>
+    <div class="container">
+        <div class="mainTitle">
+            <h1 th:text="${room.name}">방1</h1>
+            <button type="button" class="quit" onclick="quit()">방 나가기 </button>
+        </div>
+        <div class="msgBody">
+            <textarea id="msgArea" placeholder="메세지 입력공간" readonly></textarea>
+            <div class="sendMsgDiv">
+                <input id="content" class="content" type="text" placeholder="보낼 메세지를 입력하세요." autofocus>
+                <button id="sendBtn" class="sendBtn" onclick="sendMsg()" type="button">전송</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script th:inline="javascript">
+    /*뒤로가기 버튼클릭시 : socket send quit*/
+    window.onbeforeunload = function () {
+        // 크롬, edge custom 메시지 안됨.
+        console.log("뒤로가기 이벤트 감지함.");
+    };
+
+    let socket = new WebSocket("ws://localhost:8080/ws/chat");
+    var roomId = [[${room.roomId}]];
+    var sender = [[${nickname}]];
+
+    function enterRoom(socket){
+        let enterMsg={"type" : "ENTER", "roomId" : roomId, "sender" : sender, "msg" : ""};
+
+        socket.send(JSON.stringify(enterMsg));
+    }
+
+    function leftRoom(socket){
+        let leftMsg={"type" : "QUIT", "roomId" : roomId, "sender" : sender, "msg" : ""};
+        socket.send(JSON.stringify(leftMsg));
+    }
+
+
+    socket.onopen = function (e) {
+        console.log('open server!')
+        enterRoom(socket);
+    };
+
+    socket.onclose=function(e){
+        console.log('disconnect');
+        leftRoom(socket);
+    }
+
+    socket.onerror = function (e){
+        console.log(e);
+    }
+
+    //백엔드 -> 프론트로 수신했을 때 이벤트. socket.send하면 이어지는거같은데
+    socket.onmessage = function (e) {
+        let msgJson = JSON.parse(e.data);
+        console.log(msgJson);
+
+        let msgArea = document.getElementById('msgArea');
+        let newMsg =  "\"" + msgJson.sender + "\"" + " : " + msgJson.message;
+
+        console.log("메세지 전송완료");
+
+        msgArea.append(newMsg + "\n");
+
+        content.value = '';
+    }
+
+
+    // 채팅 엔터로 입력
+    var content = document.getElementById("content");
+
+    content.addEventListener("keypress", function (e) {
+        if (e.key == "Enter") {
+            sendMsg();
+        }
+    })
+
+
+    //메세지 보내기 버튼 눌렀을 떄..
+    function sendMsg() {
+        let talkMsg = {"type": "TALK", "roomId": roomId, "sender": sender, "message": content.value};
+
+        // 서버로 전송
+        socket.send(JSON.stringify(talkMsg));
+    }
+
+    function quit() {
+        let confirmMsg = confirm("채팅방을 나가시겠습니까?")
+
+        if (!confirmMsg) return;
+
+        let quitMsg = {"type": "QUIT", "roomId": roomId, "sender": sender, "message": ""};
+
+        socket.send(JSON.stringify(quitMsg));
+        socket.close();
+
+        location.href = "/chat/chatList";
+    }
+</script>
+</html>
