@@ -12,8 +12,8 @@ spring:
   datasource:
     driver-class-name: org.h2.Driver
     url: 'jdbc:h2:mem:test'
-    username: ${h2_USERNAME}
-    password: ${h2_PASSWORD}
+    username: ${H2_USERNAME}
+    password: ${H2_PASSWORD}
 
   jpa:
     hibernate:

@@ -1,0 +1,1 @@
+INSERT INTO SITE_USER (nickname,username,password,email,birthday) values ('홍길동','홍길동', 'qwer1234', 'd@naver.com', '2003-03-20');
