@@ -2,12 +2,14 @@ package com.example.chat.user.service;
 
 import com.example.chat.exception.CustomException;
 import com.example.chat.exception.ErrorCode;
+import com.example.chat.login.service.TokenService;
 import com.example.chat.user.domain.UserCreateForm;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
@@ -20,6 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final TokenService tokenService;
 
     public SiteUser create (UserCreateForm userCreateForm){
         /*중복 회원 체크*/
@@ -34,16 +37,6 @@ public class UserService {
         return siteUser;
     }
 
-    public Map<String, String> validateHandling(Errors errors) {
-        Map<String, String> validatorResult = new HashMap<>();
-
-        for (FieldError error : errors.getFieldErrors()) {
-            String validKeyName = String.format("valid_%s", error.getField());
-            validatorResult.put(validKeyName, error.getDefaultMessage());
-        }
-        return validatorResult;
-    }
-
     public SiteUser findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -52,6 +45,23 @@ public class UserService {
     public boolean existsByEmail(String email) {
         log.info("existsByEmail");
         return userRepository.existsByEmail(email);
+    }
+
+
+    public void changePassword(String email, String password) {
+        log.info("chanagePassword : password : {}", password);
+        SiteUser siteUser = findByEmail(email);
+        siteUser.setPassword(password);
+    }
+
+    @Transactional
+    public void changePassword(String email, String newPassword, String token) {
+        /*트랜잭션으로 묶어야할듯*/
+        // 비밀번호 변경
+        changePassword(email, newPassword);
+        // 토큰은 1회용.
+        tokenService.deleteToken(token);
+        /**/
     }
 }
 

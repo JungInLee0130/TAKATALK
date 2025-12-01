@@ -10,6 +10,9 @@ public enum ErrorCode {
     NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON_002", "정보가 없습니다."),
     /*로그인에러*/
     INVALID_INPUT_EMAIL_OR_PASSWORD(HttpStatus.BAD_REQUEST, "LOGIN_001", "유효하지않는 아이디 또는 비밀번호 입니다."),
+    /*비밀번호 찾기 에러*/
+    RESET_TOKEN_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "RESET_TOKEN_001", "토큰이 존재하지않습니다."),
+    RESET_TOKEN_INVALID_EXCEPTION(HttpStatus.BAD_REQUEST, "RESET_TOKEN_002", "토큰이 만료되었습니다."),
     /*회원에러*/
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER_001", "가입된 사용자가 아닙니다."),
     /*회원가입 에러*/

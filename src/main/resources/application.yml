@@ -8,6 +8,7 @@ spring:
   application:
     name: chat
 ---
+#DB
 spring:
   datasource:
     driver-class-name: org.h2.Driver
@@ -55,3 +56,7 @@ spring:
           starttls:
             enable: true
           auth: true
+---
+#BASE_URL
+app:
+  base-url: ${BASE_URL}

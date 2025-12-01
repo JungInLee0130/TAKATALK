@@ -156,6 +156,9 @@
                 <div class="find-password-button-wrapper">
                     <button type="button" id="findPasswordBtn">비밀번호를 잊으셨나요?</button>
                 </div>
+                <div class="send-change-password-wrapper">
+                    <button type="button" id="sendChangePasswordBtn">비밀번호를 잊으셨나요?</button>
+                </div>
                 <div class="login-button-wrapper">
                     <button type="button" id="loginBtn">로그인</button>
                 </div>
@@ -170,6 +173,33 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', (event) => {
+        // 비밀번호 재설정 메일 발송
+        document.getElementById("sendChangePasswordBtn").onclick = () => {
+            var email = document.getElementById("email").value;
+
+            console.log(email);
+
+            $.ajax({
+                type: 'POST',
+                url: '/login/send-change-password',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                   mail : email
+                }),
+                success: function (response) {
+                  if (response === "SUCCESS") {
+                      alert("비밀번호 재설정 메일이 발송되었습니다. 이메일을 확인해주세요.");
+                  } else {
+                      alert(response);
+                  }
+                },
+                error : function (request, error) {
+                    console.log(request);
+                    alert(request.responseJSON.message);
+                    document.getElementById("emailErrorMsg").innerText = request.responseJSON.message;
+                }
+            });
+        };
         // 비밀번호 찾기 : 인증번호 전송
         document.getElementById("findPasswordBtn").onclick = () => {
             var email = document.getElementById("email").value;
@@ -204,6 +234,7 @@
                                         document.getElementById("passwordErrorMsg").innerText = "";
                                         alert("임시 비밀번호가 이메일로 발송되었습니다. 이메일을 확인해주세요.");
                                     } else {
+                                        console.log(response);
                                         document.getElementById("emailErrorMsg").innerText = "해당 이메일로 가입된 사용자가 없습니다.";
                                         document.getElementById("passwordErrorMsg").innerText = "";
                                     }

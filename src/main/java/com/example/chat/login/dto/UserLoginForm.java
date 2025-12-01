@@ -1,4 +1,4 @@
-package com.example.chat.login.domain;
+package com.example.chat.login.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
