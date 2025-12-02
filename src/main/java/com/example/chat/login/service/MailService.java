@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import java.util.concurrent.CompletableFuture;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -31,10 +33,20 @@ public class MailService {
     private String baseUrl;
 
     /*
-    * 비밀번호 재설정메일 전송
-    * */
-    public void sendChangePasswordMail(SiteUser siteUser) {
-        // 1. OTP 토큰 생성 및 DB 저장
+     * 비밀번호 재설정메일 전송
+     * */
+    public CompletableFuture<String> sendChangePasswordMail(SiteUser siteUser) {
+        MimeMessage message = createChangePasswordMail(siteUser);
+        javaMailSender.send(message);
+        return CompletableFuture.completedFuture("SUCCESS");
+    }
+
+
+
+    /*
+     * 비밀번호 재설정메일 생성
+     * */
+    private MimeMessage createChangePasswordMail(SiteUser siteUser) {
         String resetToken = tokenService.createAndSaveToken(siteUser.getEmail());
 
         log.info("resetToken 생성완료(JSON) : {}", resetToken);
@@ -46,10 +58,11 @@ public class MailService {
             helper.setTo(siteUser.getEmail());
             helper.setSubject("Discord 비밀번호 재설정 요청");
             helper.setText(setContext(resetToken, siteUser), true);
-            javaMailSender.send(message);
         } catch (Exception e) {
             throw new RuntimeException("비밀번호 재설정 요청 메일 전송 오류", e);
         }
+
+        return message;
     }
 
     private String setContext(String resetToken, SiteUser siteUser) {

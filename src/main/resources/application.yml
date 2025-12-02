@@ -60,3 +60,11 @@ spring:
 #BASE_URL
 app:
   base-url: ${BASE_URL}
+
+---
+#SECURITY
+spring:
+  security:
+    user:
+      name: ${SECURITY_USERNAME}
+      password: ${SECURITY_PASSWORD}

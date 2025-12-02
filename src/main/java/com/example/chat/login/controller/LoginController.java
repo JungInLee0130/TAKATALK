@@ -19,6 +19,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.CompletableFuture;
+
 @Slf4j
 @Controller
 @RequestMapping("/login")
@@ -76,13 +78,13 @@ public class LoginController {
     }
 
     /*
-     * 비밀번호 변경 메일보내기
+     * 비밀번호 변경 메일보내기(비동기처리)
      * */
     @PostMapping("/send-change-password")
-    public ResponseEntity<String> sendChangePasswordMail(@Valid @RequestBody MailRequest request) {
+    public CompletableFuture<ResponseEntity<String>> sendChangePasswordMail(@Valid @RequestBody MailRequest request) {
         SiteUser siteUser = userService.findByEmail(request.mail());
-        mailService.sendChangePasswordMail(siteUser);
-        return ResponseEntity.ok("SUCCESS");
+        return mailService.sendChangePasswordMail(siteUser)
+                .thenApply(str -> ResponseEntity.ok(str));
     }
     
     /*
