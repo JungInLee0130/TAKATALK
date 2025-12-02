@@ -30,32 +30,35 @@ public class LoginController {
     private final MailService mailService;
     private final TokenService tokenService;
 
+    /*
+    * 로그인 페이지
+    * */
     @GetMapping
     public String loginPage(UserLoginForm userLoginForm){
         return "login/login";
     }
 
+    /*
+    * 비밀번호 변경 페이지 접속 메일
+    * */
     @GetMapping("/change-password-mail-template")
     public String changePasswordTemplagePage (){
         return "login/change-password-mail-template";
     }
+    
     /*
     * 비밀번호 변경 페이지 이동
     * */
     @GetMapping("/change-password")
     public String changePasswordPage(@RequestParam("token") String token,
                                      Model model) {
-        // requestparam을 받아서 사용하려면 model에 넣어줘야함.
-        // 1. 이메일 검증
         String email = tokenService.validateTokenAndGetEmail(token);
 
-        // 1-2. 이메일 검증완료
         if (email != null) {
             model.addAttribute("token", token);
             return "login/change-password";
         }
 
-        // 1-1. 이메일 검증 실패
         return "redirect:/login/token-expired";
     }
 
@@ -70,20 +73,6 @@ public class LoginController {
         log.info("LOGIN_SUCCESS");
 
         return ResponseEntity.ok("LOGIN_SUCCESS");
-    }
-
-    /*
-    * 비밀번호 찾기 : 이메일 전송
-    * */
-    @PostMapping("/find-password")
-    public ResponseEntity<String> findPassword(@Valid @RequestBody MailRequest mailRequest){
-        if (userService.existsByEmail(mailRequest.mail())) {
-            String temporaryPassword = mailService.createTemporaryPassword(mailRequest.mail());
-            mailService.sendTemporaryPasswordMail(mailRequest.mail(), temporaryPassword);
-            return ResponseEntity.ok("success");
-        } else {
-            return ResponseEntity.ok("해당 이메일로 가입된 사용자가 없습니다.");
-        }
     }
 
     /*

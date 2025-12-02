@@ -34,69 +34,6 @@ public class MailService {
     private String baseUrl;
 
     /*
-     * 랜덤 비밀번호 생성
-     * */
-    private static String generateRandomPassword() {
-
-        int length = 8;
-        StringBuilder sb = new StringBuilder(length);
-        Random random = new Random();
-
-        for (int i = 0; i < length; i++) {
-            sb.append((char) (random.nextInt(10) + '0'));
-        }
-
-        log.info("random password : {}", sb.toString());
-        return sb.toString();
-    }
-
-    /*
-     * 임시 비밀번호 메일전송
-     * */
-    public void sendTemporaryPasswordMail(String mail, String tempPassword) {
-        MimeMessage message = javaMailSender.createMimeMessage();
-
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            helper.setFrom(SENDER_EMAIL);
-            helper.setTo(mail);
-            helper.setSubject("DISCORD : 임시 비밀번호");
-            String body = "<h2>DISCORD에 오신것을 환영합니다!</h2>" +
-                    "<p>아래의 임시 비밀번호를 사용하세요.</p>" +
-                    "<h1>" +
-                    tempPassword +
-                    "</h1>" +
-                    "<h3>반드시 비밀번호를 재설정하세요.</h3>";
-            helper.setText(body, true);
-            javaMailSender.send(message);
-        } catch (Exception e) {
-            throw new RuntimeException("임시 비밀번호 전송 오류", e);
-        }
-    }
-
-    /*
-    * 임시 비밀번호 생성 및 DB 업데이트
-    * */
-    @Transactional
-    public String createTemporaryPassword(String mail) {
-        String tempPassword = generateRandomPassword();
-
-        SiteUser siteUser = userService.findByEmail(mail);
-
-        siteUser.setPassword(tempPassword);
-
-        log.info("임시 비밀번호 저장완료 : {}", siteUser.getPassword());
-        return tempPassword;
-    }
-
-    /*
-    *
-    * */
-    public void sendTemporaryPasswordMailFake(String mail, String temporaryPassword) {
-        log.info("임시 비밀번호 전송완료");
-    }
-
-    /*
     * 비밀번호 재설정메일 전송
     * */
     public void sendChangePasswordMail(SiteUser siteUser) {
