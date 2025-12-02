@@ -67,10 +67,10 @@
         padding-bottom: 10px;
         color: #6C6D74;
     }
-    .login .find-password-button-wrapper {
+    .login .send-change-password-wrapper {
 
     }
-    .login .find-password-button-wrapper button {
+    .login .send-change-password-wrapper button {
         padding: 0;
         background: none;
         border: none;
@@ -78,6 +78,7 @@
         margin-bottom: 10px;
         color: #93A7FD;
     }
+
     .login .login-button-wrapper{
 
     }
@@ -153,9 +154,6 @@
                 <div>
                     <p id = "globalErrorMsg" class="error-msg"></p>
                 </div>
-                <div class="find-password-button-wrapper">
-                    <button type="button" id="findPasswordBtn">비밀번호를 잊으셨나요?</button>
-                </div>
                 <div class="send-change-password-wrapper">
                     <button type="button" id="sendChangePasswordBtn">비밀번호를 잊으셨나요?</button>
                 </div>
@@ -173,11 +171,32 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', (event) => {
-        // 비밀번호 재설정 메일 발송
+        /*
+        * 이메일 검증
+        * */
+        function validateEmail(email) {
+            var emailRegex = new RegExp("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
+
+            if (email == '' || email == null) {
+                document.getElementById("emailErrorMsg").innerText = "필수 입력칸이에요.";
+                return false;
+            } else if (!email.match(emailRegex)) {
+                // 이메일 정규표현식 만족못하면
+                console.log("이메일 형식을 다시 작성해주세요.")
+                document.getElementById("emailErrorMsg").innerText = "이메일 형식을 다시 작성해주세요.";
+                return false;
+            }
+            return true;
+        }
+
+        /*
+        * 비밀번호 재설정 메일 버튼 클릭시
+        * */
         document.getElementById("sendChangePasswordBtn").onclick = () => {
             var email = document.getElementById("email").value;
-
             console.log(email);
+
+            if(!validateEmail(email)) return;
 
             $.ajax({
                 type: 'POST',
@@ -188,87 +207,50 @@
                 }),
                 success: function (response) {
                   if (response === "SUCCESS") {
+                      document.getElementById("emailErrorMsg").innerText = "";
+                      document.getElementById("passwordErrorMsg").innerText = "";
                       alert("비밀번호 재설정 메일이 발송되었습니다. 이메일을 확인해주세요.");
                   } else {
                       alert(response);
                   }
                 },
                 error : function (request, error) {
-                    console.log(request);
-                    alert(request.responseJSON.message);
-                    document.getElementById("emailErrorMsg").innerText = request.responseJSON.message;
+                    let errorCode = request.responseJSON.code;
+                    let errorMsg = request.responseJSON.message;
+                    console.log(errorCode + ": " + errorMsg);
+
+                    switch (errorCode) {
+                        case "COMMON_001" :
+                            document.getElementById("emailErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
+                            break;
+                        case "MEMBER_001":
+                            document.getElementById("emailErrorMsg").innerText = "존재하지 않는 이메일이에요.";
+                            document.getElementById("passwordErrorMsg").innerText = "";
+                            break;
+                        default :
+                            // SERVER_ERROR
+                            alert("임시 비밀번호 발송에 실패했습니다. 다시 시도해주세요.");
+                            document.getElementById("emailErrorMsg").innerText = "임시 비밀번호 발송에 실패했습니다. 다시 시도해주세요.";
+                            break;
+                    }
                 }
             });
         };
-        // 비밀번호 찾기 : 인증번호 전송
-        document.getElementById("findPasswordBtn").onclick = () => {
-            var email = document.getElementById("email").value;
 
-            console.log(email);
-
-            // 인증번호 전송
-            if (email == '' || email == null) {
-                document.getElementById("emailErrorMsg").innerText = "필수 입력칸이에요.";
-            } else if (email == '#') {
-                // 이메일 정규표현식 만족못하면
-                console.log("이메일 형식을 다시 작성해주세요.")
-                document.getElementById("emailErrorMsg").innerText = "이메일 형식을 다시 작성해주세요.";
-            } else {
-                // 이메일 DB 확인
-                $.ajax({
-                    type: 'POST',
-                    url: '/user/find-user',
-                    contentType: 'application/json',
-                    data: JSON.stringify({mail : email}),
-                    success : function (response) {
-                        if (response === "success") {
-                            // 임시 비밀번호 전송
-                            $.ajax({
-                                type: 'POST',
-                                url: '/login/find-password',
-                                contentType: 'application/json',
-                                data: JSON.stringify({mail: email}),
-                                success: function (response) {
-                                    if (response === "success") {
-                                        document.getElementById("emailErrorMsg").innerText = "";
-                                        document.getElementById("passwordErrorMsg").innerText = "";
-                                        alert("임시 비밀번호가 이메일로 발송되었습니다. 이메일을 확인해주세요.");
-                                    } else {
-                                        console.log(response);
-                                        document.getElementById("emailErrorMsg").innerText = "해당 이메일로 가입된 사용자가 없습니다.";
-                                        document.getElementById("passwordErrorMsg").innerText = "";
-                                    }
-                                },
-                                error : function(request, error) {
-                                    // SERVER_ERROR
-                                    document.getElementById("emailErrorMsg").innerText = request.responseJSON.message;
-                                    alert(request.responseJSON.message);
-                                    alert("임시 비밀번호 발송에 실패했습니다. 다시 시도해주세요.");
-                                }
-                            });
-                        } else {
-                            // NOT_FOUND
-                            document.getElementById("emailErrorMsg").innerText = "존재하지 않는 이메일이에요.";
-                            document.getElementById("passwordErrorMsg").innerText = "";
-                        }
-                    },
-                    error : function (request, error) {
-                        if (request.responseJSON.code === "COMMON_001") {
-                            document.getElementById("emailErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
-                        } else {
-                            // SERVER_ERROR
-                            console.log("실패" + " " + request.responseJSON.message);
-                            document.getElementById("emailErrorMsg").innerText = request.responseJSON.message;
-                            alert(request.responseJSON.message);
-                        }
-                    }
-                });
-            }
-        };
-
+        /*
+        * 로그인 버튼 클릭시
+        * */
         document.getElementById("loginBtn").onclick = () => {
             let email = document.getElementById("email").value;
             let password = document.getElementById("password").value;
+
+            let passwordRegex = new RegExp("^[]")
+            if(!validateEmail(email)) {
+                return;
+            }
+            if (8 > password.length || password.length > 25) {
+                return;
+            }
 
             $.ajax({
                 type: 'POST',
@@ -287,15 +269,27 @@
                   }
                 },
                 error : function (request, error) {
-                    console.log(request.responseJSON.code);
-                    if (request.responseJSON.code == "COMMON_001") {
-                        document.getElementById("emailErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
-                        document.getElementById("passwordErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
-                    } else if (request.responseJSON.code == "MEMBER_001"){
-                        /*"가입된 사용자가 아닙니다."*/
-                        document.getElementById("emailErrorMsg").innerText = request.responseJSON.message;
-                    } else {
-                        alert(request.responseJSON.message);
+                    let errorCode = request.responseJSON.code;
+                    let errorMsg = request.responseJSON.message;
+                    console.log(errorCode + ": " + errorMsg);
+
+                    switch (errorCode) {
+                        case "COMMON_001":
+                            document.getElementById("emailErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
+                            document.getElementById("passwordErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
+                            break;
+                        case "MEMBER_001":
+                            /*"가입된 사용자가 아닙니다."*/
+                            document.getElementById("emailErrorMsg").innerText = request.responseJSON.message;
+                            document.getElementById("passwordErrorMsg").innerText = "";
+                            break;
+                        case "LOGIN_001" :
+                            document.getElementById("emailErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
+                            document.getElementById("passwordErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
+                            break;
+                        default:
+                            alert(request.responseJSON.message);
+                            break;
                     }
                 }
             });
