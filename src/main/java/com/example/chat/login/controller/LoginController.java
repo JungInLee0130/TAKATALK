@@ -1,7 +1,6 @@
 package com.example.chat.login.controller;
 
-import com.example.chat.exception.CustomException;
-import com.example.chat.exception.ErrorCode;
+import com.example.chat.global.aop.annotation.Timer;
 import com.example.chat.login.dto.MailRequest;
 import com.example.chat.login.dto.PasswordChangeRequest;
 import com.example.chat.login.dto.UserLoginForm;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.CompletableFuture;
 
-@Slf4j
 @Controller
 @RequestMapping("/login")
 @RequiredArgsConstructor
@@ -67,19 +65,17 @@ public class LoginController {
     /*
     * 로그인
     * */
+    @Timer
     @PostMapping
     public ResponseEntity<String> login(@Valid @RequestBody UserLoginForm userLoginForm) {
-        log.info("email : {}, password : {}", userLoginForm.email(), userLoginForm.password());
-
         loginService.login(userLoginForm);
-        log.info("LOGIN_SUCCESS");
-
         return ResponseEntity.ok("LOGIN_SUCCESS");
     }
 
     /*
      * 비밀번호 변경 메일보내기(비동기처리)
      * */
+    @Timer
     @PostMapping("/send-change-password")
     public CompletableFuture<ResponseEntity<String>> sendChangePasswordMail(@Valid @RequestBody MailRequest request) {
         SiteUser siteUser = userService.findByEmail(request.mail());

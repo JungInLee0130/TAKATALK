@@ -1,5 +1,6 @@
 package com.example.chat.login.service;
 
+import com.example.chat.global.aop.annotation.Timer;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.repository.UserRepository;
 import com.example.chat.user.service.UserService;
