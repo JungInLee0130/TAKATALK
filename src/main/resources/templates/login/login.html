@@ -133,6 +133,7 @@
         color: #E88985;
     }
 </style>
+<style th:replace="~{modal/modal :: modal-css}"></style>
 <body>
     <div class="container">
         <div class="login-logo">
@@ -151,11 +152,13 @@
                     <input id="password" type="password" th:field="*{password}" required>
                     <p id="passwordErrorMsg" class="error-msg"></p>
                 </div>
-                <div>
+                <div class="global-error-msg-wrapper">
                     <p id = "globalErrorMsg" class="error-msg"></p>
                 </div>
                 <div class="send-change-password-wrapper">
                     <button type="button" id="sendChangePasswordBtn">비밀번호를 잊으셨나요?</button>
+                    <!--비밀번호 재설정 클릭시-->
+                    <div th:replace="~{modal/modal :: modal-fragment}"></div>
                 </div>
                 <div class="login-button-wrapper">
                     <button type="button" id="loginBtn">로그인</button>
@@ -169,6 +172,7 @@
   </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script th:replace="~{modal/modal :: modal-js}"></script>
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', (event) => {
         /*
@@ -198,6 +202,11 @@
 
             if(!validateEmail(email)) return;
 
+            /*
+            * 유효성 검증 성공시 modal창 활성화
+            * */
+            modal.style.display = "block";
+
             $.ajax({
                 type: 'POST',
                 url: '/login/send-change-password',
@@ -209,7 +218,6 @@
                   if (response === "SUCCESS") {
                       document.getElementById("emailErrorMsg").innerText = "";
                       document.getElementById("passwordErrorMsg").innerText = "";
-                      alert("비밀번호 재설정 메일이 발송되었습니다. 이메일을 확인해주세요.");
                   } else {
                       alert(response);
                   }
