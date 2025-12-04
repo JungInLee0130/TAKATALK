@@ -1,4 +1,4 @@
-package com.example.chat.config.websocket;
+package com.example.chat.global.config.websocket;
 
 import com.example.chat.chatting.domain.ChatMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;

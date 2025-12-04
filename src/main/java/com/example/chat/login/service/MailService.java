@@ -36,6 +36,7 @@ public class MailService {
     /*
      * 비밀번호 재설정메일 전송
      * */
+    @Timer
     public CompletableFuture<String> sendChangePasswordMail(SiteUser siteUser) {
         MimeMessage message = createChangePasswordMail(siteUser);
         javaMailSender.send(message);

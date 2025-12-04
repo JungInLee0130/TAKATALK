@@ -1,7 +1,7 @@
 package com.example.chat.login.service;
 
-import com.example.chat.exception.CustomException;
-import com.example.chat.exception.ErrorCode;
+import com.example.chat.global.exception.CustomException;
+import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.login.entity.ResetToken;
 import com.example.chat.login.repository.ResetTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

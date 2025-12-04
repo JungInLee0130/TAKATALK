@@ -1,13 +1,12 @@
 package com.example.chat.login.service;
 
-import com.example.chat.exception.CustomException;
-import com.example.chat.exception.ErrorCode;
+import com.example.chat.global.exception.CustomException;
+import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.login.dto.UserLoginForm;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor

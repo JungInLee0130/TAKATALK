@@ -1,7 +1,7 @@
 package com.example.chat.user.service;
 
-import com.example.chat.exception.CustomException;
-import com.example.chat.exception.ErrorCode;
+import com.example.chat.global.exception.CustomException;
+import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.login.service.TokenService;
 import com.example.chat.user.domain.UserCreateForm;
 import com.example.chat.user.entity.SiteUser;
@@ -10,12 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Service
