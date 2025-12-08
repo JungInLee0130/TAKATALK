@@ -159,13 +159,13 @@
                 <h2>로그인</h2>
                 <div class="login-email">
                     <label for="email">이메일<span style="color: red;">*</span></label>
-                    <input id="email" type="email" th:field="*{email}" required>
-                    <p id="emailErrorMsg" class="error-msg"></p>
+                    <input id="email" type="email" th:field="*{email}"required>
+                    <p id="emailErrorMsg" class="error-msg" th:if="${error}" th:text="${exception}"></p>
                 </div>
                 <div class="login-password">
                     <label for="password">비밀번호<span style="color: red;">*</span></label>
                     <input id="password" type="password" th:field="*{password}" required>
-                    <p id="passwordErrorMsg" class="error-msg"></p>
+                    <p id="passwordErrorMsg" class="error-msg" th:if="${error}" th:text="${exception}"></p>
                 </div>
                 <div class="global-error-msg-wrapper">
                     <p id = "globalErrorMsg" class="error-msg"></p>
@@ -176,7 +176,7 @@
                     <div th:replace="~{modal/modal :: modal-fragment}"></div>
                 </div>
                 <div class="login-button-wrapper">
-                    <button type="button" id="loginBtn">로그인</button>
+                    <button type="submit" id="loginBtn">로그인</button>
                 </div>
                 <div class="find-account">
                     <p>계정이 필요한가요?</p>
@@ -189,7 +189,23 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script th:replace="~{modal/modal :: modal-js}"></script>
 <script th:inline="javascript">
+    /*
+    * ajax 요청시 자동으로 header에 csrf 토큰 삽입
+    * */
+    $(function () {
+        var csrfToken = [[${_csrf.token}]];
+        var csrfHeader = [[${_csrf.headerName}]];
+
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(csrfHeader, csrfToken);
+        });
+    })
+
     document.addEventListener('DOMContentLoaded', (event) => {
+        /*
+        * 로그인 버튼 클릭시
+        * */
+
         /*
         * 이메일 검증
         * */
@@ -259,64 +275,6 @@
                 }
             });
         };
-
-        /*
-        * 로그인 버튼 클릭시
-        * */
-        document.getElementById("loginBtn").onclick = () => {
-            let email = document.getElementById("email").value;
-            let password = document.getElementById("password").value;
-
-            let passwordRegex = new RegExp("^[]")
-            if(!validateEmail(email)) {
-                return;
-            }
-            if (8 > password.length || password.length > 25) {
-                return;
-            }
-
-            $.ajax({
-                type: 'POST',
-                url: '/login',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                   email: email,
-                   password: password
-                }),
-                success: function (response) {
-                  if (response === "LOGIN_SUCCESS") {
-                      console.log("로그인 성공!")
-                      window.location.href = '/chat/main';
-                  } else {
-                      console.log("?");
-                  }
-                },
-                error : function (request, error) {
-                    let errorCode = request.responseJSON.code;
-                    let errorMsg = request.responseJSON.message;
-                    console.log(errorCode + ": " + errorMsg);
-
-                    switch (errorCode) {
-                        case "COMMON_001":
-                            document.getElementById("emailErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
-                            document.getElementById("passwordErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
-                            break;
-                        case "MEMBER_001":
-                            /*"가입된 사용자가 아닙니다."*/
-                            document.getElementById("emailErrorMsg").innerText = request.responseJSON.message;
-                            document.getElementById("passwordErrorMsg").innerText = "";
-                            break;
-                        case "LOGIN_001" :
-                            document.getElementById("emailErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
-                            document.getElementById("passwordErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
-                            break;
-                        default:
-                            alert(request.responseJSON.message);
-                            break;
-                    }
-                }
-            });
-        }
     });
 </script>
 </html>

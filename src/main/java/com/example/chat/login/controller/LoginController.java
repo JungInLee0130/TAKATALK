@@ -10,6 +10,7 @@ import com.example.chat.login.service.MailService;
 import com.example.chat.login.service.TokenService;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @Controller
 @RequestMapping("/login")
 @RequiredArgsConstructor
@@ -34,7 +36,24 @@ public class LoginController {
     * 로그인 페이지
     * */
     @GetMapping
-    public String loginPage(UserLoginForm userLoginForm){
+    public String loginPage(Model model,
+                            HttpSession session){
+        String errorMsg = (String) session.getAttribute("loginErrorMsg");
+
+        UserLoginForm userLoginForm = new UserLoginForm();
+
+        if (errorMsg != null) {
+            userLoginForm.setEmail((String) session.getAttribute("email"));
+
+            model.addAttribute("error", "true");
+            model.addAttribute("exception", errorMsg);
+
+            session.removeAttribute("loginErrorMsg");
+            session.removeAttribute("email");
+        }
+
+        model.addAttribute("userLoginForm", userLoginForm);
+
         return "login/login";
     }
 
@@ -65,17 +84,15 @@ public class LoginController {
     /*
     * 로그인
     * */
-    @Timer
-    @PostMapping
-    public ResponseEntity<String> login(@Valid @RequestBody UserLoginForm userLoginForm) {
+    /*@PostMapping
+    public ResponseEntity<Void> login(@Valid @RequestBody UserLoginForm userLoginForm) {
         loginService.login(userLoginForm);
-        return ResponseEntity.ok("LOGIN_SUCCESS");
-    }
+        return ResponseEntity.ok().build();
+    }*/
 
     /*
      * 비밀번호 변경 메일보내기(비동기처리)
      * */
-    @Timer
     @PostMapping("/send-change-password")
     public CompletableFuture<ResponseEntity<String>> sendChangePasswordMail(@Valid @RequestBody MailRequest request) {
         SiteUser siteUser = userService.findByEmail(request.mail());
