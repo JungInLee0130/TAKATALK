@@ -28,14 +28,32 @@ public class ParameterAop {
         Method method = methodSignature.getMethod();
         System.out.println("----------" + method.getName() + " 실행" + "-----------");
 
-        // 메서드에 들어가는 매개변수 배열을 읽어옴.
-        Object[] args = joinPoint.getArgs();
+        // 파라미터 이름
+        final String[] parameterNames = methodSignature.getParameterNames();
+        // 메서드에 들어가는 매개변수 배열(value)을 읽어옴.
+        final Object[] args = joinPoint.getArgs();
 
+        for (int i = 0; i < parameterNames.length; i++) {
+            if (args[i] != null) {
+                System.out.print("type : " + args[i].getClass().getSimpleName());
+                System.out.print(", parameterName : " + parameterNames[i]);
+                System.out.println(", value : " + args[i]);
+            } else {
+                System.out.print("type : null");
+                System.out.print(", parameterName : " + parameterNames[i]);
+                System.out.println(", value : null");
+            }
+        }
         // 매개변수 배열의 종류와 값을 출력
-        for (Object obj : args) {
+        /*for (Object obj : args) {
+            if (obj == null) {
+                System.out.println("type : null");
+                System.out.println("value : null");
+                continue;
+            }
             System.out.println("type : " + obj.getClass().getSimpleName());
             System.out.println("value : " + obj);
-        }
+        }*/
     }
 
     @AfterReturning(value = "cut()", returning = "obj")
