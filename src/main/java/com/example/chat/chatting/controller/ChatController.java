@@ -1,10 +1,8 @@
 package com.example.chat.chatting.controller;
 
 import com.example.chat.chatting.domain.ChatRoom;
-import com.example.chat.channel.dto.CreateChannelRequest;
 import com.example.chat.chatting.service.ChatService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,17 +15,13 @@ import java.util.List;
 public class ChatController {
     private final ChatService chatService;
 
-    /*
-    * 메인페이지 : 채팅목록
-    * */
+    /*채팅방 목록*/
+
     @GetMapping("/main")
     public String index(){
-        return "chat/chatList";
+        return "/index";
     }
 
-    /*
-    * 전체 채팅방 목록
-    * */
     @GetMapping("/chatList")
     public String chatList(Model model){
         List<ChatRoom> roomList = chatService.findAllRoom();
@@ -56,6 +50,4 @@ public class ChatController {
         model.addAttribute("nickname", nickname);
         return "chat/chatRoom";
     }
-
-
 }

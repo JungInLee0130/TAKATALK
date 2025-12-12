@@ -48,12 +48,6 @@ dependencies {
     //validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    //security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-
-    //AOP
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
-
     //test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -61,8 +55,4 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs << '-parameters' // spring boot 3.2부터 추가 필수
 }

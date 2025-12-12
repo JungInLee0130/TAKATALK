@@ -1,142 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
   <meta charset="UTF-8">
   <title>Title</title>
 </head>
 <style>
-  body {
-    margin: 0;
-    width: auto;
-    min-height: 100vh;
-    background-image: url("/images/discord-background.svg");
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
   .container {
-
-  }
-
-  .login-logo {
-    position: absolute;
-    top:50px;
-    left:50px;
-  }
-  .login-logo img {
-    object-fit: none;
-  }
-
-  .signup {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
-    margin: 0;
-    padding: 32px 32px;
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
-
-    background-color: #393A41;
-    color: #FFFFFF;
-    font-size: 16px;
-    font-family: sans-serif;
-
-    width: 480px;
   }
-  .signup .signup-header {
-    margin: 0 auto;
+  .signup {
+    padding: 0 32px;
+    border: 1px solid black;
+    width: 480px;
+    height: 100%;
   }
   .signup h2{
-    margin: 0;
-    margin-bottom: 10px;
     text-align: center;
-  }
-
-  .signup-email {
-    margin: 0 auto;
-
   }
 
   .signup label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    font-size: 16px;
   }
 
   .signup input {
-    margin: 0;
-    margin-bottom: 10px;
-    padding: 1px 10px;
-
-    width: 100%;
+    width: 400px;
     height: 40px;
-
-    border: none;
-    border-radius: 10px;
-
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1px 10px;
+    margin-bottom: 10px;
     font-size: 16px;
-    background-color: #2E2E34;
-    color:#A5A6AC;
-
-    -ms-box-sizing: border-box; /* ie8 */
-    -khtml-box-sizing: border-box; /* konqueror */
-    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-    box-sizing: border-box;         /* Opera/IE 8+ */
-    box-sizing: border-box; /* css3 rec */
   }
 
-  input:focus {
-    border: 1px solid black;
-    border-color: #7BB0F5;
-    outline: none;
+  .signup .signup-checkbox {
+    display: flex;
+    flex-display: row;
+    align-items: center;
+  }
+  .signup .signup-checkbox input {
+    width: 24px;
+    height: 24px;
+  }
+
+  .signup .signup-checkbox p {
+
   }
 
   .signup .signup-button-wrapper {
-    height: 45px;
-    margin-bottom: 10px;
+    width: 384px;
+    height: 40px;
+    padding: 7px;
+  }
+
+  .signup .signup-button-wrapper button{
+    width: 384px;
+    height: 30px;
+    font-size: 16px;
   }
 
   .signup .signup-birthday {
-    margin: 0;
     display: flex;
     flex-direction: column;
-    color: #FFFFFF;
-    margin-bottom: 10px;
   }
 
-  #info__birth {
+  .info#info__birth {
     display:flex;
     align-items: center;
   }
-  #info__birth select{
+  .info#info__birth select{
     margin-left: 7px;
-    padding: 8px 12px;
-
-    width: 100%;
+    width: 128px;
     height: 44px;
-
+    padding: 8px 12px;
     font-size: 16px;
-
-    border: none;
-    border-radius: 7px;
-    background-color: #2E2E34;
-    color: #A5A6AC;
-  }
-  #info__birth select:focus {
     border: 1px solid black;
-    border-color: #7BB0F5;
-    outline: none;
+    border-radius: 7px;
   }
-
-  #info__birth select:first-child{
+  .info#info__birth select:first-child{
     margin-left: 0px;
   }
   .info#info__birth select::-webkit-scrollbar{
@@ -153,127 +98,71 @@
     border-radius: 6px;
   }
 
-  .signup .signup-checkbox {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-  }
-
-  .signup .signup-checkbox input {
-    width: 24px;
-    height: 24px;
-    margin-right: 5px;
-  }
-  .signup .signup-checkbox p {
-    margin: 0;
-    color: #A5A6AC;
-  }
-
-  .signup .signup-agree {
-    color: #A5A6AC;
-    margin-bottom: 15px;
-  }
-  .signup .signup-agree p{
-    margin: 0;
-  }
-
-  .signup .signup-already a{
-    color: #5865F2;
-    text-decoration: none;
-  }
-
-  .signup .signup-button-wrapper button{
-    float: left;
-    width: 100%;
-    height: 45px;
-
-    padding: 7px 15px;
-
-    border: none;
-    border-radius: 10px;
-    margin: 1px 0;
-    font-size: 16px;
-
-    background-color: #5865F2;
-    color: white;
-
-    -ms-box-sizing: border-box; /* ie8 */
-    -khtml-box-sizing: border-box; /* konqueror */
-    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-    box-sizing: border-box;         /* Opera/IE 8+ */
-    box-sizing: border-box; /* css3 rec */
-  }
-
   .field-error {
     margin: 10px 0px;
     color: #E88985;
   }
-
 </style>
 <body>
 <div class="container">
-  <div class="login-logo">
-    <img th:src="@{/images/discord-logo.svg}" class="discord-logo">
-  </div>
   <div class="signup">
-    <div class="signup-header">
+    <div>
       <h2>계정만들기</h2>
     </div>
     <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
-      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
       <div class="signup-email">
-        <label for="email">이메일 <span style="color:red">*</span></label>
-        <input id="email" type="email" th:field="*{email}" required/>
-        <p class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+        <label for="email">이메일<span style="color:red">*</span></label>
+        <input id="email" type="email" th:field="*{email}" th:errorclass="field-error" required/>
+        <p class="field-error" th:errors="*{email}"></p>
       </div>
       <div class="signup-nickname">
         <label for="nickname">별명</label>
-        <input id="nickname" type="text" th:field="*{nickname}">
-        <p class="field-error" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"></p>
+        <input id="nickname" type="text" th:field="*{nickname}" th:errorclass="field-error">
+        <p class="field-error" th:errors="*{nickname}"></p>
       </div>
       <div class="signup-username">
-        <label for="username">사용자명 <span style="color:red">*</span></label>
-        <input id="username" type="text" th:field="*{username}" required>
-        <p class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+        <label for="username">사용자명<span style="color:red">*</span></label>
+        <input id="username" type="text" th:field="*{username}" th:errorclass="field-error" required>
+        <p class="field-error" th:errors="*{username}"></p>
       </div>
       <div class="signup-password">
-        <label for="password">비밀번호 <span style="color:red">*</span></label>
-        <input id="password" type="password" th:field="*{password}" required>
-        <p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+        <label for="password">비밀번호<span style="color:red">*</span></label>
+        <input id="password" type="password" th:field="*{password}" th:errorclass="field-error" required>
+        <p class="field-error" th:errors="*{password}"></p>
       </div>
       <div class="signup-birthday">
-        <p>생년월일 <span style="color:red">*</span></p>
+        <p>생년월일<span style="color:red">*</span></p>
         <div class="info" id="info__birth">
-          <select th:field="*{birthYear}" class="birth-year" id="birth-year">
-            <option value="-1" disabled selected>년</option>
+          <select th:field="*{birthYear}" class="birth-year" id="birth-year" onchange="birthValidation()" th:errorclass="field-error" required>
+            <option value="" disabled selected>년</option>
           </select>
-          <select th:field="*{birthMonth}" class="birth-month" id="birth-month">
-            <option value="-1" disabled selected>월</option>
+          <select th:field="*{birthMonth}" class="birth-month" id="birth-month" onchange="birthValidation()" th:errorclass="field-error" required>
+            <option value="" disabled selected>월</option>
           </select>
-          <select th:field="*{birthDay}" class="birth-day" id="birth-day">
-            <option value="-1" disabled selected>일</option>
+          <select th:field="*{birthDay}" class="birth-day" id="birth-day" onchange="birthValidation()" th:errorclass="field-error" required>
+            <option value="" disabled selected>일</option>
           </select>
         </div>
+        <p class="field-error" th:if="${#fields.hasErrors('birthYear')} or ${#fields.hasErrors('birthMonth')} or ${#fields.hasErrors('birthDay')}" th:errors="*{birthYear}"></p>
+
+        <!-- 글로벌 에러 처리부분 -->
+        <div th:if="${#fields.hasGlobalErrors()}">
+          <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+        </div>
+        <!-- ---------------- -->
       </div>
-      <p class="field-error" th:if="${#fields.hasErrors('birthYear')} or ${#fields.hasErrors('birthMonth')} or ${#fields.hasErrors('birthDay')}" th:errors="*{birthYear}"></p>
-      <!-- 글로벌 에러 처리부분 -->
-      <div th:if="${#fields.hasGlobalErrors()}">
-        <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
-      </div>
-      <!-- ---------------- -->
       <div class="signup-checkbox">
         <input type="checkbox">
         <p>(선택사항)Discord 소식, 도움말, 특별할인을 이메일로 보내주세요. 언제든지 취소하실 수 있어요.</p>
       </div>
-      <div class="signup-agree">
-        <p>"계정 만들기"를 클릭하면 Discord의 <span style="color:#5865F2;">이용약관</span>에 동의하며 <span style="color:#5865F2">개인정보 보호 정책</span>을 읽었음을 확인하는 것으로 간주됩니다.</p>
+      <div>
+        <p>"계정 만들기"를 클릭하면 Discord의 이용약관에 동의하며 개인정보 보호 정책을 읽었음을 확인하는 것으로 간주됩니다.</p>
       </div>
       <div class="signup-button-wrapper">
         <button type="submit">계정만들기</button>
       </div>
     </form>
-    <div class="signup-already">
+    <div>
       <a th:href="@{/login}">이미 계정이 있나요? 로그인하세요</a>
     </div>
   </div>
@@ -281,7 +170,7 @@
 </body>
 <script th:inline="javascript">
   /***생년월일 option 추가로직****/
-  const birthYearEl = document.getElementById('birth-year');
+  const birthYearEl = document.querySelector('#birth-year');
   isYearOptionExisted = false;
   birthYearEl.addEventListener('focus', function () {
     if (!isYearOptionExisted) {
@@ -316,22 +205,20 @@
       isDayOptionExisted = true;
       for (var i = 1; i <= 31; i++) {
         const DayOption = document.createElement('option');
-
-        DayOption.setAttribute('value', i); // value 설정
+        DayOption.setAttribute('value', i);
         DayOption.innerText = i;
-
-        this.appendChild(DayOption);  // select 하위로 append
+        this.appendChild(DayOption);
       }
     }
   })
   /*******/
   /***생일 유효성검사****/
-  /*function birthValidation() {
+  function birthValidation() {
     let birthYear = parseInt(document.querySelector('#birth-year').value);
     let birthMonth = parseInt(document.querySelector('#birth-month').value);
     let birthDay = parseInt(document.querySelector('#birth-day').value);
 
-    if (!(birthYear == -1 && birthMonth == -1 && birthDay == -1)) {
+    if (!isNaN(birthYear) && !isNaN(birthMonth) && !isNaN(birthDay)) {
       isValidBirthDate = true;
 
       switch (birthMonth) {
@@ -362,9 +249,8 @@
       } else {
         document.getElementById("valid-birth").innerHTML = "";
       }
-       onchange="birthValidation()"
     }
-  }*/
+  }
   /*****/
 </script>
 </html>
