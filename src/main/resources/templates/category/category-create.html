@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <meta charset="UTF-8">
+  <title>카테고리 만들기</title>
+</head>
+<style>
+</style>
+<body>
+  <div>
+    <form th:action="@{/category/create/{groupId}(groupId = ${groupId})}"
+          th:object="${createForm}" method="post">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+      <div>
+        <h2 th:text="${groupId}"></h2>
+      </div>
+      <div>
+        <label for="categoryName">카테고리 이름</label>
+        <input type="text" id="categoryName" th:field="*{categoryName}">
+      </div>
+      <div>
+        <label for="isSecret">비공개 여부</label>
+        <input type="checkbox" id="isSecret" th:field="*{isSecret}">
+      </div>
+      <div>
+        <button type="submit">create Category</button>
+      </div>
+    </form>
+  </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script th:inline="javascript">
+  /*
+  * ajax 요청시 자동으로 header에 csrf 토큰 삽입
+  * */
+  $(function () {
+    var csrfToken = [[${_csrf.token}]];
+    var csrfHeader = [[${_csrf.headerName}]];
+
+    $(document).ajaxSend(function (e, xhr, options) {
+      xhr.setRequestHeader(csrfHeader, csrfToken);
+    });
+  })
+
+</script>
+</html>
