@@ -1,4 +1,4 @@
-package com.example.chat.global.config.security;
+package com.example.chat.global.config.security.authentication;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

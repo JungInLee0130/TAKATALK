@@ -1,5 +1,6 @@
 package com.example.chat.global.config.security;
 
+import com.example.chat.global.config.security.authentication.CustomAuthenticationFailureHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -8,9 +9,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 public class SecurityConfig {
@@ -28,22 +31,47 @@ public class SecurityConfig {
                         .requestMatchers(PathRequest.toH2Console()).permitAll() // dev : h2 database permitAll
                         .requestMatchers("/images/**", "/css/**", "/js/**").permitAll()     // 정적 리소스 permitAll
                         .requestMatchers("/login/**", "/user/signup").permitAll()   // 로그인, 회원가입 permitAll
-                        .anyRequest().hasAnyRole("USER", "ADMIN"))
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/mypage/**").hasRole("USER")
+                        .anyRequest().authenticated()
+                )
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .formLogin(form -> form     // 사용자정의 formLogin 사용
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/index")
+                        .defaultSuccessUrl("/main")
                         .failureHandler(failureHandler)
-                        .permitAll())
-                .httpBasic(AbstractHttpConfigurer::disable); // Http Basic 인증 비활성화
+                        .permitAll()
+                )
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session
+                        .invalidSessionUrl("/login")
+                        //.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)   // IF_REQUIRED : 기본값
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(true)
+                        .expiredUrl("/login")
+
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")   // post 요청
+                        .logoutSuccessUrl("/login") // logout 성공시 이동할 url
+                        .invalidateHttpSession(true)    // http session 무효화
+                        .deleteCookies("JSESSIONID")    // 로그아웃시 삭제할 쿠키이름
+                )
+                .exceptionHandling(exceptions -> exceptions
+                        .accessDeniedPage("/403")
+                )
+        ; // Http Basic 인증 비활성화
 
         return http.build();
     }
 
-
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
 
     @Bean
     @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
