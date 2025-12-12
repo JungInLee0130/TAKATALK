@@ -5,63 +5,92 @@
 <!--<script type="text/javascript" src="/js/chatList.js"></script>-->
 <style>
     * {
+        /*box-sizing all*/
         box-sizing: border-box;
         font-family: sans-serif;
     }
     body {
         margin: 0;
-        background: #eee;
+        background: #1A1A1E;
+        min-height: 100vh;
     }
     .container {
         display: flex;
-        width: 100%;
-        height: 680px;
+        min-height: 100vh;
     }
-    .container .semi-container {
+    .container .left-container {
         display: flex;
         flex-direction: column;
+
+        width: 20vw;
+        background-color: #5865F2;
     }
-    .container .semi-container .left-object {
+    .container .left-container .left-object {
         display: flex;
+        width: 100%;
         flex-direction: row;
     }
-    .container .semi-container .character-info {
+    .left-container .character-info {
+        margin: 0;
         background-color: darkgray;
-        height: 80px;
+        height: 10vh;
     }
-    .container .left-bar {
+    .left-container .character-info p{
+        margin : 0;
+        text-align: center;
+        line-height: 10vh;
+        height: 10vh;
+    }
+    .left-bar {
         width: 60px;
-        height: 600px;
+        height: 90vh;
         background-color: skyblue;
     }
-    .container .left {
+
+    .left {
         display: flex;
         flex-direction: column;]
         width: 250px;
-        height: 600px;
+        height: 90vh;
         background-color: beige;
     }
-    .container .left .chat-list {
+    .left .chat-list {
         border: 1px solid black;
         margin: 0 5px;
         padding: 0 5px;
         border-radius: 7px;
     }
-    .container .left .chat-list h3 {
+    .chat-list .chat-list-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .chat-list-body {
+        display: flex;
+        justify-content: space-between;
+    }
+    .chat-list-body a{
+        text-decoration: none;
+    }
+    .chat-list-body .chatroom-btn-wrapper {
+
+    }
+    .left .chat-list h3 {
         text-align: center;
     }
-    .container .left .chat-list p {
+    .left .chat-list p {
         border: 1px solid black;
         border-radius: 7px;
         margin: 0;
     }
-    .container .left .left-header {
-        width: 250px;
+    .left .left-header {
+        width: 300px;
     }
-    .container .left h2{
+    .left-header h2{
+        width: 100%;
         text-align: center;
     }
-    .container .left .chatTable {
+    .left .chatTable {
         width: 410px;
         background-color: beige;
         border: 1px solid black;
@@ -72,48 +101,80 @@
     .container .center{
         display: flex;
         flex-direction: column;
-        width: 910px;
+        width: 60vw;
         background-color: skyblue;
         gap: 5px;
+        padding: 10px;
+        box-sizing: border-box;
     }
-    .container .center .center-header{
+    .center .center-header{
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+
+        height: 10vh;
+
+        background-color: #006d77;
     }
-    .container .center .center-header h2{
+    .center .center-header h2{
         margin-left: 10px;
         text-align: center;
     }
-    .container .center .center-header p {
+    .center .center-header .icon {
+
+    }
+    .center .center-header #chatUserlist {
+        margin: 10px 0;
+        width: 50px;
+        height: 45px;
         margin-right: 10px;
     }
-    .container .center .chatBox {
+    .center .chatBox {
         display: flex;
         justify-content: center;
     }
-    .container .center textarea{
-        width: 890px;
-        height: 530px;
+    .center textarea{
+        /*width: 890px;
+        height: 530px;*/
+        padding: 10px;
 
+        width: 100%;
+        height: 80vh;
     }
-    .container .center .chatInput{
+    .center .chat-input-wrapper{
         display: flex;
         flex-direction: row;
+        height: 10vh;
     }
-    .container .center .chatInput input {
-        width: 890px;
+    .center .chat-input-wrapper #uploadFileBtn{
+        width: 5%;
+        height: 45px;
+    }
+    .chat-input-wrapper input {
+        font-size: 15px;
+        padding: 0 10px;
+        width: 85%;
+        height: 45px;
+        margin: 0 5px;
+    }
+    .chat-input-wrapper #sendMsgBtn {
+        margin: 0;
+        width: 10%;
         height: 45px;
     }
     /*****************************************************************/
     /**********************접속자 창 css********************************/
     .container .right {
+        width: 20vw;
         display: flex;
         flex-direction: column;
         background-color: darkgray;
+
+        box-sizing: border-box;
+        padding: 10px 32px;
     }
-    .container .right h2{
+    .right h2{
         text-align: center;
     }
     .chatRoom {
@@ -146,12 +207,18 @@
     <title>Title</title>
 </head>
 <body>
-    <div th:insert="~{/comm/header.html}"></div>
     <div class="container">
-        <div class="semi-container">
+        <div class="left-container">
             <div class="left-object">
-                <div class="left-bar">
-                    <p>여러 그룹을 이동할수있는 바(icon 형태로 보임)</p>
+                <!--<p>여러 그룹을 이동할수있는 바(icon 형태로 보임)</p>-->
+                <div class="left-bar" th:each="group : ${groups}">
+                    <a th:href="@{/group/access(groupId = ${group.id})}" class="group-link">
+                        <img th:src="${group.profile}" th:alt="${group.name} + '아이콘'" class="group-icon">
+                        <span th:if="${group.hasNewMessage}" class="notification-badge">
+                            <span th:text="${group.newMessageCount}">1</span>
+                        </span>
+                    </a>
+
                 </div>
                 <!--**채팅방 목록**-->
                 <div class="left">
@@ -159,29 +226,24 @@
                         <h2>방제목</h2>
                     </div>
                     <div class="chat-list">
-                        <div class="chat-list-header" style="display:flex; flex-direction: row; justify-content: space-between">
-                            <p style="font-weight: bold">채팅 채널</p>
-                            <button style="">+</button>
+                        <div class="chat-list-header">
+                            <div>
+                                <p style="font-weight: bold">채팅 채널</p>
+                            </div>
+                            <!--채널 생성 -->
+                            <div cla>
+                                <button type="button" id="createChannel" class="create-channel">+</button>
+                            </div>
                         </div>
-                        <table class="chat-table">
-                            <tr th:each="room : ${roomList}" style="">
-                                <td>
-                                    <p th:text="${room.name}" style="box-shadow: 0 4px 40px -8px rgba(0,0,0,0.3);">테스트용</a>
-                                </td>
-                                <td>
-                                    <p th:text="${room.count}">6/8</p>
-                                </td>
-                            </tr>
-                            <tr th:each="room : ${roomList}">
-                                <td>
-                                    <p th:text="${room.name}" style="box-shadow: 0 4px 40px -8px rgba(0,0,0,0.3);">테스트용</p>
-                                </td>
-                                <td>
-                                    <p th:text="${room.count}">6/8</p>
-                                </td>
-                            </tr>
-                            <th>음성 채널</th>
-                        </table>
+                        <div class="chat-list-body">
+                            <!--채팅방입장-->
+                            <a class="chatroom" th:href="@{chatRoom(room = ${room.roomId})}" th:text = "*{room.name}"># dd</a>
+                            <!--채팅방초대-->
+                            <div class="chatroom-btn-wrapper">
+                                <button type="button" id="inviteChannel" class="invite-channel">초대</button>
+                                <button type="button" id="settingChannel" class="setting-channel">설정</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -194,39 +256,61 @@
         <!--****채팅방****-->
         <div class="center">
             <div class="center-header">
-                <h2>채팅 공간</h2> <!--채팅방 title-->
+                <div>
+                    <h2>채팅 공간</h2> <!--채팅방 title-->
+                </div>
                 <div class="icon">
-                    <p>참가자(사람이미지)</p>
+                    <button type="button" id="chatUserlist" class="chat-userlist">user</button>
                 </div>
             </div>
             <div class="chatBox">
                 <textarea class="chatBox-textarea">
                 </textarea>
             </div>
-            <div class="chatInput">
-                <p class="file-input">파일업로드 아이콘</p>
+            <div class="chat-input-wrapper">
+                <button type="button" id="uploadFileBtn" class="upload-file-btn">File</button>
                 <input class="chat-input" placeholder="채팅 입력" autofocus>
-                <p class="send-btn">채팅 전송 버튼</input>
+                <button type="button" id="sendMsgBtn" class="send-msg-btn">Send</button>
             </div>
         </div>
         <div class="right">
-            <h2>현재 접속자</h2>
-            <p>온라인-200</p>
-            <div class="chat-participants">
-                채팅리스트
+            <div>
+                <h2>현재 접속자</h2>
             </div>
-            <p>오프라인-200(설정으로 보이게 안보이게 가능)</p>
+            <div>
+                <p>온라인-200</p>
+            </div>
+            <div class="chat-online-participants-wrapper">
+                <p>참가자 리스트</p>
+            </div>
+            <div>
+                <p>오프라인-200(설정으로 보이게 안보이게 가능)</p>
+            </div>
+            <div class="chat-offline-participants-wrapper">
+                <p>참가자 리스트</p>
+            </div>
         </div>
         <!--*************-->
     </div>
-    </div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script th:inline="javascript">
-    onpageshow = (e) => {
+    /*
+    * ajax 요청시 자동으로 header에 csrf 토큰 삽입
+    * */
+    $(function () {
+        var csrfToken = [[${_csrf.token}]];
+        var csrfHeader = [[${_csrf.headerName}]];
+
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(csrfHeader, csrfToken);
+        });
+    })
+    /*onpageshow = (e) => {
         if (e.persisted || (window.performance && window.performance.navigation.type == 2)) {
             window.location.reload();
         }
-    }
+    }*/
 
     function enterRoom(roomId) {
         console.log("roomId: " + roomId);
@@ -248,5 +332,12 @@
 
         window.location.href = url;
     }
+
+    /*document.getElementById("createChannel").onclick = () => {
+        $.ajax({
+            type: 'POST',
+            url:
+        })
+    }*/
 </script>
 </html>

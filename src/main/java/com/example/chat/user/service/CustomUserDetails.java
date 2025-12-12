@@ -51,14 +51,6 @@ public class CustomUserDetails implements UserDetails, Serializable {
         return String.valueOf(id);  // SSO 정책에 따라서 이메일이 중복된값이 대입될수있으므로 DB SiteUser의 PK로 설정
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;

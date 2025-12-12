@@ -23,11 +23,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
     private final UserService userService;
 
+    /*
+    * 회원 가입 페이지 접속
+    * */
     @GetMapping("/signup")
-    public String signup(UserCreateForm userCreateForm) {
+    public String signupPage(UserCreateForm userCreateForm) {
         return "signup/signup";
     }
 
+    /*
+    * 회원 가입 신청
+    * */
     @PostMapping("/signup")
     public String signup(@Valid @ModelAttribute UserCreateForm userCreateForm
             , BindingResult bindingResult

@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class SiteUser {
     @Id
@@ -45,5 +44,9 @@ public class SiteUser {
         this.email = email;
         this.birthday = birthday;
         this.role = RoleType.USER;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

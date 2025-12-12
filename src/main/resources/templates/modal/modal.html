@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>modal</title>
 </head>
-<style th:fragment="modal-css">
+<style th:fragment="login-modal-css">
     /*body {
         margin: 0;
         width: 100vw;
@@ -29,7 +29,7 @@
         position: absolute;
         top: 30vh;
     }*/
-    .modal {
+    .login-modal {
         display: none;
         position: absolute;
 
@@ -70,9 +70,9 @@
         margin: 0;
     }
 
-    .modal .confirm-btn-wrapper {
+    .login-modal .confirm-btn-wrapper {
     }
-    .modal #confirmBtn{
+    .login-modal #confirmBtn{
         width: 100px;
         height: 40px;
 
@@ -93,7 +93,7 @@
     }
 </style>
 <body>
-    <div th:fragment="modal-fragment" class="modal" id="modal">
+    <div th:fragment="login-modal-fragment" class="login-modal" id="loginModal">
         <div class="modal-body">
             <h2>지시사항 이메일로 전송완료</h2>
             <p>계정 비밀번호 변경 방법을 <span style="font-family: bold">이메일</span>(으)로 보냈어요. 받은 편지함 또는 스팸함을 확인해 주세요.</p>
@@ -103,7 +103,7 @@
         </div>
     </div>
 </body>
-<script th:inline="javascript" th:fragment="modal-js">
+<script th:inline="javascript" th:fragment="login-modal-js">
     /**
      * 모달 바깥쪽에 선언
      * **/
@@ -121,10 +121,10 @@
         document.querySelector("span").innerText = document.getElementById("#email").innerText.value;
     })*/
 
-    const modal = document.getElementById("modal");
+    const loginModal = document.getElementById("modal");
     const confirmBtn = document.getElementById("confirmBtn");
     confirmBtn.onclick = () => {
-        modal.style.display = "none";
+        loginModal.style.display = "none";
     };
 
     /*confirmBtn.addEventListener("keydown", function (e) {

@@ -1,5 +1,6 @@
 <html>
 <head>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -100,7 +101,7 @@
             <img src="/images/wuwa-icon.png">
         </div>
         <div class="right">
-            <h2> Steps to complete </h2>
+            <h2 th:text="${nickname}"> Steps to complete </h2>
             <div class="steps-container">
                 <div class="step active">
                     <div class="icon">
