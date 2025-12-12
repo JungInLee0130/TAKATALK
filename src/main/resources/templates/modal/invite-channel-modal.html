@@ -1,0 +1,264 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>modal</title>
+</head>
+<!--<style th:fragment="invite-modal-css">-->
+<style th:fragment="invite-modal-css">
+  body {
+      margin: 0;
+      width: 100vw;
+      min-height: 100vh;
+      background-color: skyblue;
+  }
+  .container {
+      background-color: #006d77;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+  }
+  .container .modal-outside {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+      top: 30vh;
+  }
+  .invite-channel-modal {
+    /*display: none;*/
+    position: absolute;
+
+    top:0;
+    left:0;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(0,0,0,0.4);
+  }
+
+  .modal-body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    width: 500px;
+
+
+    padding: 16px 32px;
+
+    background-color: rgb(0, 0, 0);
+    border-radius: 10px;
+    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+
+    transform: translate(-50%, -50%); /*자신의 전체너비, 높이의 절반만큼 왼쪽,위로이동*/
+
+    color: white;
+    font-size: 16px;
+  }
+
+  .modal-body h2{
+    margin-bottom: 10px;
+  }
+
+  .modal-body p {
+    margin: 0;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0px;
+  }
+
+  .modal-header h2 {
+    margin: 0;
+
+  }
+
+  .modal-header-text {
+
+  }
+
+  .search-friends-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-sizing: border-box;
+  }
+  .search-icon {
+
+  }
+
+  .search-friends-wrapper input {
+    margin: 10px 0;
+    padding: 5px;
+    width: 100%;
+    height: 24px;
+  }
+
+  .friendslist {
+    margin: 10px 0;
+    display: flex;
+
+  }
+
+  .friends-table {
+    margin: 0;
+    color: white;
+  }
+
+  .friends-table-row {
+  }
+
+
+  .share-link-wrapper {
+
+  }
+
+  .share-link-input-wrapper{
+    display: flex;
+    margin: 10px 0;
+    box-sizing: border-box;
+  }
+
+  .share-link-input-wrapper input{
+    width: 80%;
+  }
+
+  .share-link-input-wrapper button{
+    width: 20%;
+  }
+
+  .invite-channel-modal .confirm-btn-wrapper {
+  }
+  .invite-channel-modal #confirmBtn{
+    width: 100px;
+    height: 40px;
+
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translate(-20px, -20px);
+
+    border-radius: 10px;
+    border-color: rgba(0,0,0,0);
+
+    text-align: center;
+    line-height: 2px; /* ? */
+
+    padding: 0;
+    color: white;
+    background-color: red;
+  }
+  #modalCloseBtn {
+    background-color: black;
+    color: #6C6D74;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    width: 40px;
+    font-size: 20px;
+  }
+  #modalCloseBtn:hover {
+    border: 1px solid black;
+    background-color: #333333;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,0.15);
+    color: white;
+  }
+</style>
+<body>
+<div th:fragment="invite-modal-fragment(channelId)" class="invite-channel-modal" id="inviteChannelModal">
+  <div class="modal-body">
+    <div class="modal-header">
+      <div class="modal-header-text">
+        <h2>친구를 <span th:text="${inviteChannelResponse.groupName}">그룹 1</span> 그룹으로 초대하기</h2>
+      </div>
+      <div class="modal-close-btn-wrapper">
+        <button type="button" id="modalCloseBtn">X</button>
+      </div>
+    </div>
+    <p>수신자는 # <span th:text="${inviteChannelResponse.channelName}"></span>에 도착해요</p>
+    <div class="search-friends-wrapper">
+      <div class="search-icon">
+        <img src="#">
+      </div>
+      <!--아마 검색버튼없이 자동으로 되야할거임-->
+      <input type="text" placeholder="친구 찾기">
+    </div>
+    <div class="friendslist">
+      <table class="friends-table">
+        <tr th:each="friend : ${inviteChannelResponse.friendsResponses}">
+          <td th:text="${friend.nickname}"></td>
+          <td><button type="button" id="sendInvitationBtn">초대하기</button></td>
+        </tr>
+      </table>
+
+    </div>
+    <div class="share-link-wrapper">
+      <p>또는 친구에게 서버 초대 링크 전송하기</p>
+      <div class="share-link-input-wrapper">
+        <input type="text" readonly>
+        <button type="button" id="linkCopyBtn">복사하기</button>
+      </div>
+      <p>초대 링크가 7일 후에 만료돼요.</p>
+    </div>
+  </div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<!--<script th:inline="javascript" th:fragment="invite-modal-js">-->
+<script th:inline="javascript" th:fragment="invite-modal-js">
+  /**
+   * 모달 바깥쪽에 선언
+   * **/
+  /*document.getElementById("modalActivateBtn").onclick = () => {
+      modal.style.display = "block"
+  }*/
+
+  /**
+   * 모달 안쪽에 선언
+   * **/
+  /**
+   * 모달 밖을 클릭했을때도 추가
+   * **/
+  /*document.addEventListener("DOMContentLoaded", (event) => {
+      document.querySelector("span").innerText = document.getElementById("#email").innerText.value;
+  })*/
+
+  const inviteChannelModal = document.getElementById("inviteChannelModal");
+
+  /*
+  * 엔터 클릭시
+  * */
+  /*confirmBtn.addEventListener("keydown", function (e) {
+      e.preventDefault();
+      console.log(e.key);
+      if (e.key === 'Enter') {
+          confirmBtn.click();
+      }
+  });*/
+
+  document.getElementById("sendInvitationBtn").onclick = () => {
+    $.ajax({
+      type: 'POST',
+      url: '/channel/'
+      contentType: 'application/json',
+      data: JSON.stringify({}),
+      success: function (response) {
+
+      },
+      error: function (request, error) {
+
+      }
+    });
+  }
+</script>
+</html>

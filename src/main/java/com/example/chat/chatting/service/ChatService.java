@@ -16,6 +16,8 @@ public class ChatService {
     private final ObjectMapper objectMapper;
     private Map<String, ChatRoom> chatRooms;
 
+
+
     @PostConstruct
     private void init(){
         chatRooms = new LinkedHashMap<>();

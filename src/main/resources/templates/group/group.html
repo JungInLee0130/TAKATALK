@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <meta charset="UTF-8">
+  <title>로그인</title>
+</head>
+<style>
+</style>
+<body>
+  <div>
+    <form th:action="@{/group/create}" th:object="${request}" method="post">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+      <label for="groupName">서버 이름</label>
+      <input type="text" id="groupName" placeholder="서버이름" th:field="*{name}">
+      <button type="submit">create Group</button>
+    </form>
+  </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script th:inline="javascript">
+  /*
+  * ajax 요청시 자동으로 header에 csrf 토큰 삽입
+  * */
+  $(function () {
+    var csrfToken = [[${_csrf.token}]];
+    var csrfHeader = [[${_csrf.headerName}]];
+
+    $(document).ajaxSend(function (e, xhr, options) {
+      xhr.setRequestHeader(csrfHeader, csrfToken);
+    });
+  })
+
+</script>
+</html>

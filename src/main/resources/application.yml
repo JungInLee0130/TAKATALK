@@ -8,16 +8,17 @@ spring:
   application:
     name: chat
 ---
+#DB
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: 'jdbc:h2:mem:test'
-    username: ${h2_USERNAME}
-    password: ${h2_PASSWORD}
+    url: jdbc:h2:mem:test
+    username: ${H2_USERNAME}
+    password: ${H2_PASSWORD}
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -55,3 +56,15 @@ spring:
           starttls:
             enable: true
           auth: true
+---
+#BASE_URL
+app:
+  base-url: ${BASE_URL}
+
+---
+#SECURITY
+spring:
+  security:
+    user:
+      name: ${SECURITY_USERNAME}
+      password: ${SECURITY_PASSWORD}
