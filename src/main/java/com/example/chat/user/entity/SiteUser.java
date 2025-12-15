@@ -35,6 +35,8 @@ public class SiteUser {
     @Enumerated(EnumType.STRING)
     private RoleType role;
 
+    private String profile;
+
     @Builder
     public SiteUser(String nickname, String username, String password, String email
             , LocalDate birthday) {

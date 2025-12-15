@@ -26,7 +26,6 @@ import java.util.concurrent.CompletableFuture;
 @RequestMapping("/login")
 @RequiredArgsConstructor
 public class LoginController {
-    private final LoginService loginService;
     private final UserService userService;
 
     private final MailService mailService;
@@ -80,15 +79,6 @@ public class LoginController {
 
         return "redirect:/login/token-expired";
     }
-
-    /*
-    * 로그인
-    * */
-    /*@PostMapping
-    public ResponseEntity<Void> login(@Valid @RequestBody UserLoginForm userLoginForm) {
-        loginService.login(userLoginForm);
-        return ResponseEntity.ok().build();
-    }*/
 
     /*
      * 비밀번호 변경 메일보내기(비동기처리)

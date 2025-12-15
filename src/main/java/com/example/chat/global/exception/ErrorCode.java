@@ -11,6 +11,7 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON_003", "INTERNAL SERVER ERROR"),
     /*로그인에러*/
     INVALID_INPUT_EMAIL_OR_PASSWORD(HttpStatus.BAD_REQUEST, "LOGIN_001", "유효하지않는 아이디 또는 비밀번호 입니다."),
+    SESSION_INVALID_ERROR(HttpStatus.BAD_REQUEST, "LOGIN_002", "로그인이 만료되었습니다. 다시 로그인해주세요."),
     /*비밀번호 찾기 에러*/
     RESET_TOKEN_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "RESET_TOKEN_001", "토큰이 존재하지않습니다."),
     RESET_TOKEN_INVALID_EXCEPTION(HttpStatus.BAD_REQUEST, "RESET_TOKEN_002", "토큰이 만료되었습니다."),
@@ -21,7 +22,10 @@ public enum ErrorCode {
     /*그룹 에러*/
     GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "GROUP_001", "해당 그룹이 없습니다."),
     /*카테고리 에러*/
-    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "CATEGORY_001", "해당 카테고리가 없습니다.");
+    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "CATEGORY_001", "해당 카테고리가 없습니다."),
+    /*채널 에러*/
+    CHANNEL_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_001", "해당 채널이 없습니다.");
+
     private final HttpStatus status;
     private final String code;
     private final String message;
