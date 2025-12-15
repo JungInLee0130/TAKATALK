@@ -2,14 +2,11 @@ package com.example.chat.channel.service;
 
 import com.example.chat.category.entity.Categories;
 import com.example.chat.category.repository.CategoryRepository;
-import com.example.chat.channel.domain.ChannelType;
-import com.example.chat.channel.dto.ChannelResponse;
-import com.example.chat.channel.dto.CreateChannelRequest;
-import com.example.chat.channel.dto.ChatResponse;
-import com.example.chat.channel.dto.InviteChannelResponse;
+import com.example.chat.channel.domain.ChatMessages;
+import com.example.chat.channel.dto.*;
 import com.example.chat.channel.entity.Channels;
-import com.example.chat.channel.entity.Chats;
 import com.example.chat.channel.repository.ChannelRepository;
+import com.example.chat.channel.repository.ChatMessageRepository;
 import com.example.chat.channel.repository.ChatRepository;
 import com.example.chat.friends.FriendService;
 import com.example.chat.friends.FriendsResponse;
@@ -17,24 +14,27 @@ import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.group.GroupRepository;
 import com.example.chat.group.Groups;
+import com.example.chat.user.entity.SiteUser;
+import com.example.chat.user.repository.UserRepository;
 import com.example.chat.visitor.repository.VisitorsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ChannelService {
     private final ChannelRepository channelRepository;
-    private final ChatRepository chatRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final VisitorsRepository visitorsRepository;
     private final CategoryRepository categoryRepository;
     private final GroupRepository groupRepository;
     private final FriendService friendService;
+    private final UserRepository userRepository;
 
     @Transactional
     public void createChannel(Long categoryId, Long groupId, CreateChannelRequest request) {
@@ -57,9 +57,27 @@ public class ChannelService {
         channelRepository.save(channel);
     }
 
-    public ChatResponse enterChannel(Long channelId) {
-        Channels channel = channelRepository.findById(channelId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND, "채널이 없음."));
+
+
+    public List<ChatMessageResponse> enterChannel(Long siteUserId, Long channelId) {
+        List<ChatMessages> chatMessages = chatMessageRepository.findAllByChannelId(channelId);
+
+        List<ChatMessageResponse> responses = new ArrayList<>();
+        for (ChatMessages chatMessage: chatMessages) {
+            ChatMessageResponse response = ChatMessageResponse.builder()
+                    .profile(chatMessage.getSiteUser().getProfile())
+                    .nickname(chatMessage.getSiteUser().getNickname())
+                    .content(chatMessage.getContent())
+                    .createdAt(chatMessage.getCreatedAt())
+                    .build();
+
+            responses.add(response);
+        }
+
+        return responses;
+    }
+
+    /*public ChatResponse enterChannel(Long channelId) {
 
         // 채널 response 생성
         ChatResponse response = new ChatResponse(channel);
@@ -72,7 +90,7 @@ public class ChannelService {
         }
 
         return response;
-    }
+    }*/
 
     public InviteChannelResponse getInviteResponse(Long siteUserid, Long channelId) {
         Channels channel = channelRepository.findById(channelId)
@@ -98,5 +116,11 @@ public class ChannelService {
                         channel.getType(),
                         channel.getIsSecret()))
                 .collect(Collectors.toList());
+    }
+
+    public String findById(Long channelId) {
+        Channels channel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new CustomException(ErrorCode.CHANNEL_NOT_FOUND));
+        return channel.getName();
     }
 }

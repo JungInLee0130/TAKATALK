@@ -1,9 +1,6 @@
 package com.example.chat.channel.controller;
 
-import com.example.chat.channel.dto.ChannelResponse;
-import com.example.chat.channel.dto.ChatResponse;
-import com.example.chat.channel.dto.CreateChannelRequest;
-import com.example.chat.channel.dto.InviteChannelResponse;
+import com.example.chat.channel.dto.*;
 import com.example.chat.channel.service.ChannelService;
 import com.example.chat.user.service.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -34,21 +31,8 @@ public class ChannelController {
     }
 
     /*
-    * 채널입장
-    * */
-    @GetMapping("/enter/{channelId}")
-    public String enterChannel(@PathVariable(required = false) Long channelId, Model model) {
-        ChatResponse chatResponse = channelService.enterChannel(channelId);
-        model.addAttribute("channel", chatResponse.getChannel());
-        model.addAttribute("visitors", chatResponse.getVisitorsList());
-        model.addAttribute("chat", chatResponse.getChat());
-        return "/chat/chatList";
-    }
-
-    /*
      * 채널 생성
      * */
-    //{/channel/create(groupId = ${group})
     @PostMapping(value = "/create", produces = "application/string;charset=UTF-8") // UTF-8 설정
     public String createChannel(@RequestParam Long groupId,
                                 @RequestParam(required = false) Long categoryId,
@@ -58,10 +42,29 @@ public class ChannelController {
         redirectAttributes.addAttribute("groupId", groupId);
         return "redirect:/group/access/{groupId}";
     }
-    /*@PostMapping(value = "/createChannel", produces = "application/string;charset=UTF-8") // UTF-8 설정
-    public ResponseEntity<String> createChannel(@RequestBody CreateChannelRequest request) {
-        channelService.createChannel(request);
-        return ResponseEntity.ok("SUCCESS");
+
+    /*
+    * 채널입장
+    * */
+    @GetMapping("/enter/{channelId}")
+    public String enterChannel(@AuthenticationPrincipal CustomUserDetails userDetails,
+                               @PathVariable(name = "channelId") Long channelId,
+                               Model model) {
+        String channelName = channelService.findById(channelId);
+        List<ChatMessageResponse> responses = channelService.enterChannel(userDetails.getId(), channelId);
+        model.addAttribute("channelName", channelName);
+        model.addAttribute("responses", responses);
+        //model.addAttribute("visitors", chatResponse.getVisitorsList());
+        return "channel/channel";
+    }
+
+    /*@GetMapping("/enter/{channelId}")
+    public String enterChannel(@PathVariable(name = "channelId") Long channelId, Model model) {
+        ChatResponse chatResponse = channelService.enterChannel(channelId);
+        model.addAttribute("channel", chatResponse.getChannel());
+        model.addAttribute("visitors", chatResponse.getVisitorsList());
+        model.addAttribute("chat", chatResponse.getChat());
+        return "/chat/chatList";
     }*/
 
     /*
