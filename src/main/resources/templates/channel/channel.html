@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="../../static/images/favicon.ico">
   <title>channel</title>
 </head>
 <!--<link rel="stylesheet" type="text/css" href="/css/chatList.css"/>-->
@@ -17,10 +17,11 @@
     margin: 0;
     background: #1A1A1E;
     min-height: 100vh;
+    overflow: hidden;
   }
   .container {
     display: flex;
-    min-height: 100vh;
+    min-height: 100%;
   }
   .left-container {
     display: flex;
@@ -113,7 +114,6 @@
     border: 1px solid black;
   }
 
-
   .chat-list .chat-list-header {
     display: flex;
     flex-direction: row;
@@ -132,7 +132,7 @@
   }
   /*****************************************************************/
   /**********************채팅창 css********************************/
-  .container .center{
+  .center{
     display: flex;
     flex-direction: column;
     width: 60vw;
@@ -141,7 +141,7 @@
     padding: 10px;
     box-sizing: border-box;
   }
-  .center .center-header{
+  .center-header{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -151,23 +151,105 @@
 
     background-color: #006d77;
   }
-  .center .center-header h2{
+  .center-header h2{
     margin-left: 10px;
     text-align: center;
   }
-  .center .center-header .icon {
+  .center-header .icon {
 
   }
-  .center .center-header #chatUserlist {
+  .center-header #chatUserlist {
     margin: 10px 0;
     width: 50px;
     height: 45px;
     margin-right: 10px;
   }
-  .center .chatBox {
+  .chat-box {
     display: flex;
-    justify-content: center;
+    flex-direction: column-reverse;
+    overflow-y: auto; /*내용이 넘치면 자동으로 스크롤 생성*/
+    height: 80vh;
+    box-sizing: border-box;
   }
+  .chatmessage-wrapper,
+  #inputMessageWrapper{
+    display: none;
+    background-color: #A5A6AC;
+    width: 100%;
+    height: 60px;
+    margin: 0;
+    gap: 10px;
+    box-sizing: border-box;
+    border: 1px solid black;
+  }
+  .chatmessage-profile-wrapper {
+    margin: 0;
+    width: 100px;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid black;
+  }
+  .chatmessage-profile {
+    margin: 0;
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid black;
+    box-sizing: border-box;
+  }
+  .chatmessage-second-wrapper{
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+  }
+  .chatmessage-upper-wrapper {
+    margin: 0;
+    display: flex;
+    border: 1px solid black;
+    gap: 10px;
+    box-sizing: border-box;
+  }
+  .chatmessage-nickname-wrapper {
+    margin: 0;
+
+  }
+  .chatmessage-nickname {
+    margin: 0;
+
+    padding: 5px;
+  }
+  .chatmessage-createdat-wrapper {
+    margin: 0;
+
+  }
+  .chatmessage-createdat {
+    margin: 0;
+
+    padding: 5px;
+  }
+  .chatmessage-content-wrapper {
+    margin: 0;
+
+    width: 100%;
+    height: 100%;
+
+    box-sizing: border-box;
+    border: 1px solid black;
+  }
+  .chatmessage-content {
+    margin: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0px 5px;
+    border: 1px solid black;
+  }
+
   .center textarea{
     /*width: 890px;
     height: 530px;*/
@@ -176,6 +258,7 @@
     width: 100%;
     height: 80vh;
   }
+
   .center .chat-input-wrapper{
     display: flex;
     flex-direction: row;
@@ -298,15 +381,13 @@
                   <th th:text="${channel.channelName}"></th>
                   <td th:text="${channel.channelType}"></td>
                   <td th:text="${channel.channelIsSecret}"></td>
+                  <td>
+                    <a th:href="@{/channel/enter/{channelId}(channelId = ${channel.channelId})}">채널입장</a>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <!--<table class="channel-table" th:each="category : ${categories}">
-            <tr th:text="${category.name}">
-              <th>채팅채널</th>
-            </tr>
-          </table>-->
         </div>
       </div>
       <div class="character-info">
@@ -318,21 +399,45 @@
     <!--****채팅방****-->
     <div class="center">
       <div class="center-header">
-        <div>
-          <h2>채팅 공간</h2> <!--채팅방 title-->
+        <div th:if="${channelName}">
+          <h2 th:text="${channelName}"></h2> <!--채팅방 title-->
         </div>
         <div class="icon">
-          <button type="button" id="chatUserlist" class="chat-userlist">user</button>
+          <button type="button" id="chatUserlist" class="chat-userlist">user</button> <!--채팅방 visitor 햄버거버튼-->
         </div>
       </div>
-      <div class="chatBox">
-                  <textarea class="chatBox-textarea">
-                  </textarea>
+      <!--메시지 공간 80vh-->
+      <div id="chatBox" class="chat-box">
+        <!-- 서버로부터 받아온 메시지가 존재하면-->
+        <div th:if="${responses}">
+          <!--개별 메시지 wrapper-->
+          <div id="chatMessageWrapper" class="chatmessage-wrapper" th:each="response : ${responses}">
+            <div class="chatmessage-profile-wrapper">
+              <img class="chatmessage-profile" th:src="${response.profile}">
+            </div>
+            <div class="chatmessage-second-wrapper">
+              <div class="chatmessage-upper-wrapper">
+                <div class="chatmessage-nickname-wrapper">
+                  <p class="chatmessage-nickname" th:text="${response.nickname}"></p>
+                </div>
+                <div class="chatmessage-createdat-wrapper">
+                  <p class="chatmessage-createdat" th:text="${response.createdAt}"></p>
+                </div>
+              </div>
+              <div class="chatmessage-content-wrapper">
+                <p class="chatmessage-content" th:text="${response.content}"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--inputMessage가 들어가는공간-->
+        <div id="inputMessageWrapper">
+        </div>
       </div>
       <div class="chat-input-wrapper">
-        <button type="button" id="uploadFileBtn" class="upload-file-btn">File</button>
-        <input class="chat-input" placeholder="채팅 입력" autofocus>
-        <button type="button" id="sendMsgBtn" class="send-msg-btn">Send</button>
+        <button type="button" id="uploadFileBtn" class="upload-file-btn" onclick="uploadFile()">File</button>
+        <input id="chatInput" class="chat-input" placeholder="채팅 입력" autofocus>
+        <button type="button" id="sendMsgBtn" class="send-msg-btn" onclick="addMessage()">Send</button>
       </div>
     </div>
     <div class="right">
@@ -354,6 +459,91 @@
     </div>
     <!--*************-->
   </div>
+  <script>
+    function uploadFile() {
+      alert('upload!')
+    }
+    /*
+     * sendMsgBtn 클릭시
+     * */
+    function addMessage() {
+      let chatMessageProfileWrapper = document.createElement("div");
+      chatMessageProfileWrapper.className = "chatmessage-profile-wrapper";
+
+      /*프로필 이미지*/
+      let chatMessageProfile = document.createElement("img");
+      chatMessageProfile.className = "chatmessage-profile";
+      chatMessageProfile.src = "../../static/images/meeng.png";
+      chatMessageProfileWrapper.appendChild(chatMessageProfile)
+
+      /*닉네임*/
+      let chatMessageNicknameWrapper = document.createElement("div");
+      chatMessageNicknameWrapper.className = "chatmessage-nickname-wrapper";
+      let chatMessageNickname = document.createElement("p");
+      chatMessageNickname.className = "chatmessage-nickname";
+      chatMessageNickname.textContent = "이정인";
+      chatMessageNicknameWrapper.appendChild(chatMessageNickname);
+
+      /*생성날짜*/
+      let chatMessageCreatedAtWrapper = document.createElement("div");
+      chatMessageCreatedAtWrapper.className = "chatmessage-createdat-wrapper";
+      let chatMessageCreatedAt = document.createElement("p");
+      chatMessageCreatedAt.className = "chatmessage-createdat";
+      chatMessageCreatedAt.textContent = "12:15";
+      chatMessageCreatedAtWrapper.appendChild(chatMessageCreatedAt);
+
+      /*내용*/
+      let chatMessageContentWrapper = document.createElement("div");
+      chatMessageContentWrapper.className = "chatmessage-content-wrapper";
+      let chatMessageContent = document.createElement("p");
+      chatMessageContent.className = "chatmessage-content";
+
+      let inputBox = document.getElementById("chatInput");
+
+      chatMessageContent.textContent = inputBox.value;
+
+      chatMessageContentWrapper.appendChild(chatMessageContent);
+
+
+      /*UpperWrapper : 닉네임, 생성날짜 상위 래퍼*/
+      let chatMessageUpperWrapper = document.createElement("div");
+      chatMessageUpperWrapper.className = "chatmessage-upper-wrapper";
+      chatMessageUpperWrapper.appendChild(chatMessageNicknameWrapper);
+      chatMessageUpperWrapper.appendChild(chatMessageCreatedAtWrapper);
+
+      /*secondWrapper: UpperWrapper(닉네임, 생성날짜), 내용 상위 래퍼*/
+      let chatMessageSecondWrapper = document.createElement("div");
+      chatMessageSecondWrapper.className = "chatmessage-second-wrapper";
+      chatMessageSecondWrapper.appendChild(chatMessageUpperWrapper);
+      chatMessageSecondWrapper.appendChild(chatMessageContentWrapper);
+
+
+      /*inputMessageWrapper : profile, secondWrapper 상위 래퍼*/
+      let inputMessageWrapper = document.createElement("div");
+      inputMessageWrapper.style.display = "flex";
+      inputMessageWrapper.className = "inputmessage-wrapper";
+      inputMessageWrapper.appendChild(chatMessageProfileWrapper);
+      inputMessageWrapper.appendChild(chatMessageSecondWrapper);
+
+      /*chatBox : 최상위 래퍼. chatMessageWrapper 상위 래퍼*/
+      const container = document.getElementById("chatBox");
+
+      /*아래서부터 위로 append*/
+      container.prepend(inputMessageWrapper);
+
+      /*스크롤 맨아래로*/
+      container.scrollTop = 0;
+
+      /*inputBox 초기화*/
+      inputBox.value = '';
+    }
+
+    document.getElementById("chatInput").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        addMessage();
+      }
+    });
+  </script>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <!--<script th:replace="~{modal/invite-channel-modal :: invite-modal-js}"></script>-->
@@ -375,6 +565,9 @@
       }
   }*/
 
+  /*
+  * 돔 렌더링 모두 완료되고 실행
+  * */
   $(document).ready(function () {
 
     /*
@@ -411,8 +604,6 @@
       type: 'POST',
     })
   }
-
-  document.get
 </script>
 
 </html>
