@@ -22,7 +22,7 @@ public class ChannelIndexController {
     @GetMapping("/create")
     public String channelCreatePage(@RequestParam(name = "groupId") Long groupId,
                                     @RequestParam(name = "categoryId", required = false) Long categoryId,
-                                    @ModelAttribute(name = "request") CreateChannelRequest request, Model model) {
+                                    Model model) {
         model.addAttribute("groupId", groupId);
         if (categoryId != null) {
             model.addAttribute("categoryId", categoryId);

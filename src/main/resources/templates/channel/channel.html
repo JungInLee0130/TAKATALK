@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/x-icon" href="../../static/images/favicon.ico">
+  <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">
   <title>channel</title>
 </head>
 <!--<link rel="stylesheet" type="text/css" href="/css/chatList.css"/>-->
@@ -48,15 +48,33 @@
     height: 10vh;
   }
   .left-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
     width: 60px;
     height: 90vh;
     background-color: skyblue;
   }
-  .left-bar .group-icon-wrapper a, .left-bar .group-icon-wrapper a img {
-    width: 30px;
-    height: 30px;
+  .group-icon-wrapper {
+    width: 100%;
+    height: 60px;
+    padding: 2px;
     border: 1px solid black;
     background-color: coral;
+
+  }
+  .group-icon-wrapper a {
+    width: 100%;
+    height: 100%;
+  }
+  .group-icon-wrapper a img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .group-icon-wrapper a img:hover {
+    padding: 5px;
+    opacity: 0.9;
   }
 
   .left {
@@ -325,13 +343,17 @@
     <div class="left-container">
       <div class="left-object">
         <div class="left-bar">
-          <div class="group-icon-wrapper" th:each="group : ${groups}">
-            <a th:href="@{/group/access/{groupId}(groupId = ${group.id})}" class="group-link">
-              <img class="group-icon" th:src="${group.profile}" th:alt="${group.name} + '아이콘'">
-              <!--<span th:if="${group.hasNewMessage}" class="notification-badge">
-                <span th:text="${group.newMessageCount}">1</span>
-              </span>-->
-            </a>
+          <div th:if="${groups != null}">
+            <div class="group-icon-wrapper" th:each="group : ${groups}">
+              <!--<a>
+              <img class="group-icon" alt="뮁 이미지" src="../../static/images/meeng.png">-->
+              <a th:href="@{/group/access/{groupId}(groupId = ${group.id})}" class="group-link">
+                <img class="group-icon" th:src="@{${group.profile}}" th:alt="${group.name} + '아이콘'">
+            <!--<span th:if="${group.hasNewMessage}" class="notification-badge">
+                  <span th:text="${group.newMessageCount}">1</span>
+                </span>-->
+              </a>
+            </div>
           </div>
           <!--그룸생성 페이지 이동-->
           <div class="create-group-btn-wrapper">
@@ -351,8 +373,8 @@
             </div>
           </div>
           <!--만들어진 채널들이 있다면-->
-          <div class="channel-categorized-group" th:if="${groupResponse}">
-            <table class="categorized-channel-table" th:each="categories : ${groupResponse.categorizedChannels}">
+          <div class="channel-categorized-group" th:if="${channelGroupResponse}">
+            <table class="categorized-channel-table" th:each="categories : ${channelGroupResponse.categorizedChannels}">
               <!--카테고리를 가진 채널이 있다면-->
               <thead th:if="${categories}">
                 <th th:text="${categories.name}"></th>
@@ -366,7 +388,7 @@
                   <td th:text="${channel.channelType}"></td>
                   <td th:text="${channel.channelIsSecret}"></td>
                   <td>
-                    <a th:href="@{/channel/enter/{channelId}(channelId = ${channel.channelId})}">채널입장</a>
+                    <a th:href="@{/channel/enter/{channelId}(channelId = ${channel.channelId}, groupId = ${currentGroup.id})}">채널입장</a>
                   </td>
                 </tr>
               </tbody>
@@ -374,15 +396,15 @@
           </div>
           <hr/>
           <!--카테고리 없는 채널-->
-          <div class="channel-uncategorized-group" th:if="${groupResponse}">
-            <table th:each="channels : ${groupResponse.uncategorizedChannels}">
+          <div class="channel-uncategorized-group" th:if="${channelGroupResponse}">
+            <table th:each="channels : ${channelGroupResponse.uncategorizedChannels}">
               <tbody th:if="${channels}" >
                 <tr th:each="channel : ${channels}">
                   <th th:text="${channel.channelName}"></th>
                   <td th:text="${channel.channelType}"></td>
                   <td th:text="${channel.channelIsSecret}"></td>
                   <td>
-                    <a th:href="@{/channel/enter/{channelId}(channelId = ${channel.channelId})}">채널입장</a>
+                    <a th:href="@{/channel/enter/{channelId}(channelId = ${channel.channelId}, groupId = ${currentGroup.id})}">채널입장</a>
                   </td>
                 </tr>
               </tbody>
@@ -399,8 +421,8 @@
     <!--****채팅방****-->
     <div class="center">
       <div class="center-header">
-        <div th:if="${channelName}">
-          <h2 th:text="${channelName}"></h2> <!--채팅방 title-->
+        <div th:if="${currentChannel}">
+          <h2 th:text="${currentChannel.name}"></h2> <!--채팅방 title-->
         </div>
         <div class="icon">
           <button type="button" id="chatUserlist" class="chat-userlist">user</button> <!--채팅방 visitor 햄버거버튼-->
@@ -413,12 +435,12 @@
           <!--개별 메시지 wrapper-->
           <div id="chatMessageWrapper" class="chatmessage-wrapper" th:each="response : ${responses}">
             <div class="chatmessage-profile-wrapper">
-              <img class="chatmessage-profile" th:src="${response.profile}">
+              <img class="chatmessage-profile" th:src="@{${loginProfile}}">
             </div>
             <div class="chatmessage-second-wrapper">
               <div class="chatmessage-upper-wrapper">
                 <div class="chatmessage-nickname-wrapper">
-                  <p class="chatmessage-nickname" th:text="${response.nickname}"></p>
+                  <p class="chatmessage-nickname" th:text="${loginNickname}"></p>
                 </div>
                 <div class="chatmessage-createdat-wrapper">
                   <p class="chatmessage-createdat" th:text="${response.createdAt}"></p>
@@ -460,89 +482,7 @@
     <!--*************-->
   </div>
   <script>
-    function uploadFile() {
-      alert('upload!')
-    }
-    /*
-     * sendMsgBtn 클릭시
-     * */
-    function addMessage() {
-      let chatMessageProfileWrapper = document.createElement("div");
-      chatMessageProfileWrapper.className = "chatmessage-profile-wrapper";
 
-      /*프로필 이미지*/
-      let chatMessageProfile = document.createElement("img");
-      chatMessageProfile.className = "chatmessage-profile";
-      chatMessageProfile.src = "../../static/images/meeng.png";
-      chatMessageProfileWrapper.appendChild(chatMessageProfile)
-
-      /*닉네임*/
-      let chatMessageNicknameWrapper = document.createElement("div");
-      chatMessageNicknameWrapper.className = "chatmessage-nickname-wrapper";
-      let chatMessageNickname = document.createElement("p");
-      chatMessageNickname.className = "chatmessage-nickname";
-      chatMessageNickname.textContent = "이정인";
-      chatMessageNicknameWrapper.appendChild(chatMessageNickname);
-
-      /*생성날짜*/
-      let chatMessageCreatedAtWrapper = document.createElement("div");
-      chatMessageCreatedAtWrapper.className = "chatmessage-createdat-wrapper";
-      let chatMessageCreatedAt = document.createElement("p");
-      chatMessageCreatedAt.className = "chatmessage-createdat";
-      chatMessageCreatedAt.textContent = "12:15";
-      chatMessageCreatedAtWrapper.appendChild(chatMessageCreatedAt);
-
-      /*내용*/
-      let chatMessageContentWrapper = document.createElement("div");
-      chatMessageContentWrapper.className = "chatmessage-content-wrapper";
-      let chatMessageContent = document.createElement("p");
-      chatMessageContent.className = "chatmessage-content";
-
-      let inputBox = document.getElementById("chatInput");
-
-      chatMessageContent.textContent = inputBox.value;
-
-      chatMessageContentWrapper.appendChild(chatMessageContent);
-
-
-      /*UpperWrapper : 닉네임, 생성날짜 상위 래퍼*/
-      let chatMessageUpperWrapper = document.createElement("div");
-      chatMessageUpperWrapper.className = "chatmessage-upper-wrapper";
-      chatMessageUpperWrapper.appendChild(chatMessageNicknameWrapper);
-      chatMessageUpperWrapper.appendChild(chatMessageCreatedAtWrapper);
-
-      /*secondWrapper: UpperWrapper(닉네임, 생성날짜), 내용 상위 래퍼*/
-      let chatMessageSecondWrapper = document.createElement("div");
-      chatMessageSecondWrapper.className = "chatmessage-second-wrapper";
-      chatMessageSecondWrapper.appendChild(chatMessageUpperWrapper);
-      chatMessageSecondWrapper.appendChild(chatMessageContentWrapper);
-
-
-      /*inputMessageWrapper : profile, secondWrapper 상위 래퍼*/
-      let inputMessageWrapper = document.createElement("div");
-      inputMessageWrapper.style.display = "flex";
-      inputMessageWrapper.className = "inputmessage-wrapper";
-      inputMessageWrapper.appendChild(chatMessageProfileWrapper);
-      inputMessageWrapper.appendChild(chatMessageSecondWrapper);
-
-      /*chatBox : 최상위 래퍼. chatMessageWrapper 상위 래퍼*/
-      const container = document.getElementById("chatBox");
-
-      /*아래서부터 위로 append*/
-      container.prepend(inputMessageWrapper);
-
-      /*스크롤 맨아래로*/
-      container.scrollTop = 0;
-
-      /*inputBox 초기화*/
-      inputBox.value = '';
-    }
-
-    document.getElementById("chatInput").addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        addMessage();
-      }
-    });
   </script>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
@@ -569,6 +509,9 @@
   * 돔 렌더링 모두 완료되고 실행
   * */
   $(document).ready(function () {
+    /*
+    * 그룹 리스트 get
+    * */
 
     /*
     * 초대버튼 클릭시
@@ -578,31 +521,94 @@
     }
   });
 
-  function enterRoom(roomId) {
-      console.log("roomId: " + roomId);
+  document.getElementById("chatInput").addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      addMessage();
+    }
+  });
 
-      /*채팅방이 이미 닫혔는지 확인*/
 
-
-  /***********************/
-
-  let nickname = prompt("채팅방에서 사용할 닉네임을 입력해주세요.");
-
-  if (nickname === null || nickname.trim() === ""){
-    alert("닉네임이 유효하지않습니다.");
-    return;
+  function uploadFile() {
+    alert('upload!')
   }
+  /*
+   * sendMsgBtn 클릭시
+   * */
+  function addMessage() {
+    let chatMessageProfileWrapper = document.createElement("div");
+    chatMessageProfileWrapper.className = "chatmessage-profile-wrapper";
+
+    /*프로필 이미지*/
+    let chatMessageProfile = document.createElement("img");
+    chatMessageProfile.className = "chatmessage-profile";
+    const profile = [[${loginProfile}]];
+    chatMessageProfile.src = profile;
+    //chatMessageProfile.src = "../../static/images/meeng.png";
+    chatMessageProfileWrapper.appendChild(chatMessageProfile)
+
+    /*닉네임*/
+    let chatMessageNicknameWrapper = document.createElement("div");
+    chatMessageNicknameWrapper.className = "chatmessage-nickname-wrapper";
+
+    let chatMessageNickname = document.createElement("p");
+    chatMessageNickname.className = "chatmessage-nickname";
+    const nickname = [[${loginNickname}]];
+    chatMessageNickname.textContent = nickname.toString();
+    //chatMessageNickname.textContent = "이정인";
+    chatMessageNicknameWrapper.appendChild(chatMessageNickname);
+
+    /*생성날짜*/
+    let chatMessageCreatedAtWrapper = document.createElement("div");
+    chatMessageCreatedAtWrapper.className = "chatmessage-createdat-wrapper";
+    let chatMessageCreatedAt = document.createElement("p");
+    chatMessageCreatedAt.className = "chatmessage-createdat";
+    chatMessageCreatedAt.textContent = "12:15";
+    chatMessageCreatedAtWrapper.appendChild(chatMessageCreatedAt);
+
+    /*내용*/
+    let chatMessageContentWrapper = document.createElement("div");
+    chatMessageContentWrapper.className = "chatmessage-content-wrapper";
+    let chatMessageContent = document.createElement("p");
+    chatMessageContent.className = "chatmessage-content";
+
+    let inputBox = document.getElementById("chatInput");
+
+    chatMessageContent.textContent = inputBox.value;
+
+    chatMessageContentWrapper.appendChild(chatMessageContent);
 
 
-  const url = `/chat/chatRoom?roomId=${roomId}&nickname=${nickname.trim()}`;
+    /*UpperWrapper : 닉네임, 생성날짜 상위 래퍼*/
+    let chatMessageUpperWrapper = document.createElement("div");
+    chatMessageUpperWrapper.className = "chatmessage-upper-wrapper";
+    chatMessageUpperWrapper.appendChild(chatMessageNicknameWrapper);
+    chatMessageUpperWrapper.appendChild(chatMessageCreatedAtWrapper);
 
-  window.location.href = url;
-  }
+    /*secondWrapper: UpperWrapper(닉네임, 생성날짜), 내용 상위 래퍼*/
+    let chatMessageSecondWrapper = document.createElement("div");
+    chatMessageSecondWrapper.className = "chatmessage-second-wrapper";
+    chatMessageSecondWrapper.appendChild(chatMessageUpperWrapper);
+    chatMessageSecondWrapper.appendChild(chatMessageContentWrapper);
 
-  document.getElementById("createChannel").onclick = () => {
-    $.ajax({
-      type: 'POST',
-    })
+
+    /*inputMessageWrapper : profile, secondWrapper 상위 래퍼*/
+    let inputMessageWrapper = document.createElement("div");
+    inputMessageWrapper.style.display = "flex";
+    inputMessageWrapper.className = "inputmessage-wrapper";
+    inputMessageWrapper.appendChild(chatMessageProfileWrapper);
+    inputMessageWrapper.appendChild(chatMessageSecondWrapper);
+
+    /*chatBox : 최상위 래퍼. chatMessageWrapper 상위 래퍼*/
+    const container = document.getElementById("chatBox");
+
+    /*아래서부터 위로 append*/
+    container.prepend(inputMessageWrapper);
+
+    /*스크롤 맨아래로*/
+    container.scrollTop = 0;
+
+    /*inputBox 초기화*/
+    inputBox.value = '';
   }
 </script>
 

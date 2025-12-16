@@ -2,8 +2,8 @@ package com.example.chat.group.controller;
 
 import com.example.chat.category.service.CategoryService;
 import com.example.chat.channel.service.ChannelService;
-import com.example.chat.group.GroupResponse;
-import com.example.chat.group.GroupResponse2;
+import com.example.chat.group.ChannelGroupResponse;
+import com.example.chat.group.GroupGetResponse;
 import com.example.chat.group.Groups;
 import com.example.chat.group.service.GroupService;
 import com.example.chat.group.createGroupRequest;
@@ -32,13 +32,20 @@ public class GroupIndexController {
      * 그룹 접속
      * */
     @GetMapping("/access/{groupId}")
-    public String accessGroup(@PathVariable(name = "groupId") Long groupId, Model model) {
+    public String accessGroup(@AuthenticationPrincipal CustomUserDetails userDetails,
+                              @PathVariable(name = "groupId") Long currentGroupId,
+                              Model model) {
         // 그룹 접속
-        Groups currentGroup = groupService.findById(groupId);
-        GroupResponse groupResponse = groupService.accessGroup(groupId);
+        Groups currentGroup = groupService.findById(currentGroupId);
+        // GroupResponse : 기존 채널들 response
+        ChannelGroupResponse channelGroupResponse = groupService.accessGroup(currentGroupId);
+        // 전체 그룹 리스트
+        // GroupResponse2 : groupId, profile, name
+        List<GroupGetResponse> groups = groupService.findAll(userDetails.getId());
 
         model.addAttribute("currentGroup", currentGroup);
-        model.addAttribute("groupResponse", groupResponse);
+        model.addAttribute("channelGroupResponse", channelGroupResponse);
+        model.addAttribute("groups", groups);
 
         return "channel/channel";
     }
@@ -50,7 +57,7 @@ public class GroupIndexController {
     public String createGroupPage(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   @ModelAttribute(name = "request") createGroupRequest request,
                                   Model model) {
-        List<GroupResponse2> groups = groupService.findAll(userDetails.getId());
+        List<GroupGetResponse> groups = groupService.findAll(userDetails.getId());
         if (groups != null) {
             model.addAttribute("groups", groups);
         }

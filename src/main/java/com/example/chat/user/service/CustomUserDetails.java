@@ -16,18 +16,20 @@ public class CustomUserDetails implements UserDetails, Serializable {
     private Long id;          // PK
     private String email;       // 로그인 ID
     private String password;    // 로그인 password
+    private String nickname;    // 닉네임
+    private String profile;     // 프로필
     private boolean emailVerified;  // 이메일 인증여부
     private boolean isNonLocked;     // 계정 잠김 여부
-    private String nickname;
     private Collection<GrantedAuthority> authorities;
 
     public CustomUserDetails(SiteUser siteUser) {
         this.id = siteUser.getId();
         this.email = siteUser.getEmail();
         this.password = siteUser.getPassword();
+        this.nickname = siteUser.getNickname();
+        this.profile = siteUser.getProfile();
         this.emailVerified = true; // 이메일 인증기능 넣을거면 false
         this.isNonLocked = true;
-        this.nickname = siteUser.getNickname();
         this.authorities = Collections.singletonList(
                 new SimpleGrantedAuthority("ROLE_" + siteUser.getRole().name())
         );

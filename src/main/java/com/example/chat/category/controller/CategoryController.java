@@ -13,6 +13,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CategoryController {
     private final CategoryService categoryService;
 
+    /*
+    * 카테고리 생성
+    * */
     @PostMapping("/create/{groupId}")
     public String createCategory(@PathVariable(name = "groupId") Long groupId,
                                  @ModelAttribute(name = "createForm") CateGoryCreateForm createForm,

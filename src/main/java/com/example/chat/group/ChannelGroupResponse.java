@@ -10,13 +10,13 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class GroupResponse {
+public class ChannelGroupResponse {
     private List<CategoryResponse> categorizedChannels = new ArrayList<>();
     private List<ChannelResponse> uncategorizedChannels = new ArrayList<>();
 
     //private List<Visitors> visitorsList = new ArrayList<>();;
 
-    public GroupResponse(List<CategoryResponse> categorizedChannels, List<ChannelResponse> uncategorizedChannels) {
+    public ChannelGroupResponse(List<CategoryResponse> categorizedChannels, List<ChannelResponse> uncategorizedChannels) {
         this.categorizedChannels = categorizedChannels;
         this.uncategorizedChannels = uncategorizedChannels;
     }

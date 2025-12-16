@@ -37,7 +37,7 @@ public class ChannelService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void createChannel(Long categoryId, Long groupId, CreateChannelRequest request) {
+    public ChannelCreateResponse createChannel(Long categoryId, Long groupId, CreateChannelRequest request) {
         Groups group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
 
@@ -50,11 +50,16 @@ public class ChannelService {
 
         if (categoryId != null) {
             Categories category = categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND, "카테고리 없음."));
+                    .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
             channel.setCategories(category);
         }
 
         channelRepository.save(channel);
+
+        return ChannelCreateResponse.builder()
+                .channelId(channel.getId())
+                .groupId(groupId)
+                .build();
     }
 
 
@@ -118,9 +123,9 @@ public class ChannelService {
                 .collect(Collectors.toList());
     }
 
-    public String findById(Long channelId) {
+    public Channels findById(Long channelId) {
         Channels channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new CustomException(ErrorCode.CHANNEL_NOT_FOUND));
-        return channel.getName();
+        return channel;
     }
 }
