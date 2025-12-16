@@ -1,6 +1,6 @@
 package com.example.chat.login.controller;
 
-import com.example.chat.group.GroupResponse2;
+import com.example.chat.group.GroupGetResponse;
 import com.example.chat.group.service.GroupService;
 import com.example.chat.user.service.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class IndexController {
     @GetMapping("/main")
     public String mainPage(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   Model model) {
-        List<GroupResponse2> groups = groupService.findAll(userDetails.getId());
+        List<GroupGetResponse> groups = groupService.findAll(userDetails.getId());
         model.addAttribute("groups", groups);
         return "channel/channel";
     }

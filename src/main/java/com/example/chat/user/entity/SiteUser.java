@@ -48,6 +48,10 @@ public class SiteUser {
         this.role = RoleType.USER;
     }
 
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }

@@ -35,7 +35,7 @@ public class GroupService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public void createGroup(CustomUserDetails userDetails, createGroupRequest request) {
+    public Long createGroup(CustomUserDetails userDetails, createGroupRequest request) {
         SiteUser siteUser = userRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -46,9 +46,11 @@ public class GroupService {
         }
 
         groupRepository.save(group);
+
+        return group.getId();
     }
 
-    public GroupResponse accessGroup(Long groupId) {
+    public ChannelGroupResponse accessGroup(Long groupId) {
         Groups group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
         // 전체 카테고리 조회
@@ -88,7 +90,7 @@ public class GroupService {
             }
         }
 
-        GroupResponse response = new GroupResponse(categoryResponses, uncategorizedChannels);
+        ChannelGroupResponse response = new ChannelGroupResponse(categoryResponses, uncategorizedChannels);
 
         // 전체 방문객 조회
         /*List<Visitors> visitors = visitorsRepository.findByGroupId(groupId);
@@ -98,11 +100,11 @@ public class GroupService {
         return response;
     }
 
-    public List<GroupResponse2> findAll(Long siteUserId) {
+    public List<GroupGetResponse> findAll(Long siteUserId) {
         List<Groups> groups = groupRepository.findAllBySiteUserId(siteUserId);
 
         return groups.stream()
-                .map(group -> new GroupResponse2(group.getId(),
+                .map(group -> new GroupGetResponse(group.getId(),
                         group.getName(),
                         group.getProfile()))
                 .collect(Collectors.toList());

@@ -50,13 +50,17 @@ public class UserService {
 
         LocalDate dateTime = LocalDate.of(year, month, day);
 
-        return SiteUser.builder()
+        SiteUser siteUser = SiteUser.builder()
                 .username(userCreateForm.username())
                 .email(userCreateForm.email())
                 .nickname(nickname)
                 .password(passwordEncoder.encode(userCreateForm.password()))
                 .birthday(dateTime)
                 .build();
+
+        siteUser.setProfile("/images/meeng.png");
+
+        return siteUser;
     }
 
     public SiteUser findByEmail(String email) {
