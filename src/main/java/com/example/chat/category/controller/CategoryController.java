@@ -16,7 +16,7 @@ public class CategoryController {
     /*
     * 카테고리 생성
     * */
-    @PostMapping("/create/{groupId}")
+    @PostMapping(value = "/create/{groupId}", produces = "application/string;charset=UTF-8")
     public String createCategory(@PathVariable(name = "groupId") Long groupId,
                                  @ModelAttribute(name = "createForm") CateGoryCreateForm createForm,
                                  RedirectAttributes redirectAttributes) {

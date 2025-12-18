@@ -25,8 +25,6 @@ import java.util.List;
 public class GroupIndexController {
 
     private final GroupService groupService;
-    private final CategoryService categoryService;
-    private final ChannelService channelService;
 
     /*
      * 그룹 접속
@@ -61,7 +59,7 @@ public class GroupIndexController {
         if (groups != null) {
             model.addAttribute("groups", groups);
         }
-        return "/group/group";
+        return "group/group";
     }
 
 }

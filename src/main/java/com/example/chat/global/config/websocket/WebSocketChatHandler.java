@@ -1,5 +1,6 @@
 package com.example.chat.global.config.websocket;
 
+import com.example.chat.channel.domain.ChatMessages;
 import com.example.chat.chatting.domain.ChatMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +37,16 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         //session.sendMessage(new TextMessage(mapper.writeValueAsString(chatMessage)));
     }
 
-    // 메세지 수신시
     @Override
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        String payload = message.getPayload();
+        log.info("payload {}", payload);
+
+        ChatMessages chatMessage = mapper.readValue(payload, ChatMessages.class);
+    }
+
+    // 메세지 수신시
+    /*@Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
         log.info("payload {}", payload);
@@ -72,7 +81,7 @@ public class WebSocketChatHandler extends TextWebSocketHandler {
         for (WebSocketSession webSocketSession : chatRoomSessionMap.get(chatMessage.getRoomId())) {
             webSocketSession.sendMessage(new TextMessage(mapper.writeValueAsString(chatMessage)));
         }
-    }
+    }*/
 
     // 소켓 연결 종료
     @Override

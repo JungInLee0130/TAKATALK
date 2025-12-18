@@ -64,7 +64,7 @@ public class ChannelService {
 
 
 
-    public List<ChatMessageResponse> enterChannel(Long siteUserId, Long channelId) {
+    public List<ChatMessageResponse> enterChannel(Long channelId) {
         List<ChatMessages> chatMessages = chatMessageRepository.findAllByChannelId(channelId);
 
         List<ChatMessageResponse> responses = new ArrayList<>();

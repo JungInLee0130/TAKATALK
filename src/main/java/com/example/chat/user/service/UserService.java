@@ -63,6 +63,15 @@ public class UserService {
         return siteUser;
     }
 
+    public SiteUser getReferenceById(Long siteUserId) {
+        return userRepository.getReferenceById(siteUserId); // 프록시 객체 조회. 더 빠른 탐색가능. Optional이 아니기때문에 실제로 존재할때만사용.
+    }
+
+    public SiteUser findById(Long siteUserId) {
+        return userRepository.findById(siteUserId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));    // 진짜 객체 조회. Optional 적용.
+    }
+
     public SiteUser findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));

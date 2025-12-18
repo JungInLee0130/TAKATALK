@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -44,21 +45,19 @@ public class ParameterAop {
                 System.out.println(", value : null");
             }
         }
-        // 매개변수 배열의 종류와 값을 출력
-        /*for (Object obj : args) {
-            if (obj == null) {
-                System.out.println("type : null");
-                System.out.println("value : null");
-                continue;
-            }
-            System.out.println("type : " + obj.getClass().getSimpleName());
-            System.out.println("value : " + obj);
-        }*/
     }
 
     @AfterReturning(value = "cut()", returning = "obj")
     public void afterReturn(JoinPoint joinPoint, Object obj) {
-        System.out.println("return " + obj);
+        if (obj != null) {
+            // Hibernate 프록시 객체이면서 초기화가 안된 상태라면
+            if (!Hibernate.isInitialized(obj)) {
+                System.out.println("return (Proxy Object - Not Initialized) : " + obj.getClass().getName());
+            } else {
+                System.out.println("return " + obj);
+            }
+
+        }
         System.out.println("-----------------------------------------");
     }
 }
