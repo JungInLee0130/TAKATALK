@@ -62,18 +62,16 @@ public class ChannelController {
         Groups currentGroup = groupService.findById(currentGroupId);
 
         Channels currentChannel = channelService.findById(channelId);
-        List<ChatMessageResponse> responses = channelService.enterChannel(userDetails.getId(), channelId);
+
+        List<ChatMessageResponse> chatMessageResponseList = channelService.enterChannel(channelId);
 
         model.addAttribute("currentGroup", currentGroup);
         model.addAttribute("channelGroupResponse", channelGroupResponse);
         model.addAttribute("groups", groups);
 
-
-        model.addAttribute("loginProfile", userDetails.getProfile());
-        model.addAttribute("loginNickname", userDetails.getNickname());
-
         model.addAttribute("currentChannel", currentChannel);
-        model.addAttribute("responses", responses);
+        // chatMessage 전달
+        model.addAttribute("chatMessageResponseList", chatMessageResponseList);
         //model.addAttribute("visitors", chatResponse.getVisitorsList());
         return "channel/channel";
     }

@@ -27,13 +27,13 @@ public class ChatMessages {
     @JoinColumn(name = "channel_id")
     private Channels channel;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "siteuser_id")
     private SiteUser siteUser;
 
     private LocalDateTime createdAt;
 
-    private LocalDateTime modifiedAt;
+    private Boolean isModified;
 
     @Builder
     public ChatMessages(String content, Channels channel, SiteUser siteUser) {
@@ -41,10 +41,13 @@ public class ChatMessages {
         this.channel = channel;
         this.siteUser = siteUser;
         this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
+        this.isModified = false;    // 클라이언트가 조작가능하므로 처음 저장시 false로 고정
     }
 
-    public void setModifiedAt(LocalDateTime modifiedAt) {
-        this.modifiedAt = LocalDateTime.now();
+    public void setContent(String newContent) {
+        if (newContent != null && !newContent.equals(this.content)) {
+            this.content = newContent;
+            this.isModified = true;     // 내용을 수정할때 수정됨으로 표시하는게 좋음.
+        }
     }
 }

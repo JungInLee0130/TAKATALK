@@ -35,9 +35,9 @@ public class GroupController {
     /*
     * 그룹 생성
     * */
-    @PostMapping(value = "/create", produces = "application/string;charset=UTF-8")
+    @PostMapping("/create")
     public ResponseEntity<Void> createGroup(@AuthenticationPrincipal CustomUserDetails userDetails,
-                              @Valid @RequestBody createGroupRequest request) {
+                                            @Valid @RequestBody createGroupRequest request) {
         Long newGroupId = groupService.createGroup(userDetails, request);
         return ResponseEntity.created(URI.create("/group/access/" + newGroupId)).build();
     }
