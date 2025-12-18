@@ -8,9 +8,9 @@ import java.util.List;
 
 @NoArgsConstructor
 public class InviteChannelResponse {
-    String groupName;
-    String channelName;
-    List<FriendsResponse> friendsResponses;
+    private String groupName;
+    private String channelName;
+    private List<FriendsResponse> friendsResponses;
 
     @Builder
     public InviteChannelResponse(String groupName, String channelName, List<FriendsResponse> friendsResponses) {

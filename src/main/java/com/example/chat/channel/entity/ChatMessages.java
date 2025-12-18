@@ -1,4 +1,4 @@
-package com.example.chat.channel.domain;
+package com.example.chat.channel.entity;
 
 import com.example.chat.channel.entity.Channels;
 import com.example.chat.user.entity.SiteUser;

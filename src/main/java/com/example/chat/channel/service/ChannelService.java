@@ -2,19 +2,17 @@ package com.example.chat.channel.service;
 
 import com.example.chat.category.entity.Categories;
 import com.example.chat.category.repository.CategoryRepository;
-import com.example.chat.channel.domain.ChatMessages;
+import com.example.chat.channel.entity.ChatMessages;
 import com.example.chat.channel.dto.*;
 import com.example.chat.channel.entity.Channels;
 import com.example.chat.channel.repository.ChannelRepository;
 import com.example.chat.channel.repository.ChatMessageRepository;
-import com.example.chat.channel.repository.ChatRepository;
 import com.example.chat.friends.FriendService;
 import com.example.chat.friends.FriendsResponse;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.group.GroupRepository;
 import com.example.chat.group.Groups;
-import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.repository.UserRepository;
 import com.example.chat.visitor.repository.VisitorsRepository;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +70,8 @@ public class ChannelService {
             ChatMessageResponse response = ChatMessageResponse.builder()
                     .profile(chatMessage.getSiteUser().getProfile())
                     .nickname(chatMessage.getSiteUser().getNickname())
+                    .isModified(chatMessage.getIsModified())
+                    .channelId(chatMessage.getChannel().getId())
                     .content(chatMessage.getContent())
                     .createdAt(chatMessage.getCreatedAt())
                     .build();

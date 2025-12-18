@@ -9,7 +9,7 @@
         </ul>
     <li>채팅방</li>
         <ul>
-            <li>websocket</li>
+            <li>websocket, Stomp</li>
         </ul>
 </ul>
 <hr>

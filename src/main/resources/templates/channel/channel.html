@@ -423,7 +423,7 @@
       </div>
       <!--메시지 공간 80vh-->
       <div id="chatBox" class="chat-box">
-        <!-- 서버로부터 받아온 메시지가 존재하면-->
+        <!-- 서버로부터 받아온 메시지가 존재하면 visible.: 이전 채팅데이터 GET-->
         <div th:if="${chatMessageResponseList}">
           <!--개별 메시지 wrapper-->
           <div class="chatmessage-wrapper" th:each="chatMessageResponse : ${chatMessageResponseList}">
@@ -436,7 +436,7 @@
                   <p class="chatmessage-nickname" th:text="${chatMessageResponse.nickname}"></p>
                 </div>
                 <div class="chatmessage-createdat-wrapper">
-                  <p class="chatmessage-createdat" th:text="${chatMessageResponse.createdAt}"></p>
+                  <p class="chatmessage-createdat" th:text="${#temporals.format(chatMessageResponse.createdAt, 'HH:mm')}"></p>
                 </div>
               </div>
               <div class="chatmessage-content-wrapper">
@@ -444,6 +444,7 @@
               </div>
             </div>
           </div>
+          <!--사용자가 입력하는 메시지 생성되는 공간-->
         </div>
       </div>
       <div class="chat-input-wrapper">
@@ -475,9 +476,9 @@
 
   </script>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script> <!--SOCKJS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script> <!--STOMP-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> <!--JQUERY-->
 <!--<script th:replace="~{modal/invite-channel-modal :: invite-modal-js}"></script>-->
 <script th:inline="javascript">
   /*
@@ -511,6 +512,7 @@
       }
     });
 
+    /* 전송버튼 클릭시 */
     document.getElementById("sendMsgBtn").onclick = () => {
       sendMessage();
     }
@@ -523,6 +525,7 @@
       console.log("현재 선택된 채널이 없습니다.");
     }
 
+    /* 소켓 연결 함수 */
     function connect() {
       const socket = new SockJS('/ws-stomp');
       stompClient = Stomp.over(socket);
@@ -541,7 +544,7 @@
     }
 
     /*
-    * response rendering
+    * response rendering 함수
     * */
     function renderMessage(data) {
       let chatMessageProfileWrapper = document.createElement("div");
@@ -613,7 +616,7 @@
       container.scrollTop = 0;
     }
 
-    /* sendMsgBtn 클릭시 */
+    /* sendMessage 함수 */
     function sendMessage() {
       const inputBox = document.getElementById("chatInput");
       if (!inputBox.value || !stompClient) return;
@@ -629,11 +632,12 @@
       /*inputBox 초기화*/
       inputBox.value = '';
     }
-  });
 
-  function uploadFile() {
-    alert('upload!')
-  }
+    /* 파일 업로드 함수 */
+    function uploadFile() {
+      alert('upload!')
+    }
+  });
 </script>
 
 </html>

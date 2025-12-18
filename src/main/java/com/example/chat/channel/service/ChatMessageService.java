@@ -1,8 +1,8 @@
 package com.example.chat.channel.service;
 
-import com.example.chat.channel.domain.ChatMessages;
+import com.example.chat.channel.entity.ChatMessages;
 import com.example.chat.channel.dto.ChatMessageRequest;
-import com.example.chat.channel.dto.ChatMessageResponse2;
+import com.example.chat.channel.dto.ChatMessageResponse;
 import com.example.chat.channel.entity.Channels;
 import com.example.chat.channel.repository.ChatMessageRepository;
 import com.example.chat.user.entity.SiteUser;
@@ -19,7 +19,7 @@ public class ChatMessageService {
     private final ChannelService channelService;
     private final UserService userService;
 
-    public ChatMessageResponse2 save(CustomUserDetails userDetails, ChatMessageRequest request) {
+    public ChatMessageResponse save(CustomUserDetails userDetails, ChatMessageRequest request) {
         Channels channel = channelService.findById(request.getChannelId()); // 쿼리 1번
 
         SiteUser siteUser = userService.findById(userDetails.getId());  // 쿼리 x. 실제로 id값을 제외한 다른 value를 조회할때 쿼리나감.
@@ -32,7 +32,7 @@ public class ChatMessageService {
 
         ChatMessages savedMessage = chatMessageRepository.save(chatMessages);
 
-        return ChatMessageResponse2.builder()
+        return ChatMessageResponse.builder()
                 .channelId(channel.getId())
                 .profile(userDetails.getProfile())  // 사용자는 세션값
                 .nickname(userDetails.getNickname())

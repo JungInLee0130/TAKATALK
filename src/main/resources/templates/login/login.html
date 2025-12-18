@@ -150,7 +150,7 @@
         color: #E88985;
     }
 </style>
-<style th:replace="~{modal/modal :: login-modal-css}"></style>
+<style th:replace="~{login/login-modal :: login-modal-css}"></style>
 <body>
     <div class="container">
         <div class="login-logo">
@@ -176,7 +176,7 @@
                 <div class="send-change-password-wrapper">
                     <button type="button" id="sendChangePasswordBtn">비밀번호를 잊으셨나요?</button>
                     <!--비밀번호 재설정 클릭시-->
-                    <div th:replace="~{modal/modal :: login-modal-fragment}"></div>
+                    <div th:replace="~{login/login-modal :: login-modal-fragment}"></div>
                 </div>
                 <div class="login-button-wrapper">
                     <button type="submit" id="loginBtn">로그인</button>
@@ -194,7 +194,7 @@
   </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<script th:replace="~{modal/modal :: login-modal-js}"></script>
+<script th:replace="~{login/login-modal :: login-modal-js}"></script>
 <script th:inline="javascript">
     /*
     * ajax 요청시 자동으로 header에 csrf 토큰 삽입
