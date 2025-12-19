@@ -12,8 +12,10 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,5 +35,13 @@ public class ChatMessageController {
 
         ChatMessageResponse response = chatMessageService.save(userDetails, request);
         messagingTemplate.convertAndSend("/sub/channel/" + request.getChannelId(), response);
+    }
+
+    @GetMapping("/chatmessage/history/{channelId}")
+    @ResponseBody
+    public List<ChatMessageResponse> getChatHistory(
+            @PathVariable(name = "channelId") Long channelId,
+            @RequestParam(required = false) Long lastMessageId) {
+        return chatMessageService.getOldMessage(channelId, lastMessageId);
     }
 }

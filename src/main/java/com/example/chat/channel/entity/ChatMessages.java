@@ -27,7 +27,7 @@ public class ChatMessages {
     @JoinColumn(name = "channel_id")
     private Channels channel;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "siteuser_id")
     private SiteUser siteUser;
 

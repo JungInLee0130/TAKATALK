@@ -1,15 +1,22 @@
 package com.example.chat.channel.service;
 
-import com.example.chat.channel.entity.ChatMessages;
 import com.example.chat.channel.dto.ChatMessageRequest;
 import com.example.chat.channel.dto.ChatMessageResponse;
 import com.example.chat.channel.entity.Channels;
+import com.example.chat.channel.entity.ChatMessages;
 import com.example.chat.channel.repository.ChatMessageRepository;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.service.CustomUserDetails;
 import com.example.chat.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +46,39 @@ public class ChatMessageService {
                 .content(savedMessage.getContent())
                 .createdAt(savedMessage.getCreatedAt()) // chatMessage에서 저장하고 받아와서 정확한 시간 기록
                 .isModified(savedMessage.getIsModified())
+                .chatMessageId(savedMessage.getId())
                 .build();
+    }
+
+    public List<ChatMessageResponse> getOldMessage(Long channelId, Long lastMessageId) {
+
+        Pageable pageable = PageRequest.of(0, 20);
+
+        Slice<ChatMessages> slice;
+
+        // lastMessageId가 없으면 -> 가장 최신 메시지 ID 찾아서 조회
+        // lastMessageId가 있으면 -> repository...findBy..LessThan.. 호출
+        if (lastMessageId == null) {
+            slice = chatMessageRepository.findByChannelIdOrderByIdDesc(channelId, pageable);
+        } else {
+            slice = chatMessageRepository.findByChannelIdAndIdLessThanOrderByIdDesc(channelId, lastMessageId, pageable);
+        }
+
+
+        List<ChatMessageResponse> responseList = slice.getContent().stream()
+                .map(chatmessage -> ChatMessageResponse.builder()
+                        .channelId(chatmessage.getChannel().getId())
+                        .profile(chatmessage.getSiteUser().getProfile())
+                        .nickname(chatmessage.getSiteUser().getNickname())
+                        .content(chatmessage.getContent())
+                        .createdAt(chatmessage.getCreatedAt())
+                        .isModified(chatmessage.getIsModified())
+                        .chatMessageId(chatmessage.getId())
+                        .build())
+                .collect(Collectors.toList());
+
+        Collections.reverse(responseList);
+
+        return responseList;
     }
 }

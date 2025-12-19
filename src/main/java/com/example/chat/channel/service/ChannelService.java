@@ -62,7 +62,7 @@ public class ChannelService {
 
 
 
-    public List<ChatMessageResponse> enterChannel(Long channelId) {
+    /*public List<ChatMessageResponse> enterChannel(Long channelId) {
         List<ChatMessages> chatMessages = chatMessageRepository.findAllByChannelId(channelId);
 
         List<ChatMessageResponse> responses = new ArrayList<>();
@@ -80,7 +80,7 @@ public class ChannelService {
         }
 
         return responses;
-    }
+    }*/
 
     /*public ChatResponse enterChannel(Long channelId) {
 
