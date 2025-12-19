@@ -33,6 +33,7 @@
 </ul>
 <hr>
 <h2>ERD</h2>
+<img width="1333" height="693" alt="Image" src="https://github.com/user-attachments/assets/f9635d5d-dcca-4f41-9943-e811478dd29a" />
 <hr>
 <h2>아키텍쳐</h2>
 <hr>
