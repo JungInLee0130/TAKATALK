@@ -1,6 +1,6 @@
-package com.example.chat.global.config.security;
+package com.example.chat.global.security;
 
-import com.example.chat.global.config.security.authentication.CustomAuthenticationFailureHandler;
+import com.example.chat.global.security.authentication.CustomAuthenticationFailureHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;

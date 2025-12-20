@@ -1,5 +1,6 @@
 package com.example.chat.channel.service;
 
+import com.example.chat.channel.domain.ChatMessageType;
 import com.example.chat.channel.dto.ChatMessageRequest;
 import com.example.chat.channel.dto.ChatMessageResponse;
 import com.example.chat.channel.entity.Channels;
@@ -32,6 +33,7 @@ public class ChatMessageService {
         SiteUser siteUser = userService.findById(userDetails.getId());  // 쿼리 x. 실제로 id값을 제외한 다른 value를 조회할때 쿼리나감.
 
         ChatMessages chatMessages = ChatMessages.builder()
+                .type(ChatMessageType.TALK)
                 .content(request.getContent())
                 .channel(channel)   // 중간에 누군가가 채널을 삭제할수있기때문에 직접 불러와야함.
                 .siteUser(siteUser)
@@ -40,6 +42,7 @@ public class ChatMessageService {
         ChatMessages savedMessage = chatMessageRepository.save(chatMessages);
 
         return ChatMessageResponse.builder()
+                .type(ChatMessageType.TALK)
                 .channelId(channel.getId())
                 .profile(userDetails.getProfile())  // 사용자는 세션값
                 .nickname(userDetails.getNickname())
@@ -74,11 +77,25 @@ public class ChatMessageService {
                         .createdAt(chatmessage.getCreatedAt())
                         .isModified(chatmessage.getIsModified())
                         .chatMessageId(chatmessage.getId())
+                        .type(chatmessage.getType())
                         .build())
                 .collect(Collectors.toList());
 
         Collections.reverse(responseList);
 
         return responseList;
+    }
+
+    public ChatMessages saveSystemMessage(Long channelId, Long siteUserId, String content, ChatMessageType type) {
+        Channels channel = channelService.getReferenceById(channelId);
+        SiteUser siteUser = userService.getReferenceById(siteUserId);
+        ChatMessages welcomeMsg = ChatMessages.builder()
+                .channel(channel)
+                .siteUser(siteUser)
+                .content(content)
+                .type(type) // 현재는 ENTER밖에없음.
+                .build();
+
+        return chatMessageRepository.save(welcomeMsg);
     }
 }
