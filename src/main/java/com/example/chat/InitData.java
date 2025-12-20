@@ -1,6 +1,7 @@
 package com.example.chat;
 
 import com.example.chat.channel.domain.ChannelType;
+import com.example.chat.channel.domain.ChatMessageType;
 import com.example.chat.channel.entity.Channels;
 import com.example.chat.channel.entity.ChatMessages;
 import com.example.chat.channel.repository.ChannelRepository;
@@ -90,6 +91,7 @@ public class InitData implements CommandLineRunner {
                         .content("dd" + i)
                         .channel(channel1)   // 중간에 누군가가 채널을 삭제할수있기때문에 직접 불러와야함.
                         .siteUser(siteUser1)
+                        .type(ChatMessageType.TALK)
                         .build();
 
                 chatMessageRepository.save(chatMessages);

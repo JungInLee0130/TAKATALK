@@ -1,5 +1,6 @@
 package com.example.chat.channel.dto;
 
+import com.example.chat.channel.domain.ChatMessageType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,9 +18,11 @@ public class ChatMessageResponse {
     private LocalDateTime createdAt;    // 생성 날짜
     private String content;     // 내용
     private Boolean isModified; // 수정 여부
+    private ChatMessageType type;    // 메시지타입
 
     @Builder
-    public ChatMessageResponse(Long channelId, String profile, String nickname, LocalDateTime createdAt, String content, Boolean isModified, Long chatMessageId) {
+    public ChatMessageResponse(Long channelId, String profile, String nickname, LocalDateTime createdAt, String content, Boolean isModified,
+                               Long chatMessageId, ChatMessageType type) {
         this.channelId = channelId;
         this.profile = profile;
         this.nickname = nickname;
@@ -27,5 +30,6 @@ public class ChatMessageResponse {
         this.content = content;
         this.isModified = isModified;
         this.chatMessageId = chatMessageId;
+        this.type = type;
     }
 }

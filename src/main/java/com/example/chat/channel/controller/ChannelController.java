@@ -74,18 +74,11 @@ public class ChannelController {
         model.addAttribute("currentChannel", currentChannel);
         // chatMessage 전달
         model.addAttribute("chatMessageResponseList", chatMessageResponseList);
+
+        // websocketEventHandler가 처리
         //model.addAttribute("visitors", chatResponse.getVisitorsList());
         return "channel/channel";
     }
-
-    /*@GetMapping("/enter/{channelId}")
-    public String enterChannel(@PathVariable(name = "channelId") Long channelId, Model model) {
-        ChatResponse chatResponse = channelService.enterChannel(channelId);
-        model.addAttribute("channel", chatResponse.getChannel());
-        model.addAttribute("visitors", chatResponse.getVisitorsList());
-        model.addAttribute("chat", chatResponse.getChat());
-        return "/chat/chatList";
-    }*/
 
     /*
     * 채널 목록

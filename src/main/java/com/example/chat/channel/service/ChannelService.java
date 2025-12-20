@@ -128,4 +128,8 @@ public class ChannelService {
                 .orElseThrow(() -> new CustomException(ErrorCode.CHANNEL_NOT_FOUND));
         return channel;
     }
+
+    public Channels getReferenceById(Long channelId) {
+        return channelRepository.getReferenceById(channelId);
+    }
 }

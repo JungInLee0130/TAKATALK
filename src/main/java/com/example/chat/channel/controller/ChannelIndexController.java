@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 @RequestMapping("/channel")
 public class ChannelIndexController {
-    private final GroupService groupService;
-
     /*
     * 채널생성 페이지
     * */
