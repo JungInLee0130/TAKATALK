@@ -1,52 +1,46 @@
-<h1>Discord</h1>
-<hr>
-<h2>기능</h2>
-<ul>
-    <li>로그인, 회원가입</li>
-    <li>비밀번호 찾기</li>
-        <ul>
-            <li>SMTP</li>
-        </ul>
-    <li>채팅방</li>
-        <ul>
-            <li>websocket, Stomp</li>
-        </ul>
-</ul>
-<hr>
-<h2>기술스택</h2>
-<p>- 프론트</p>
-<ul>
-    <li>html, css, js</li>
-    <li>jquery (ajax)</li>
-    <li>thymeleaf</li>
-</ul>
-<p>- 백엔드</p>
-<ul>
-    <li>java 21</li>
-    <li>spring boot 3.5.3</li>
-    <li>JPA</li>   
-    <li>DB</li>
-    <ul>
-        <li>prod : mariadb, dev : h2-database</li>
-    </ul>
-    
-</ul>
-<hr>
-<h2>ERD</h2>
+# Discord
+## 기능
+- 회원
+  - 로그인, 회원가입
+    - Spring Security : 세션 로그인
+  - 비밀번호 찾기
+    - SMTP 프로토콜을 활용한 이메일 전송
+- 그룹
+  - 그룹 생성
+- 채널
+  - 채널 생성, 입장
+- 실시간 채팅
+  - websocket + Stomp
+- 실시간 방문자 반영
+  - websocketEventListener 활용을 통한 감지
+  - Subscribe시 방문자 추가, disconnect시 방문자 제거
+## 기술스택
+- 프론트
+  - html, css, js
+  - jquery (ajax)
+  - thymeleaf
+- 백엔드
+  - java 21
+  - spring boot 3.5.3
+  - JPA
+- DB
+  - prod : mariadb, dev : h2-database
+## ERD
 <img width="1333" height="693" alt="Image" src="https://github.com/user-attachments/assets/f9635d5d-dcca-4f41-9943-e811478dd29a" />
-<hr>
-<h2>아키텍쳐</h2>
-<hr>
-<h2>문제해결</h2>
-<hr>
-<h2>깃 컨벤션</h2>
-<ul>
-<li>feat : 기능</li>
-<li>fix : 수정</li>
-<li>docs : 문서 작성, 수정</li>
-<li>style : html css 수정</li>
-<li>refactor : 리팩토링</li>
-<li>test : 테스트</li>
-<li>chore : 빌드 업무 수정</li>
+
+## 아키텍쳐
+
+ 
+## 문제해결
+
+ 
+## 깃 컨벤션
+- feat : 기능
+- fix : 수정
+- docs : 문서 작성, 수정
+- style : html css 수정
+- refactor : 리팩토링
+- test : 테스트
+- chore : 빌드 업무 수정
 </ul>
 
