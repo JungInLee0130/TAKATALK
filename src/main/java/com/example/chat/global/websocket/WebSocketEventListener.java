@@ -7,7 +7,7 @@ import com.example.chat.channel.service.ChatMessageService;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.service.CustomUserDetails;
 import com.example.chat.user.service.UserService;
-import com.example.chat.visitor.dto.VisitorDto;
+import com.example.chat.groupmember.dto.VisitorDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

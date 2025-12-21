@@ -13,7 +13,7 @@ import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.group.repository.GroupRepository;
 import com.example.chat.group.entity.Groups;
 import com.example.chat.user.repository.UserRepository;
-import com.example.chat.visitor.repository.VisitorsRepository;
+import com.example.chat.groupmember.repository.GroupMemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class ChannelService {
     private final ChannelRepository channelRepository;
     private final ChatMessageRepository chatMessageRepository;
-    private final VisitorsRepository visitorsRepository;
+    private final GroupMemberRepository groupMemberRepository;
     private final CategoryRepository categoryRepository;
     private final GroupRepository groupRepository;
     private final FriendService friendService;

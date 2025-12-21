@@ -42,7 +42,7 @@
 <body>
   <div>
     <label for="nickname">닉네임 : </label>
-    <input id="nickname" type="text" placeholder="${user.nickname}">
+    <input id="nickname" type="text" th:value="${user.nickname}">
   </div>
   <label for="profileImage">프로필 사진 : </label>
   <div class="profile-wrapper">

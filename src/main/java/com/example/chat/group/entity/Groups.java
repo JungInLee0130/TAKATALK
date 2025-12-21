@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,15 +26,24 @@ public class Groups {
     @JoinColumn(name = "siteuser_id")
     private SiteUser siteUser;  // spring security user 위치
 
+    @Column(unique = true)
+    private String inviteCode;  // 서버별 고유 초대코드
+
     @Builder
     public Groups(String name, SiteUser siteUser) {
         this.name = name;
         this.siteUser = siteUser;
+        this.inviteCode = getInviteCode();
     }
 
     public void updateProfile(String profile) {
         if (profile != null) {
             this.profile = profile;
         }
+    }
+
+    // 서버 생성시 자동으로 초대코드 생성
+    public void generateInviteCode(){
+        this.inviteCode = UUID.randomUUID().toString().substring(0, 8);
     }
 }

@@ -533,6 +533,9 @@
         <div id="transparentSpacer"></div>
         <!-- 서버 환영메시지 -->
         <!-- 서버로부터 받아온 메시지가 존재하면 visible.: 이전 채팅데이터 GET-->
+        <!--<div class="chatbox-upper-wrapper" th:if="${#lists.isEmpty(groups)}">
+          <h2>가입한 서버가 없습니다. 서버를 생성하거나 초대코드를 입력하세요!</h2>
+        </div>-->
         <div class="chatbox-upper-wrapper" th:if="${currentChannel}" style="display: none">
           <h2>#<span th:text="${currentChannel.name}"></span>에 오신걸 환영합니다!</h2>
           <p>#<span th:text="${currentChannel.name}"></span> 채널의 시작이에요.</p>

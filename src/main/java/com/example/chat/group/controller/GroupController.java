@@ -2,7 +2,7 @@ package com.example.chat.group.controller;
 
 import com.example.chat.group.dto.GroupGetResponse;
 import com.example.chat.group.service.GroupService;
-import com.example.chat.group.dto.createGroupRequest;
+import com.example.chat.group.dto.CreateGroupRequest;
 import com.example.chat.user.service.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class GroupController {
     * */
     @PostMapping("/create")
     public ResponseEntity<Void> createGroup(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                            @Valid createGroupRequest request) throws IOException {
+                                            @Valid CreateGroupRequest request) throws IOException {
         Long newGroupId = groupService.createGroup(userDetails, request);
         return ResponseEntity.created(URI.create("/group/access/" + newGroupId)).build();
     }

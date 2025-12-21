@@ -2,6 +2,7 @@ package com.example.chat.login.controller;
 
 import com.example.chat.group.dto.GroupGetResponse;
 import com.example.chat.group.service.GroupService;
+import com.example.chat.groupmember.service.GroupMemberService;
 import com.example.chat.user.dto.UserResponse;
 import com.example.chat.user.service.CustomUserDetails;
 import com.example.chat.user.service.UserService;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class IndexController {
     private final GroupService groupService;
+    private final GroupMemberService groupMemberService;
     private final UserService userService;
 
     @GetMapping("/index")
@@ -34,10 +36,11 @@ public class IndexController {
     @GetMapping("/main")
     public String mainPage(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   Model model) {
-        List<GroupGetResponse> groups = groupService.findAll(userDetails.getId());
+        //List<GroupGetResponse> groups = groupService.findAll(userDetails.getId());
         UserResponse user = userService.getUserDetails(userDetails.getId());
+        List<GroupGetResponse> groupList = groupMemberService.getGroupList(userDetails.getId());
 
-        model.addAttribute("groups", groups);
+        model.addAttribute("groups", groupList);
         model.addAttribute("user", user);
 
         return "channel/channel";

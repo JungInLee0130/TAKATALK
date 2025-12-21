@@ -1,4 +1,4 @@
-package com.example.chat.visitor.dto;
+package com.example.chat.groupmember.dto;
 
 import com.example.chat.global.file.FileUtil;
 import lombok.Builder;

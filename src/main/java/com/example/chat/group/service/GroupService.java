@@ -11,9 +11,12 @@ import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.global.file.FileService;
 import com.example.chat.group.dto.ChannelGroupResponse;
 import com.example.chat.group.dto.GroupGetResponse;
-import com.example.chat.group.dto.createGroupRequest;
+import com.example.chat.group.dto.CreateGroupRequest;
 import com.example.chat.group.entity.Groups;
 import com.example.chat.group.repository.GroupRepository;
+import com.example.chat.groupmember.domain.GroupRole;
+import com.example.chat.groupmember.entity.GroupMember;
+import com.example.chat.groupmember.repository.GroupMemberRepository;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.repository.UserRepository;
 import com.example.chat.user.service.CustomUserDetails;
@@ -33,12 +36,12 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final ChannelRepository channelRepository;
     private final UserRepository userRepository;
-
+    private final GroupMemberRepository groupMemberRepository;
     private final CategoryRepository categoryRepository;
     private final FileService fileService;
 
     @Transactional
-    public Long createGroup(CustomUserDetails userDetails, createGroupRequest request) throws IOException {
+    public Long createGroup(CustomUserDetails userDetails, CreateGroupRequest request) throws IOException {
         SiteUser siteUser = userRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -46,6 +49,12 @@ public class GroupService {
         Groups group = Groups.builder()
                 .name(request.name())
                 .siteUser(siteUser)
+                .build();
+
+        GroupMember groupMember = GroupMember.builder()
+                .role(GroupRole.OWNER)
+                .siteUser(siteUser)
+                .group(group)
                 .build();
         
         // 2. 프로필이 null이 아니면 업데이트
@@ -56,6 +65,7 @@ public class GroupService {
 
         // 3. 그룹 DB 저장
         groupRepository.save(group);
+        groupMemberRepository.save(groupMember);
 
         return group.getId();
     }

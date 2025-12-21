@@ -46,10 +46,12 @@
       const groupName = document.getElementById("groupName").value;
       const fileInput = document.getElementById("profileImg");
 
-      formData.append("groupName", groupName);
+      console.log(groupName, fileInput.files[0])
+
+      formData.append("name", groupName);
 
       if (fileInput.files.length > 0) {
-        formData.append("profileImg", fileInput.files[0]);
+        formData.append("profile", fileInput.files[0]);
       }
 
       $.ajax({

@@ -3,7 +3,7 @@ package com.example.chat.group.controller;
 import com.example.chat.group.dto.ChannelGroupResponse;
 import com.example.chat.group.dto.GroupGetResponse;
 import com.example.chat.group.entity.Groups;
-import com.example.chat.group.dto.createGroupRequest;
+import com.example.chat.group.dto.CreateGroupRequest;
 import com.example.chat.group.service.GroupService;
 import com.example.chat.user.dto.UserResponse;
 import com.example.chat.user.service.CustomUserDetails;
@@ -57,7 +57,7 @@ public class GroupIndexController {
     * */
     @GetMapping("/createPage")
     public String createGroupPage(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                  @ModelAttribute(name = "request") createGroupRequest request,
+                                  @ModelAttribute(name = "request") CreateGroupRequest request,
                                   Model model) {
         List<GroupGetResponse> groups = groupService.findAll(userDetails.getId());
         if (groups != null) {
