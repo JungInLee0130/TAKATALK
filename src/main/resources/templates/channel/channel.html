@@ -36,16 +36,34 @@
     flex-direction: row;
     box-sizing: border-box;
   }
-  .left-container .character-info {
+  .profile-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .left-profile-wrapper {
     margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
     background-color: darkgray;
     height: 10vh;
   }
-  .left-container .character-info p{
+  .profile-image-wrapper {
+    margin: 0;
+    margin-left: 5px;
+  }
+  .profile-image-wrapper .profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  .profile-nickname-wrapper {
+    margin: 0;
+  }
+  .profile-nickname-wrapper p{
     margin : 0;
-    text-align: center;
     line-height: 10vh;
-    height: 10vh;
   }
   .left-bar {
     display: flex;
@@ -412,7 +430,7 @@
           <div th:if="${groups != null}">
             <div class="group-icon-wrapper" th:each="group : ${groups}">
               <a th:href="@{/group/access/{groupId}(groupId = ${group.id})}" class="group-link">
-                <img class="group-icon" th:src="@{${group.profile}}" th:alt="${group.name} + '아이콘'">
+                <img class="group-icon" th:src="|/profile-images/${group.profile}|" th:alt="${group.name} + '아이콘'">
             <!--<span th:if="${group.hasNewMessage}" class="notification-badge">
                   <span th:text="${group.newMessageCount}">1</span>
                 </span>-->
@@ -476,10 +494,27 @@
           </div>
         </div>
       </div>
-      <div class="character-info">
-        <p>자신의 정보</p>
-      </div>
+      <a th:href="@{/profile}" class="profile-link">
+        <div class="left-profile-wrapper" id="leftProfileWrapper">
+          <div class="profile-image-wrapper">
+            <img th:src="|/profile-images/${user.profileImageUrl}|" class="profile-image">
+          </div>
+          <div class="profile-nickname-wrapper">
+            <p th:text="${user.nickname}"></p>
+          </div>
+          <div>
+            <img src="#" class="mic-image">
+          </div>
+          <div>
+            <img src="#" class="headphone-image">
+          </div>
+          <div>
+            <img src="#" class="setting-image">
+          </div>
+        </div>
+      </a>
     </div>
+
 
     <!--*************-->
     <!--****채팅방****-->
@@ -510,7 +545,7 @@
             <!--chatMessageResponse.type == 'TALK' 이면 -->
             <div class="chatmessage-talk-wrapper" th:if="${chatMessageResponse.type.name() == 'TALK'}">
               <div class="chatmessage-profile-wrapper">
-                <img class="chatmessage-profile" th:src="@{${chatMessageResponse.profile}}">
+                <img class="chatmessage-profile" th:src="|/profile-images/${chatMessageResponse.profile}|">
               </div>
               <div class="chatmessage-second-wrapper">
                 <div class="chatmessage-upper-wrapper">
@@ -688,7 +723,7 @@
         oldMessage = `
         <div class="chatmessage-talk-wrapper" data-id="${data.chatMessageId}">
             <div class="chatmessage-profile-wrapper">
-              <img class="chatmessage-profile" src="${data.profile}">
+              <img class="chatmessage-profile" src="/profile-images/${data.profile}">
             </div>
             <div class="chatmessage-second-wrapper">
               <div class="chatmessage-upper-wrapper">
@@ -772,15 +807,17 @@
     }
 
     function renderVisitorList(visitors) {
-      const listHtml = visitors.map(user => `
-        <div class="visitor-item" data-id="${user.siteUserId}">
-            <div class="visitor-image-wrapper">
-                <img src="${user.profile}" class="visitor-profile">
-                <div class="green-dot"></div>
-            </div>
-            <p>${user.nickname}</p>
-        </div>
-      `).join('');
+      const listHtml = visitors.map(user => {
+       return `
+          <div class="visitor-item" data-id="${user.siteUserId}">
+              <div class="visitor-image-wrapper">
+                  <img src="/profile-images/${user.profile}" class="visitor-profile">
+                  <div class="green-dot"></div>
+              </div>
+              <p>${user.nickname}</p>
+          </div>
+      `
+      }).join('');
 
       $(".online-visitorlist-wrapper").html(listHtml);
     }
@@ -807,7 +844,7 @@
       const inputHtml =`
            <div class="inputmessage-wrapper" style="display:flex;">
             <div class="chatmessage-profile-wrapper">
-              <img class="chatmessage-profile" src="${data.profile}">
+              <img class="chatmessage-profile" src="/profile-images/${data.profile}">
             </div>
             <div class="chatmessage-second-wrapper">
               <div class="chatmessage-upper-wrapper">

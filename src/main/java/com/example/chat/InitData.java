@@ -48,9 +48,6 @@ public class InitData implements CommandLineRunner {
                     .birthday(LocalDate.parse("2013-03-04"))
                     .build();
 
-            siteUser1.setProfile("/images/meeng.png");
-            siteUser2.setProfile("/images/meeng.png");
-
             userRepository.save(siteUser1);
             userRepository.save(siteUser2);
             System.out.println("======테스트용 초기 데이터 생성 완료 (ID : test1@naver.com / PW : qwer1234) ========");
@@ -58,8 +55,6 @@ public class InitData implements CommandLineRunner {
 
 
             Groups group1 = new Groups("그룹1", siteUser1);
-
-            group1.setProfile("/images/meeng.png");
 
             groupRepository.save(group1);
 

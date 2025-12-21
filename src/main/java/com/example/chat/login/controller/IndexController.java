@@ -2,7 +2,9 @@ package com.example.chat.login.controller;
 
 import com.example.chat.group.GroupGetResponse;
 import com.example.chat.group.service.GroupService;
+import com.example.chat.user.dto.UserResponse;
 import com.example.chat.user.service.CustomUserDetails;
+import com.example.chat.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class IndexController {
     private final GroupService groupService;
+    private final UserService userService;
 
     @GetMapping("/index")
     public String index(@AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -32,7 +35,11 @@ public class IndexController {
     public String mainPage(@AuthenticationPrincipal CustomUserDetails userDetails,
                                   Model model) {
         List<GroupGetResponse> groups = groupService.findAll(userDetails.getId());
+        UserResponse user = userService.getUserDetails(userDetails.getId());
+
         model.addAttribute("groups", groups);
+        model.addAttribute("user", user);
+
         return "channel/channel";
     }
 }

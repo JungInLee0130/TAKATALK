@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <!--<link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">-->
   <meta charset="UTF-8">
   <title>로그인</title>
 </head>
@@ -23,6 +24,12 @@
       xhr.setRequestHeader(csrfHeader, csrfToken);
     });
   })
+
+  /*
+  * 돔 렌더링 모두 완료되고 실행
+  * */
+  $(document).ready(function () {
+  });
 
 </script>
 </html>

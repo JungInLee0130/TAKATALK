@@ -1,19 +1,29 @@
 package com.example.chat.user.service;
 
+import com.example.chat.global.file.FileService;
+import com.example.chat.global.file.FileStorageProperties;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.login.service.TokenService;
+import com.example.chat.user.domain.ProfileRequest;
 import com.example.chat.user.domain.UserCreateForm;
+import com.example.chat.user.dto.UserResponse;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -21,8 +31,26 @@ import java.time.LocalDate;
 public class UserService {
     private final UserRepository userRepository;
     private final TokenService tokenService;
-
     private final PasswordEncoder passwordEncoder;
+    private final FileService fileService;
+
+    @Transactional
+    public void updateProfile(Long siteUserId, ProfileRequest request) throws IOException {
+        SiteUser siteUser = userRepository.findById(siteUserId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        
+        // 1. 닉네임을 입력했다면 저장
+        if (StringUtils.hasText(request.getNickname())) {
+            siteUser.updateNickname(request.getNickname());
+        }
+
+        // 2. 프로필 이미지가 null이 아니라면 저장
+        if (request.getProfileImage() != null && !request.getProfileImage().isEmpty()) {
+            // FileService로 분리
+            String savedFileName = fileService.storeFile(request.getProfileImage());
+            siteUser.updateProfileImageUrl(savedFileName);
+        }
+    }
 
     public SiteUser create (UserCreateForm userCreateForm){
         /*중복 회원 체크*/
@@ -58,8 +86,6 @@ public class UserService {
                 .birthday(dateTime)
                 .build();
 
-        siteUser.setProfile("/images/meeng.png");
-
         return siteUser;
     }
 
@@ -84,7 +110,7 @@ public class UserService {
 
     public void changePassword(String email, String password) {
         SiteUser siteUser = findByEmail(email);
-        siteUser.setPassword(password);
+        siteUser.updatePassword(password);
     }
 
     @Transactional
@@ -95,6 +121,20 @@ public class UserService {
         // 토큰은 1회용.
         tokenService.deleteToken(token);
         /**/
+    }
+
+    public UserResponse getUserDetails(Long siteUserId) {
+        SiteUser siteUser = userRepository.findById(siteUserId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        UserResponse response = UserResponse.builder()
+                .nickname(siteUser.getNickname())
+                .profileImageUrl(siteUser.getProfileImageUrl())
+                .build();
+
+        log.info("profileImageUrl : {}", siteUser.getProfileImageUrl());
+
+        return response;
     }
 }
 

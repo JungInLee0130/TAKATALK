@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class GroupController {
     * */
     @PostMapping("/create")
     public ResponseEntity<Void> createGroup(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                            @Valid @RequestBody createGroupRequest request) {
+                                            @Valid createGroupRequest request) throws IOException {
         Long newGroupId = groupService.createGroup(userDetails, request);
         return ResponseEntity.created(URI.create("/group/access/" + newGroupId)).build();
     }

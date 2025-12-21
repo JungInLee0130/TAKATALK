@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -24,18 +23,14 @@ public class TokenService {
         // 토큰 생성 + 만료시간 -> h2에 저장
         ResetToken resetToken = createToken(mail);
         resetTokenRepository.save(resetToken);
-        return resetToken.getUUID();
+        return resetToken.getUuid();
     }
 
     private ResetToken createToken(String mail) {
-        // 15분
-        long RESET_TOKEN_VALIDATION_MINUTE = 15L;
-        LocalDateTime now = LocalDateTime.now();
         ResetToken resetToken = ResetToken.builder()
-                .UUID(UUID.randomUUID().toString())
+                .uuid(UUID.randomUUID().toString())
                 .email(mail)
-                .createdAt(now)
-                .expiresAt(now.plusMinutes(15L))
+                .expirationMinutes(15L)   // 15분
                 .build();
         return resetToken;
     }
@@ -43,13 +38,13 @@ public class TokenService {
     /*
     * 토큰 검증 및 이메일 조회
     * */
-    public String validateTokenAndGetEmail(String UUID) {
+    public String validateTokenAndGetEmail(String uuid) {
         // 1. 토큰 없음
-        ResetToken resetToken = resetTokenRepository.findByUUID(UUID)
+        ResetToken resetToken = resetTokenRepository.findByUuid(uuid)
                 .orElseThrow(() -> new CustomException(ErrorCode.RESET_TOKEN_NOT_FOUND_EXCEPTION));
 
         // 2. 토큰 만료
-        if (LocalDateTime.now().isAfter(resetToken.getExpiresAt())) {
+        if (resetToken.isExpired()) {
             throw new CustomException(ErrorCode.RESET_TOKEN_INVALID_EXCEPTION);
         }
 
@@ -61,7 +56,7 @@ public class TokenService {
     * 토큰 삭제
     * */
     public void deleteToken(String token) {
-        ResetToken resetToken = resetTokenRepository.findByUUID(token)
+        ResetToken resetToken = resetTokenRepository.findByUuid(token)
                 .orElseThrow(() -> new CustomException(ErrorCode.RESET_TOKEN_NOT_FOUND_EXCEPTION));
 
         resetTokenRepository.delete(resetToken);

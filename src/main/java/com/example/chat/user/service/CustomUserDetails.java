@@ -27,7 +27,7 @@ public class CustomUserDetails implements UserDetails, Serializable {
         this.email = siteUser.getEmail();
         this.password = siteUser.getPassword();
         this.nickname = siteUser.getNickname();
-        this.profile = siteUser.getProfile();
+        this.profile = siteUser.getProfileImageUrl();
         this.emailVerified = true; // 이메일 인증기능 넣을거면 false
         this.isNonLocked = true;
         this.authorities = Collections.singletonList(

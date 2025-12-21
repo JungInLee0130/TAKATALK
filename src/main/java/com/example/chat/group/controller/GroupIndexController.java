@@ -1,13 +1,13 @@
 package com.example.chat.group.controller;
 
-import com.example.chat.category.service.CategoryService;
-import com.example.chat.channel.service.ChannelService;
 import com.example.chat.group.ChannelGroupResponse;
 import com.example.chat.group.GroupGetResponse;
 import com.example.chat.group.Groups;
-import com.example.chat.group.service.GroupService;
 import com.example.chat.group.createGroupRequest;
+import com.example.chat.group.service.GroupService;
+import com.example.chat.user.dto.UserResponse;
 import com.example.chat.user.service.CustomUserDetails;
+import com.example.chat.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -25,6 +25,7 @@ import java.util.List;
 public class GroupIndexController {
 
     private final GroupService groupService;
+    private final UserService userService;
 
     /*
      * 그룹 접속
@@ -41,6 +42,9 @@ public class GroupIndexController {
         // GroupResponse2 : groupId, profile, name
         List<GroupGetResponse> groups = groupService.findAll(userDetails.getId());
 
+        UserResponse user = userService.getUserDetails(userDetails.getId());
+
+        model.addAttribute("user", user);
         model.addAttribute("currentGroup", currentGroup);
         model.addAttribute("channelGroupResponse", channelGroupResponse);
         model.addAttribute("groups", groups);

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--<link rel="icon" type="image/x-icon" href="/images/favicon.ico">-->
+  <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">
+  <meta charset="UTF-8">
+  <title>Profile</title>
+</head>
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  body label {
+    margin-right: 10px;
+  }
+  body button {
+    width: 100px;
+    height: 40px;
+  }
+</style>
+<body>
+  <div>
+    <label for="nickname">닉네임 : </label>
+    <input id="nickname" type="text">
+  </div>
+  <div>
+    <label for="profileImage">프로필 사진 : </label>
+    <input id="profileImage" type="file" name="profileImage" accept="image/*">
+  </div>
+  <div>
+    <button type="button" id="saveBtn">save</button>
+  </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script th:inline="javascript">
+  /*
+  * ajax 요청시 자동으로 header에 csrf 토큰 삽입
+  * */
+  $(function () {
+    var csrfToken = [[${_csrf.token}]];
+    var csrfHeader = [[${_csrf.headerName}]];
+
+    $(document).ajaxSend(function (e, xhr, options) {
+      xhr.setRequestHeader(csrfHeader, csrfToken);
+    });
+  })
+
+  /*
+  * 돔 렌더링 모두 완료되고 실행
+  * */
+  $(document).ready(function () {
+    document.getElementById("saveBtn").onclick = () => {
+      // 1. FormData 형성
+      const formData = new FormData();
+
+      // 2. 데이터 추가
+      const nickname = document.getElementById("nickname").value;
+      const fileInput = document.getElementById("profileImage");
+
+      formData.append("nickname", nickname);
+
+      if (fileInput.files.length > 0) {
+        formData.append("profileImage", fileInput.files[0]);
+      }
+
+      $.ajax({
+        type: "POST",
+        url: "/profile/update",
+        data: formData,
+        processData: false, // 쿼리 스트링 변환 방지
+        contentType: false, // 브라우저에서 multipart/form-data 설정을 갖게함.
+        statusCode: {
+          201: function (response, textStatus, jqXHR) {
+            console.log('프로필이 성공적으로 생성(수정)되었습니다.');
+
+            const redirectUrl = jqXHR.getResponseHeader('Location');
+            window.location.href = redirectUrl || "/main";
+          },
+          403: function () {
+            alert('권한이 없습니다. csrf 토큰 확인 필요.')
+          }
+        },
+        success: function (response) {
+          window.location.href = '/main';
+        },
+        error : function (error) {
+          alert('프로필 수정에 실패하였습니다.');
+          console.log(error);
+        }
+
+      });
+    }
+  });
+</script>
+</html>
