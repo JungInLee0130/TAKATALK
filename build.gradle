@@ -54,6 +54,9 @@ dependencies {
     //AOP
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
+    // ConfigurationProperties 사용을 위한 프로세서
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
     //test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

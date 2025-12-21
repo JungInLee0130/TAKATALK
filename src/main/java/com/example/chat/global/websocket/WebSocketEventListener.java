@@ -4,7 +4,9 @@ import com.example.chat.channel.domain.ChatMessageType;
 import com.example.chat.channel.dto.ChatMessageResponse;
 import com.example.chat.channel.entity.ChatMessages;
 import com.example.chat.channel.service.ChatMessageService;
+import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.service.CustomUserDetails;
+import com.example.chat.user.service.UserService;
 import com.example.chat.visitor.domain.VisitorDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +46,7 @@ public class WebSocketEventListener {
     private static final Pattern VISITOR_REGEX = Pattern.compile("/sub/channel/(\\d+)/visitors$");
 
     private final ChatMessageService chatMessageService;
+    private final UserService userService;
 
     @EventListener
     public void sessionSubscribeListener(SessionSubscribeEvent event) {
@@ -74,10 +77,12 @@ public class WebSocketEventListener {
             UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) user;
             CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
 
+            SiteUser loginUser = userService.findById(userDetails.getId());
+
             VisitorDto visitor = VisitorDto.builder()
                     .siteUserId(userDetails.getId())
-                    .profile(userDetails.getProfile())
-                    .nickname(userDetails.getNickname())
+                    .profile(loginUser.getProfileImageUrl())
+                    .nickname(loginUser.getNickname())
                     .build();
 
             String sessionId = headerAccessor.getSessionId();
@@ -97,8 +102,6 @@ public class WebSocketEventListener {
 
             String randomMsg = welcomeMessages[new Random().nextInt(welcomeMessages.length)];
 
-            String nickname = userDetails.getNickname();
-
             ChatMessages saveSystemMessage = chatMessageService.saveSystemMessage(channelId,
                     userDetails.getId(),
                     randomMsg,
@@ -107,7 +110,7 @@ public class WebSocketEventListener {
             ChatMessageResponse welcomeMsg = ChatMessageResponse.builder()
                     .type(ChatMessageType.ENTER)
                     .channelId(channelId)
-                    .nickname(nickname)
+                    .nickname(loginUser.getNickname())
                     .content(saveSystemMessage.getContent())    // DB에 저장된 내용과 시각
                     .createdAt(saveSystemMessage.getCreatedAt())
                     .build();

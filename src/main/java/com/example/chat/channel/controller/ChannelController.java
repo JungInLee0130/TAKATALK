@@ -8,7 +8,9 @@ import com.example.chat.group.ChannelGroupResponse;
 import com.example.chat.group.GroupGetResponse;
 import com.example.chat.group.Groups;
 import com.example.chat.group.service.GroupService;
+import com.example.chat.user.dto.UserResponse;
 import com.example.chat.user.service.CustomUserDetails;
+import com.example.chat.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,6 +28,8 @@ public class ChannelController {
     private final ChannelService channelService;
     private final GroupService groupService;
     private final ChatMessageService chatMessageService;
+
+    private final UserService userService;
 
     /*
     * 초대버튼 클릭시
@@ -67,6 +71,9 @@ public class ChannelController {
 
         List<ChatMessageResponse> chatMessageResponseList = chatMessageService.getOldMessage(channelId, null);
 
+        UserResponse user = userService.getUserDetails(userDetails.getId());
+
+        model.addAttribute("user", user);
         model.addAttribute("currentGroup", currentGroup);
         model.addAttribute("channelGroupResponse", channelGroupResponse);
         model.addAttribute("groups", groups);
@@ -75,8 +82,6 @@ public class ChannelController {
         // chatMessage 전달
         model.addAttribute("chatMessageResponseList", chatMessageResponseList);
 
-        // websocketEventHandler가 처리
-        //model.addAttribute("visitors", chatResponse.getVisitorsList());
         return "channel/channel";
     }
 

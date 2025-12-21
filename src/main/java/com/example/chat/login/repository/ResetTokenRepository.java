@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface ResetTokenRepository extends JpaRepository<ResetToken, Long> {
-    Optional<ResetToken> findByUUID(String UUID);
-    boolean existsByUUID(String UUID);
+    Optional<ResetToken> findByUuid(String UUID);
+    boolean existsByUuid(String UUID);
 }

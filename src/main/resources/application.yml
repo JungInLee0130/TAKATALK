@@ -18,7 +18,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -68,3 +68,9 @@ spring:
     user:
       name: ${SECURITY_USERNAME}
       password: ${SECURITY_PASSWORD}
+
+---
+# FILE UPLOAD PATH
+file:
+  upload:
+    upload-path: ${UPLOAD_DIR}

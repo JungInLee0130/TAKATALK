@@ -3,6 +3,7 @@ package com.example.chat.group;
 import com.example.chat.user.entity.SiteUser;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,19 +18,22 @@ public class Groups {
 
     private String name;
 
-    private String profile;
+    private String profileImageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "siteuser_id")
     private SiteUser siteUser;  // spring security user 위치
 
+    @Builder
     public Groups(String name, SiteUser siteUser) {
         this.name = name;
-        this.profile = "default";
+        this.profileImageUrl = "meeng.png";
         this.siteUser = siteUser;
     }
 
-    public void setProfile(String profile) {
-        this.profile = profile;
+    public void updateProfileImageUrl(String profileImageUrl) {
+        if (profileImageUrl != null) {
+            this.profileImageUrl = profileImageUrl;
+        }
     }
 }

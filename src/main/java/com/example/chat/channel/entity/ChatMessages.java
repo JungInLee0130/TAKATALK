@@ -1,7 +1,7 @@
 package com.example.chat.channel.entity;
 
 import com.example.chat.channel.domain.ChatMessageType;
-import com.example.chat.channel.entity.Channels;
+import com.example.chat.global.auditing.BaseTimeEntity;
 import com.example.chat.user.entity.SiteUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -10,12 +10,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatMessages {
+public class ChatMessages extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "chatmessage_id")
@@ -32,9 +30,7 @@ public class ChatMessages {
     @JoinColumn(name = "siteuser_id")
     private SiteUser siteUser;
 
-    private LocalDateTime createdAt;
-
-    private Boolean isModified;
+    private Boolean isModified = false;
 
     @Enumerated(EnumType.STRING)
     private ChatMessageType type;
@@ -49,11 +45,10 @@ public class ChatMessages {
         this.siteUser = siteUser;
         this.type = (type != null ? type : ChatMessageType.TALK);
 
-        this.createdAt = LocalDateTime.now();
         this.isModified = false;    // 클라이언트가 조작가능하므로 처음 저장시 false로 고정
     }
 
-    public void setContent(String newContent) {
+    public void updateContent(String newContent) {
         if (newContent != null && !newContent.equals(this.content)) {
             this.content = newContent;
             this.isModified = true;     // 내용을 수정할때 수정됨으로 표시하는게 좋음.

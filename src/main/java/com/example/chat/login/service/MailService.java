@@ -27,9 +27,6 @@ public class MailService {
 
     private final SpringTemplateEngine templateEngine;
 
-    @Value("${spring.mail.username}")
-    private String SENDER_EMAIL;
-
     @Value("${BASE_URL}")
     private String baseUrl;
 

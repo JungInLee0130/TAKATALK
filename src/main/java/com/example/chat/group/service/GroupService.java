@@ -8,6 +8,7 @@ import com.example.chat.channel.entity.Channels;
 import com.example.chat.channel.repository.ChannelRepository;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
+import com.example.chat.global.file.FileService;
 import com.example.chat.group.*;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.repository.UserRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,23 +30,29 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
     private final ChannelRepository channelRepository;
-
-    private final VisitorsRepository visitorsRepository;
     private final UserRepository userRepository;
 
     private final CategoryRepository categoryRepository;
+    private final FileService fileService;
 
     @Transactional
-    public Long createGroup(CustomUserDetails userDetails, createGroupRequest request) {
+    public Long createGroup(CustomUserDetails userDetails, createGroupRequest request) throws IOException {
         SiteUser siteUser = userRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        Groups group = new Groups(request.name(), siteUser);
-
-        if (StringUtils.hasText(request.profile())) {
-            group.setProfile(request.profile());
+        // 1. 닉네임 저장 그룹 생성
+        Groups group = Groups.builder()
+                .name(request.name())
+                .siteUser(siteUser)
+                .build();
+        
+        // 2. 프로필이 null이 아니면 업데이트
+        if (request.profile() != null && !request.profile().isEmpty()) {
+            String savedFileName = fileService.storeFile(request.profile());
+            group.updateProfileImageUrl(savedFileName);
         }
 
+        // 3. 그룹 DB 저장
         groupRepository.save(group);
 
         return group.getId();
@@ -106,7 +114,7 @@ public class GroupService {
         return groups.stream()
                 .map(group -> new GroupGetResponse(group.getId(),
                         group.getName(),
-                        group.getProfile()))
+                        group.getProfileImageUrl()))
                 .collect(Collectors.toList());
     }
 
