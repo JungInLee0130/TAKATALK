@@ -1,4 +1,4 @@
-package com.example.chat.visitor.domain;
+package com.example.chat.visitor.dto;
 
 import lombok.Builder;
 import lombok.Getter;

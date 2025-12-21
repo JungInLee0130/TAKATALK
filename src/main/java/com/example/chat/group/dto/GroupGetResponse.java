@@ -1,4 +1,4 @@
-package com.example.chat.group;
+package com.example.chat.group.dto;
 
 import lombok.Getter;
 

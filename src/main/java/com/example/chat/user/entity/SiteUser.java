@@ -1,6 +1,7 @@
 package com.example.chat.user.entity;
 
 import com.example.chat.global.auditing.BaseTimeEntity;
+import com.example.chat.user.domain.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,7 +31,7 @@ public class SiteUser extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private RoleType role;
 
-    private String profileImageUrl;
+    private String profile;
 
     @Builder
     public SiteUser(String nickname, String username, String password, String email
@@ -41,7 +42,7 @@ public class SiteUser extends BaseTimeEntity {
         this.email = email;
         this.birthday = birthday;
         this.role = RoleType.USER;
-        this.profileImageUrl = "meeng.png";
+        this.profile = "meeng.png";
     }
 
     public void updateNickname(String nickname) {
@@ -50,9 +51,9 @@ public class SiteUser extends BaseTimeEntity {
         }
     }
 
-    public void updateProfileImageUrl(String profileImageUrl) {
-        if (profileImageUrl != null) {
-            this.profileImageUrl = profileImageUrl;
+    public void updateProfile(String profile) {
+        if (profile != null) {
+            this.profile = profile;
         }
     }
 

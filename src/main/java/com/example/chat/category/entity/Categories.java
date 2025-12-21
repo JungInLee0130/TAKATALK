@@ -1,6 +1,6 @@
 package com.example.chat.category.entity;
 
-import com.example.chat.group.Groups;
+import com.example.chat.group.entity.Groups;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

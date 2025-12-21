@@ -1,29 +1,23 @@
 package com.example.chat.user.service;
 
 import com.example.chat.global.file.FileService;
-import com.example.chat.global.file.FileStorageProperties;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.login.service.TokenService;
-import com.example.chat.user.domain.ProfileRequest;
+import com.example.chat.user.dto.ProfileRequest;
 import com.example.chat.user.domain.UserCreateForm;
 import com.example.chat.user.dto.UserResponse;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -47,8 +41,8 @@ public class UserService {
         // 2. 프로필 이미지가 null이 아니라면 저장
         if (request.getProfileImage() != null && !request.getProfileImage().isEmpty()) {
             // FileService로 분리
-            String savedFileName = fileService.storeFile(request.getProfileImage());
-            siteUser.updateProfileImageUrl(savedFileName);
+            String savedFileName = fileService.storeFile(request.getProfileImage(), siteUser.getProfile());
+            siteUser.updateProfile(savedFileName);
         }
     }
 
@@ -115,12 +109,10 @@ public class UserService {
 
     @Transactional
     public void changePassword(String email, String newPassword, String token) {
-        /*트랜잭션으로 묶어야할듯*/
         // 비밀번호 변경
         changePassword(email, newPassword);
-        // 토큰은 1회용.
+        // 토큰은 1회용이므로 삭제
         tokenService.deleteToken(token);
-        /**/
     }
 
     public UserResponse getUserDetails(Long siteUserId) {
@@ -129,10 +121,10 @@ public class UserService {
 
         UserResponse response = UserResponse.builder()
                 .nickname(siteUser.getNickname())
-                .profileImageUrl(siteUser.getProfileImageUrl())
+                .profile(siteUser.getProfile())
                 .build();
 
-        log.info("profileImageUrl : {}", siteUser.getProfileImageUrl());
+        log.info("profile : {}", siteUser.getProfile());
 
         return response;
     }

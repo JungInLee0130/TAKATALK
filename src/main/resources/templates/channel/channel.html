@@ -497,7 +497,7 @@
       <a th:href="@{/profile}" class="profile-link">
         <div class="left-profile-wrapper" id="leftProfileWrapper">
           <div class="profile-image-wrapper">
-            <img th:src="|/profile-images/${user.profileImageUrl}|" class="profile-image">
+            <img th:src="|/profile-images/${user.profile}|" class="profile-image">
           </div>
           <div class="profile-nickname-wrapper">
             <p th:text="${user.nickname}"></p>

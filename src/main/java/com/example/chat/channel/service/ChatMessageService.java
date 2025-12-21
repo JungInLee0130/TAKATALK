@@ -71,7 +71,7 @@ public class ChatMessageService {
         List<ChatMessageResponse> responseList = slice.getContent().stream()
                 .map(chatmessage -> ChatMessageResponse.builder()
                         .channelId(chatmessage.getChannel().getId())
-                        .profile(chatmessage.getSiteUser().getProfileImageUrl())
+                        .profile(chatmessage.getSiteUser().getProfile())
                         .nickname(chatmessage.getSiteUser().getNickname())
                         .content(chatmessage.getContent())
                         .createdAt(chatmessage.getCreatedAt())

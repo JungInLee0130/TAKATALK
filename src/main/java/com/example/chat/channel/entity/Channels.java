@@ -2,7 +2,7 @@ package com.example.chat.channel.entity;
 
 import com.example.chat.category.entity.Categories;
 import com.example.chat.channel.domain.ChannelType;
-import com.example.chat.group.Groups;
+import com.example.chat.group.entity.Groups;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

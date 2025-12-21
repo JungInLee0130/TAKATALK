@@ -1,4 +1,6 @@
-package com.example.chat.group;
+package com.example.chat.group.dto;
+
+import com.example.chat.group.entity.Groups;
 
 import java.util.ArrayList;
 import java.util.List;

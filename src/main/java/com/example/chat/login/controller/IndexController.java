@@ -1,6 +1,6 @@
 package com.example.chat.login.controller;
 
-import com.example.chat.group.GroupGetResponse;
+import com.example.chat.group.dto.GroupGetResponse;
 import com.example.chat.group.service.GroupService;
 import com.example.chat.user.dto.UserResponse;
 import com.example.chat.user.service.CustomUserDetails;

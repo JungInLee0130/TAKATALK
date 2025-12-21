@@ -9,15 +9,17 @@ import com.example.chat.channel.repository.ChannelRepository;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.global.file.FileService;
-import com.example.chat.group.*;
+import com.example.chat.group.dto.ChannelGroupResponse;
+import com.example.chat.group.dto.GroupGetResponse;
+import com.example.chat.group.dto.createGroupRequest;
+import com.example.chat.group.entity.Groups;
+import com.example.chat.group.repository.GroupRepository;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.repository.UserRepository;
 import com.example.chat.user.service.CustomUserDetails;
-import com.example.chat.visitor.repository.VisitorsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,8 +50,8 @@ public class GroupService {
         
         // 2. 프로필이 null이 아니면 업데이트
         if (request.profile() != null && !request.profile().isEmpty()) {
-            String savedFileName = fileService.storeFile(request.profile());
-            group.updateProfileImageUrl(savedFileName);
+            String savedFileName = fileService.storeFile(request.profile(), null);
+            group.updateProfile(savedFileName);
         }
 
         // 3. 그룹 DB 저장
@@ -114,7 +116,7 @@ public class GroupService {
         return groups.stream()
                 .map(group -> new GroupGetResponse(group.getId(),
                         group.getName(),
-                        group.getProfileImageUrl()))
+                        group.getProfile()))
                 .collect(Collectors.toList());
     }
 

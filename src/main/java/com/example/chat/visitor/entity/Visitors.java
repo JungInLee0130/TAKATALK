@@ -1,7 +1,6 @@
 package com.example.chat.visitor.entity;
 
-import com.example.chat.channel.entity.Channels;
-import com.example.chat.group.Groups;
+import com.example.chat.group.entity.Groups;
 import com.example.chat.user.entity.SiteUser;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

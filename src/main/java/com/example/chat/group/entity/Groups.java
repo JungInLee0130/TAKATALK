@@ -1,4 +1,4 @@
-package com.example.chat.group;
+package com.example.chat.group.entity;
 
 import com.example.chat.user.entity.SiteUser;
 import jakarta.persistence.*;
@@ -18,7 +18,7 @@ public class Groups {
 
     private String name;
 
-    private String profileImageUrl;
+    private String profile;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "siteuser_id")
@@ -27,13 +27,13 @@ public class Groups {
     @Builder
     public Groups(String name, SiteUser siteUser) {
         this.name = name;
-        this.profileImageUrl = "meeng.png";
+        this.profile = "meeng.png";
         this.siteUser = siteUser;
     }
 
-    public void updateProfileImageUrl(String profileImageUrl) {
-        if (profileImageUrl != null) {
-            this.profileImageUrl = profileImageUrl;
+    public void updateProfile(String profile) {
+        if (profile != null) {
+            this.profile = profile;
         }
     }
 }

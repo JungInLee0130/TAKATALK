@@ -1,8 +1,8 @@
 package com.example.chat.group.controller;
 
-import com.example.chat.group.GroupGetResponse;
+import com.example.chat.group.dto.GroupGetResponse;
 import com.example.chat.group.service.GroupService;
-import com.example.chat.group.createGroupRequest;
+import com.example.chat.group.dto.createGroupRequest;
 import com.example.chat.user.service.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

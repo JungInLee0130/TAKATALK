@@ -1,4 +1,4 @@
-package com.example.chat.group;
+package com.example.chat.group.dto;
 
 import com.example.chat.category.dto.CategoryResponse;
 import com.example.chat.channel.dto.ChannelResponse;
