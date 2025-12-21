@@ -19,16 +19,36 @@
     width: 100px;
     height: 40px;
   }
+  .profile-wrapper {
+    width: 100px;
+    height: 100px;
+
+    border-radius: 50%;
+    overflow: hidden; /* border을 넘어서 나오는거 가리기 */
+
+
+    display: flex;
+    flex-direction: column;
+    line-height: 100px;
+    gap: 10px;
+    border: 2px solid #5865f2; /* 포인트 컬러 */
+  }
+  .profile-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 </style>
 <body>
   <div>
     <label for="nickname">닉네임 : </label>
-    <input id="nickname" type="text">
+    <input id="nickname" type="text" placeholder="${user.nickname}">
   </div>
-  <div>
-    <label for="profileImage">프로필 사진 : </label>
+  <label for="profileImage">프로필 사진 : </label>
+  <div class="profile-wrapper">
+    <img id="imagePreview" th:src="${user.profile}" alt="이미지">
+  </div>
     <input id="profileImage" type="file" name="profileImage" accept="image/*">
-  </div>
   <div>
     <button type="button" id="saveBtn">save</button>
   </div>
@@ -51,6 +71,27 @@
   * 돔 렌더링 모두 완료되고 실행
   * */
   $(document).ready(function () {
+    /* 파일 선택시 이벤트 발생 */
+    $("#profileImage").on("change", function (event) {
+      const file = event.target.files[0];
+      const preview = $("#imagePreview");
+
+      if (file) {
+        if (!file.type.startsWith("image/")) {
+          alert("이미지 파일만 업로드 가능합니다.");
+          $(this).val("");  // 취소
+          return;
+        }
+
+        const reader = new URL(URL.createObjectURL(file));
+        preview.attr("src", reader);  // 가상의 URL을 만들어 imagePreview의 src 교체
+
+        preview.on("load", function () {
+          URL.revokeObjectURL(preview.attr("src"));
+        })
+      }
+    })
+    /* 저장버튼 클릭시 */
     document.getElementById("saveBtn").onclick = () => {
       // 1. FormData 형성
       const formData = new FormData();

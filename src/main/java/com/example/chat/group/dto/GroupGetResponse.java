@@ -1,5 +1,6 @@
 package com.example.chat.group.dto;
 
+import com.example.chat.global.file.FileUtil;
 import lombok.Getter;
 
 @Getter
@@ -12,6 +13,6 @@ public class GroupGetResponse {
     public GroupGetResponse(Long id, String name, String profile) {
         this.id = id;
         this.name = name;
-        this.profile = profile;
+        this.profile = FileUtil.getEffectiveProfile(profile);
     }
 }

@@ -4,6 +4,7 @@ import com.example.chat.global.auditing.BaseTimeEntity;
 import com.example.chat.user.domain.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 
@@ -35,14 +36,14 @@ public class SiteUser extends BaseTimeEntity {
 
     @Builder
     public SiteUser(String nickname, String username, String password, String email
-            , LocalDate birthday) {
+            , LocalDate birthday, String profile) {
         this.nickname = nickname;
         this.username = username;
         this.password = password;
         this.email = email;
         this.birthday = birthday;
         this.role = RoleType.USER;
-        this.profile = "meeng.png";
+        this.profile = profile;
     }
 
     public void updateNickname(String nickname) {
@@ -52,9 +53,7 @@ public class SiteUser extends BaseTimeEntity {
     }
 
     public void updateProfile(String profile) {
-        if (profile != null) {
-            this.profile = profile;
-        }
+        this.profile = profile;
     }
 
     public void updatePassword(String password) {

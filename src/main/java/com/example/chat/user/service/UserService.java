@@ -46,6 +46,19 @@ public class UserService {
         }
     }
 
+    @Transactional
+    public void deleteProfile(Long siteUserId){
+        SiteUser siteUser = findById(siteUserId);
+
+        // 1. 기본 이미지 아닐때만 삭제
+        if (StringUtils.hasText(siteUser.getProfile())) {
+            fileService.deleteProfile(siteUser.getProfile());
+
+            // 2. DB 값을 Null로 변경
+            siteUser.updateProfile(null);
+        }
+    }
+
     public SiteUser create (UserCreateForm userCreateForm){
         /*중복 회원 체크*/
         userRepository.findByEmail(userCreateForm.email())
@@ -78,6 +91,7 @@ public class UserService {
                 .nickname(nickname)
                 .password(passwordEncoder.encode(userCreateForm.password()))
                 .birthday(dateTime)
+                .profile(null)
                 .build();
 
         return siteUser;

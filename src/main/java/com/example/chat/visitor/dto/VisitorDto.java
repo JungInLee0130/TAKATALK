@@ -1,5 +1,6 @@
 package com.example.chat.visitor.dto;
 
+import com.example.chat.global.file.FileUtil;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,7 +16,7 @@ public class VisitorDto {
     public VisitorDto(Long siteUserId, String nickname, String profile) {
         this.siteUserId = siteUserId;
         this.nickname = nickname;
-        this.profile = profile;
+        this.profile = FileUtil.getEffectiveProfile(profile);
     }
 
     @Override

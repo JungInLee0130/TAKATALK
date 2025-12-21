@@ -27,7 +27,6 @@ public class Groups {
     @Builder
     public Groups(String name, SiteUser siteUser) {
         this.name = name;
-        this.profile = "meeng.png";
         this.siteUser = siteUser;
     }
 

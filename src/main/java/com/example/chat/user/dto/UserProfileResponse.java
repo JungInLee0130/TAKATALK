@@ -5,12 +5,12 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class UserResponse {
+public class UserProfileResponse {
     private String nickname;
     private String profile;
 
     @Builder
-    public UserResponse(String nickname, String profile) {
+    public UserProfileResponse(String nickname, String profile) {
         this.nickname = nickname;
         this.profile = FileUtil.getEffectiveProfile(profile);
     }
