@@ -6,8 +6,8 @@ import com.example.chat.channel.entity.Channels;
 import com.example.chat.channel.entity.ChatMessages;
 import com.example.chat.channel.repository.ChannelRepository;
 import com.example.chat.channel.repository.ChatMessageRepository;
-import com.example.chat.group.GroupRepository;
-import com.example.chat.group.Groups;
+import com.example.chat.group.repository.GroupRepository;
+import com.example.chat.group.entity.Groups;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +38,7 @@ public class InitData implements CommandLineRunner {
                     .email("test1@naver.com")
                     .password(passwordEncoder.encode("qwer1234"))
                     .birthday(LocalDate.parse("2013-03-03"))
+                    .profile(null)
                     .build();
 
             SiteUser siteUser2 = SiteUser.builder()
@@ -46,6 +47,7 @@ public class InitData implements CommandLineRunner {
                     .email("test2@naver.com")
                     .password(passwordEncoder.encode("qwer1234"))
                     .birthday(LocalDate.parse("2013-03-04"))
+                    .profile(null)
                     .build();
 
             userRepository.save(siteUser1);

@@ -430,7 +430,7 @@
           <div th:if="${groups != null}">
             <div class="group-icon-wrapper" th:each="group : ${groups}">
               <a th:href="@{/group/access/{groupId}(groupId = ${group.id})}" class="group-link">
-                <img class="group-icon" th:src="|/profile-images/${group.profile}|" th:alt="${group.name} + '아이콘'">
+                <img class="group-icon" th:src="${group.profile}" th:alt="${group.name} + '아이콘'">
             <!--<span th:if="${group.hasNewMessage}" class="notification-badge">
                   <span th:text="${group.newMessageCount}">1</span>
                 </span>-->
@@ -497,7 +497,7 @@
       <a th:href="@{/profile}" class="profile-link">
         <div class="left-profile-wrapper" id="leftProfileWrapper">
           <div class="profile-image-wrapper">
-            <img th:src="|/profile-images/${user.profileImageUrl}|" class="profile-image">
+            <img th:src="${user.profile}" class="profile-image">
           </div>
           <div class="profile-nickname-wrapper">
             <p th:text="${user.nickname}"></p>
@@ -545,7 +545,7 @@
             <!--chatMessageResponse.type == 'TALK' 이면 -->
             <div class="chatmessage-talk-wrapper" th:if="${chatMessageResponse.type.name() == 'TALK'}">
               <div class="chatmessage-profile-wrapper">
-                <img class="chatmessage-profile" th:src="|/profile-images/${chatMessageResponse.profile}|">
+                <img class="chatmessage-profile" th:src="${chatMessageResponse.profile}">
               </div>
               <div class="chatmessage-second-wrapper">
                 <div class="chatmessage-upper-wrapper">
@@ -723,7 +723,7 @@
         oldMessage = `
         <div class="chatmessage-talk-wrapper" data-id="${data.chatMessageId}">
             <div class="chatmessage-profile-wrapper">
-              <img class="chatmessage-profile" src="/profile-images/${data.profile}">
+              <img class="chatmessage-profile" src="${data.profile}">
             </div>
             <div class="chatmessage-second-wrapper">
               <div class="chatmessage-upper-wrapper">
@@ -811,7 +811,7 @@
        return `
           <div class="visitor-item" data-id="${user.siteUserId}">
               <div class="visitor-image-wrapper">
-                  <img src="/profile-images/${user.profile}" class="visitor-profile">
+                  <img src="${user.profile}" class="visitor-profile">
                   <div class="green-dot"></div>
               </div>
               <p>${user.nickname}</p>
@@ -844,7 +844,7 @@
       const inputHtml =`
            <div class="inputmessage-wrapper" style="display:flex;">
             <div class="chatmessage-profile-wrapper">
-              <img class="chatmessage-profile" src="/profile-images/${data.profile}">
+              <img class="chatmessage-profile" src="${data.profile}">
             </div>
             <div class="chatmessage-second-wrapper">
               <div class="chatmessage-upper-wrapper">

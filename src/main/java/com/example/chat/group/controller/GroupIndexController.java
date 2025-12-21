@@ -1,9 +1,9 @@
 package com.example.chat.group.controller;
 
-import com.example.chat.group.ChannelGroupResponse;
-import com.example.chat.group.GroupGetResponse;
-import com.example.chat.group.Groups;
-import com.example.chat.group.createGroupRequest;
+import com.example.chat.group.dto.ChannelGroupResponse;
+import com.example.chat.group.dto.GroupGetResponse;
+import com.example.chat.group.entity.Groups;
+import com.example.chat.group.dto.createGroupRequest;
 import com.example.chat.group.service.GroupService;
 import com.example.chat.user.dto.UserResponse;
 import com.example.chat.user.service.CustomUserDetails;

@@ -1,5 +1,6 @@
-package com.example.chat.group;
+package com.example.chat.group.repository;
 
+import com.example.chat.group.entity.Groups;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

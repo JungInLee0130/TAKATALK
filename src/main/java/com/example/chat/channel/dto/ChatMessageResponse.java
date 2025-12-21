@@ -1,6 +1,7 @@
 package com.example.chat.channel.dto;
 
 import com.example.chat.channel.domain.ChatMessageType;
+import com.example.chat.global.file.FileUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +25,7 @@ public class ChatMessageResponse {
     public ChatMessageResponse(Long channelId, String profile, String nickname, LocalDateTime createdAt, String content, Boolean isModified,
                                Long chatMessageId, ChatMessageType type) {
         this.channelId = channelId;
-        this.profile = profile;
+        this.profile = FileUtil.getEffectiveProfile(profile);
         this.nickname = nickname;
         this.createdAt = createdAt;
         this.content = content;

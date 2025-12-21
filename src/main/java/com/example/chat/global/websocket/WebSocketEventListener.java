@@ -7,7 +7,7 @@ import com.example.chat.channel.service.ChatMessageService;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.service.CustomUserDetails;
 import com.example.chat.user.service.UserService;
-import com.example.chat.visitor.domain.VisitorDto;
+import com.example.chat.visitor.dto.VisitorDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -20,7 +20,6 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -81,7 +80,7 @@ public class WebSocketEventListener {
 
             VisitorDto visitor = VisitorDto.builder()
                     .siteUserId(userDetails.getId())
-                    .profile(loginUser.getProfileImageUrl())
+                    .profile(loginUser.getProfile())
                     .nickname(loginUser.getNickname())
                     .build();
 

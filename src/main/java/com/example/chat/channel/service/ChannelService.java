@@ -2,7 +2,6 @@ package com.example.chat.channel.service;
 
 import com.example.chat.category.entity.Categories;
 import com.example.chat.category.repository.CategoryRepository;
-import com.example.chat.channel.entity.ChatMessages;
 import com.example.chat.channel.dto.*;
 import com.example.chat.channel.entity.Channels;
 import com.example.chat.channel.repository.ChannelRepository;
@@ -11,15 +10,14 @@ import com.example.chat.friends.FriendService;
 import com.example.chat.friends.FriendsResponse;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
-import com.example.chat.group.GroupRepository;
-import com.example.chat.group.Groups;
+import com.example.chat.group.repository.GroupRepository;
+import com.example.chat.group.entity.Groups;
 import com.example.chat.user.repository.UserRepository;
 import com.example.chat.visitor.repository.VisitorsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

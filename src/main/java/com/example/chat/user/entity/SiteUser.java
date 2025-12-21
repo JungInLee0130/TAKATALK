@@ -1,8 +1,10 @@
 package com.example.chat.user.entity;
 
 import com.example.chat.global.auditing.BaseTimeEntity;
+import com.example.chat.user.domain.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 
@@ -30,18 +32,18 @@ public class SiteUser extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private RoleType role;
 
-    private String profileImageUrl;
+    private String profile;
 
     @Builder
     public SiteUser(String nickname, String username, String password, String email
-            , LocalDate birthday) {
+            , LocalDate birthday, String profile) {
         this.nickname = nickname;
         this.username = username;
         this.password = password;
         this.email = email;
         this.birthday = birthday;
         this.role = RoleType.USER;
-        this.profileImageUrl = "meeng.png";
+        this.profile = profile;
     }
 
     public void updateNickname(String nickname) {
@@ -50,10 +52,8 @@ public class SiteUser extends BaseTimeEntity {
         }
     }
 
-    public void updateProfileImageUrl(String profileImageUrl) {
-        if (profileImageUrl != null) {
-            this.profileImageUrl = profileImageUrl;
-        }
+    public void updateProfile(String profile) {
+        this.profile = profile;
     }
 
     public void updatePassword(String password) {

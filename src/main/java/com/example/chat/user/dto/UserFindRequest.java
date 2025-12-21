@@ -1,4 +1,4 @@
-package com.example.chat.user.domain;
+package com.example.chat.user.dto;
 
 import jakarta.validation.constraints.Email;
 
