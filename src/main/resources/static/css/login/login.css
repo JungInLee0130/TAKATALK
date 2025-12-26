@@ -1,0 +1,143 @@
+body{
+    margin: 0;
+    min-height: 100vh;
+    background-image: linear-gradient(to right,#18004D,#1E55DC);
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+
+    background-image: url("/images/discord-background.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.container .login-logo {
+    position: absolute;
+    top:50px;
+    left:50px;
+}
+.container .login-logo img {
+    object-fit: none;
+}
+.container .login {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 0 40px;
+    padding-top : 10px;
+    padding-bottom: 40px;
+    width: 480px;
+    background-color: #393A41;
+}
+.login h2{
+    text-align: center;
+    color: #FFFFFF;
+}
+.login label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #FFFFFF;
+}
+.login input {
+    float: left;
+    width: 100%;
+    height: 40px;
+
+    border: none;
+    border-radius: 5px;
+    padding: 1px 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+
+    background-color: #2E2E34;
+    color:#A5A6AC;
+
+    /*부모 가용너비에 정확히 맞춰짐 : border-box*/
+    -ms-box-sizing: border-box; /* ie8 */
+    -khtml-box-sizing: border-box; /* konqueror */
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+    box-sizing: border-box; /* css3 rec */
+}
+
+.login input:focus {
+    border: 1px solid black;
+    border-color: #5865F2;
+    outline: none;
+}
+
+.login a {
+    display: block;
+    padding-bottom: 10px;
+    color: #6C6D74;
+}
+.login .send-change-password-wrapper {
+
+}
+.login .send-change-password-wrapper button {
+    padding: 0;
+    background: none;
+    border: none;
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #93A7FD;
+}
+
+.login .login-button-wrapper{
+
+}
+.login .login-button-wrapper button {
+    float: left;
+    width: 100%;
+    -ms-box-sizing: border-box; /* ie8 */
+    -khtml-box-sizing: border-box; /* konqueror */
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+    box-sizing: border-box; /* css3 rec */
+    height: 40px;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin: 1px 0;
+    font-size: 16px;
+    background-color: #4452BB;
+    color: white;
+}
+.login .find-account {
+    float: left;
+    width: 100%;
+    -ms-box-sizing: border-box; /* ie8 */
+    -khtml-box-sizing: border-box; /* konqueror */
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+    box-sizing: border-box; /* css3 rec */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+.login .find-account p {
+    margin: 10px 0;
+    color: #ADAEB4;
+}
+.login .find-account a {
+    padding: 0;
+    color: #7380BA;
+}
+
+.error-msg {
+    margin: 10px 0px;
+    color: #E88985;
+}
+.field-error {
+    margin: 10px 0px;
+    color: #E88985;
+}

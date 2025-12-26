@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="memberList" class="right">
+    <div class="right-header">
+        <h2>현재 접속자</h2>
+    </div>
+    <div class="online-visitorlist-wrapper">
+        <div>
+            <p id="onlineCount"></p>
+        </div>
+        <!--참가자 이름 출력-->
+        <!--<div class="visitor-item" data-id="${user.siteUserId}">
+          <div class="visitor-image-wrapper">
+            <img src="${user.profile}" class="visitor-profile">
+            <div class="green-dot"></div>
+          </div>
+          <p>테스트 1</p>
+        </div>-->
+    </div>
+    <div>
+        <p>오프라인-200(설정으로 보이게 안보이게 가능)</p>
+    </div>
+    <div class="chat-offline-participants-wrapper">
+        <p>참가자 리스트</p>
+    </div>
+</div>
+</html>

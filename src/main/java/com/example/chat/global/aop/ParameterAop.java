@@ -1,5 +1,7 @@
 package com.example.chat.global.aop;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,6 +16,12 @@ import java.lang.reflect.Method;
 @Aspect // AOP를 정의하는 클래스를 지칭함.
 @Component
 public class ParameterAop {
+
+    private final ObjectMapper objectMapper;
+
+    public ParameterAop(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     // com.example.chat.login.controller 하위클래스 모두 적용. (연습)
     @Pointcut("execution(* com.example.chat..controller..*.*(..)) ||" +
@@ -50,13 +58,18 @@ public class ParameterAop {
     @AfterReturning(value = "cut()", returning = "obj")
     public void afterReturn(JoinPoint joinPoint, Object obj) {
         if (obj != null) {
-            // Hibernate 프록시 객체이면서 초기화가 안된 상태라면
-            if (!Hibernate.isInitialized(obj)) {
-                System.out.println("return (Proxy Object - Not Initialized) : " + obj.getClass().getName());
-            } else {
-                System.out.println("return " + obj);
+            try {
+                // Hibernate 프록시 객체이면서 초기화가 안된 상태라면
+                if (!Hibernate.isInitialized(obj)) {
+                    System.out.println("return (Proxy Object - Not Initialized) : " + obj.getClass().getName());
+                } else {
+                    // ObjectMapper 사용하여 JSON 문자열로 반환
+                    String jsonContent = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
+                    System.out.println("return : (Json Content) : \n" + jsonContent);
+                }
+            } catch (JsonProcessingException e) {
+                System.out.println("return (ToString): " + obj);
             }
-
         }
         System.out.println("-----------------------------------------");
     }

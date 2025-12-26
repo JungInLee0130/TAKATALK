@@ -10,25 +10,25 @@
 <body>
   <div>
     <div class="channel-name">
-      <label for="name">채널이름</label>
-      <input id="name" type="text">
+      <label for="createChannelName">채널이름</label>
+      <input id="createChannelName" type="text">
     </div>
     <div class="channel-type">
       <fieldset>
         <legend>채널유형</legend>
           <div>
-            <label for="channelTypeText">TEXT</label>
-            <input name="channelType" id="channelTypeText" type="radio" value="TEXT">
+            <label for="createChannelTypeText">TEXT</label>
+            <input name="channelType" id="createChannelTypeText" type="radio" value="TEXT">
           </div>
           <div>
-            <label for="channelTypeVoice">VOICE</label>
-            <input name="channelType" id="channelTypeVoice" type="radio" value="VOICE">
+            <label for="createChannelTypeVoice">VOICE</label>
+            <input name="channelType" id="createChannelTypeVoice" type="radio" value="VOICE">
           </div>
       </fieldset>
     </div>
     <div>
-      <label for="isSecret">비공개여부</label>
-      <input id="isSecret" type="checkbox">
+      <label for="createChannelIsSecret">비공개여부</label>
+      <input id="createChannelIsSecret" type="checkbox">
     </div>
     <button type="button" id="createChannelBtn" class="create-channel-btn">create channel</button>
   </div>
@@ -52,47 +52,9 @@
     * 채널생성
     * */
     document.getElementById("createChannelBtn").onclick = () => {
-      /* requestparam */
       const groupId = [[${groupId}]];
       const categoryId = [[${categoryId}]];
-
-      let queryString = `?groupId=${groupId}`
-      if (categoryId != null && categoryId !== ''){
-        queryString += `&categoryId=${categoryId}`;
-      }
-
-      /* requestbody */
-      const requestBodyData = {
-        channelName : document.getElementById("name").value,
-        channelType : document.querySelector('input[name = "channelType"]:checked').value,
-        isSecret : document.getElementById("isSecret").checked
-      }
-
-      $.ajax({
-        type: "POST",
-        url: "/channel/create" + queryString,
-        contentType: "application/Json",
-        data: JSON.stringify(requestBodyData),
-        statusCode : {
-          201 : function (data,textStatus,jqXHR) {
-            let newLocation = jqXHR.getResponseHeader('Location');
-            if (newLocation) {
-              console.log(newLocation);
-              window.location.href = newLocation;
-            } else {
-              console.log("Location 헤더를 찾을수 없습니다.")
-            }
-          }
-        },
-        success: function (response) {
-          if (response === "SUCCESS") {
-            console.log(response);
-          }
-        },
-        error : function (request, error) {
-          console.log(request);
-        }
-      })
+      createChannel(groupId, categoryId);
     }
   })
 

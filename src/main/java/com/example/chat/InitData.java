@@ -8,6 +8,9 @@ import com.example.chat.channel.repository.ChannelRepository;
 import com.example.chat.channel.repository.ChatMessageRepository;
 import com.example.chat.group.repository.GroupRepository;
 import com.example.chat.group.entity.Groups;
+import com.example.chat.groupmember.domain.GroupRole;
+import com.example.chat.groupmember.entity.GroupMember;
+import com.example.chat.groupmember.repository.GroupMemberRepository;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ public class InitData implements CommandLineRunner {
 
     private final ChannelRepository channelRepository;
     private final ChatMessageRepository chatMessageRepository;
+    private final GroupMemberRepository groupMemberRepository;
 
 
     @Override
@@ -52,13 +56,30 @@ public class InitData implements CommandLineRunner {
 
             userRepository.save(siteUser1);
             userRepository.save(siteUser2);
+
             System.out.println("======테스트용 초기 데이터 생성 완료 (ID : test1@naver.com / PW : qwer1234) ========");
             System.out.println("======테스트용 초기 데이터 생성 완료 (ID : test2@naver.com / PW : qwer1234) ========");
 
 
-            Groups group1 = new Groups("그룹1", siteUser1);
+            Groups group1 = Groups.builder()
+                    .name("그룹1")
+                    .build();
+
+            GroupMember groupMember1 = GroupMember.builder()
+                    .group(group1)
+                    .role(GroupRole.OWNER)
+                    .siteUser(siteUser1)
+                    .build();
+
+            GroupMember groupMember2 = GroupMember.builder()
+                    .group(group1)
+                    .role(GroupRole.USER)
+                    .siteUser(siteUser2)
+                    .build();
 
             groupRepository.save(group1);
+            groupMemberRepository.save(groupMember1);
+            groupMemberRepository.save(groupMember2);
 
             System.out.println("======그룹 초기 데이터 생성 완료 (name : group1 / siteUser : 테스트1) ========");
 

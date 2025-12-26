@@ -1,0 +1,90 @@
+#groupFormModal .modal-content{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 32px 40px;
+    color: white;
+}
+
+#groupFormModal .modal-header{
+    text-align: center;
+}
+
+#groupFormModal .modal-body{
+    margin: 0;
+}
+
+#groupFormModal p {
+    margin: 0;
+    color: white;
+}
+
+#groupFormModal input {
+    margin: 10px 0;
+    padding: 10px 5px;
+    width: 100%;
+    height: 40px;
+    border-radius: 7px;
+}
+
+#groupFormModal .profile-wrapper {
+
+}
+#groupFormModal .profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin: 10px 0;
+}
+
+#groupFormModal .upload-circle {
+    position: relative;
+
+    width: 80px;
+    height: 80px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    border: 2px dashed white; /* 디스코드 점선 색상 */
+    border-radius: 50%;
+}
+
+/* 내부 카메라 아이콘 및 텍스트 */
+#groupFormModal .upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #b5bac1;
+}
+
+/* 파란색 + 배지 */
+.plus-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 24px;
+    height: 24px;
+    background-color: #5865f2; /* 디스코드 브랜드 색상 */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* 이미지 미리보기 스타일 */
+#imagePreview {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    z-index: 2;
+}

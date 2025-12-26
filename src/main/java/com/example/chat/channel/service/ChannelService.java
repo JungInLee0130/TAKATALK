@@ -7,13 +7,12 @@ import com.example.chat.channel.entity.Channels;
 import com.example.chat.channel.repository.ChannelRepository;
 import com.example.chat.channel.repository.ChatMessageRepository;
 import com.example.chat.friends.FriendService;
-import com.example.chat.friends.FriendsResponse;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.group.repository.GroupRepository;
 import com.example.chat.group.entity.Groups;
 import com.example.chat.user.repository.UserRepository;
-import com.example.chat.visitor.repository.VisitorsRepository;
+import com.example.chat.groupmember.repository.GroupMemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 public class ChannelService {
     private final ChannelRepository channelRepository;
     private final ChatMessageRepository chatMessageRepository;
-    private final VisitorsRepository visitorsRepository;
+    private final GroupMemberRepository groupMemberRepository;
     private final CategoryRepository categoryRepository;
     private final GroupRepository groupRepository;
     private final FriendService friendService;
@@ -95,21 +94,6 @@ public class ChannelService {
         return response;
     }*/
 
-    public InviteChannelResponse getInviteResponse(Long siteUserid, Long channelId) {
-        Channels channel = channelRepository.findById(channelId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
-
-        String groupName = channel.getGroup().getName();
-        String channelName = channel.getName();
-        List<FriendsResponse> friendsResponses = friendService.getFriendsResponses(siteUserid);
-
-        return InviteChannelResponse.builder()
-                .groupName(groupName)
-                .channelName(channelName)
-                .friendsResponses(friendsResponses)
-                .build();
-    }
-
     public List<ChannelResponse> getChannels(Long groupId) {
         List<Channels> channels = channelRepository.findByGroupId(groupId);
 
@@ -129,5 +113,15 @@ public class ChannelService {
 
     public Channels getReferenceById(Long channelId) {
         return channelRepository.getReferenceById(channelId);
+    }
+
+    public ChannelResponse getChannelInfo(Long channelId) {
+        Channels channel = findById(channelId);
+        return ChannelResponse.builder()
+                .id(channel.getId())
+                .name(channel.getName())
+                .type(channel.getType())
+                .isSecret(channel.getIsSecret())
+                .build();
     }
 }

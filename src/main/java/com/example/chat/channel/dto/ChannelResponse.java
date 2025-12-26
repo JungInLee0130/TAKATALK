@@ -1,11 +1,14 @@
 package com.example.chat.channel.dto;
 
 import com.example.chat.channel.domain.ChannelType;
+import lombok.Builder;
 
-public record ChannelResponse(Long channelId,
-                              String channelName,
-                              ChannelType channelType,
-                              Boolean channelIsSecret) {
+@Builder
+public record ChannelResponse(Long id,
+                              String name,
+                              ChannelType type,
+                              Boolean isSecret) {
+
 
 }
 

@@ -1,0 +1,42 @@
+package com.example.chat.groupmember.entity;
+
+import com.example.chat.global.auditing.BaseTimeEntity;
+import com.example.chat.group.entity.Groups;
+import com.example.chat.groupmember.domain.GroupRole;
+import com.example.chat.user.entity.SiteUser;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "group_members")
+public class GroupMember extends BaseTimeEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "siteuser_id")
+    private SiteUser siteUser;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    private Groups group;
+
+    @Enumerated(EnumType.STRING)
+    private GroupRole role;
+
+    private Boolean isOnline;
+
+    @Builder
+    public GroupMember(SiteUser siteUser, Groups group, GroupRole role) {
+        this.siteUser = siteUser;
+        this.group = group;
+        this.role = role;
+        this.isOnline = false;
+    }
+}
