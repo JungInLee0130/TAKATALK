@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <div th:fragment="invite-modal">
+    <div class="modal" id="inviteGroupModal">
+      <div class="modal-content" th:if="${currentGroup != null}">
+        <div class="modal-header">
+          <div class="modal-header-text">
+            <h2>친구를 <span th:text="${currentGroup.name}" style="font-weight: bold">그룹 1</span> 그룹으로 초대하기</h2>
+          </div>
+          <div class="modal-close-btn-wrapper" onclick="closeInviteGroupModal()">
+            <p>X</p>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div>
+            <p>수신자는 # <span th:text="${currentGroup.name}"></span>에 도착해요</p>
+          </div>
+          <div class="search-friends">
+            <!--아마 검색버튼없이 자동으로 되야할거임(동적이벤트)-->
+            <img class="search-icon" th:src="@{/images/search-icon.svg}">
+            <!--<img class="search-icon" src="../../static/images/search-icon.svg">-->
+            <input class="search-input" type="text" placeholder="사용자명을 입력해주세요.">
+          </div>
+          <div class="friends-list">
+            <!--검색되는 friendslist div 도배. 일정개수 넘어가면 스크롤-->
+            <div class="friends-info">
+              <div class="profile-wrapper">
+                <img th:src="@{/images/meeng.png}">
+                <!--<img src="../../static/images/meeng.png">-->
+              </div>
+              <div class="nickname-wrapper">
+                <p>이정인</p>
+              </div>
+            </div>
+              <div class="btn-invite" onclick="inviteMember()">
+                <p>초대하기</p>
+              </div>
+          </div>
+          <div class="share-link-wrapper">
+            <p>또는 초대 코드 전송하기</p>
+            <div class="share-link-input-wrapper">
+              <input type="text" placeholder="CSDFWE" readonly>
+              <div class="btn-copy">
+                <p>복사하기</p>
+              </div>
+            </div>
+            <p>초대 링크가 7일 후에 만료돼요.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</html>

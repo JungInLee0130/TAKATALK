@@ -63,7 +63,6 @@ public class InitData implements CommandLineRunner {
 
             Groups group1 = Groups.builder()
                     .name("그룹1")
-                    .siteUser(siteUser1)
                     .build();
 
             GroupMember groupMember1 = GroupMember.builder()

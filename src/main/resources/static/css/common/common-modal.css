@@ -1,0 +1,96 @@
+/* inviteModal 전용 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px); /* 배경 살짝 흐리게 (디스코드 느낌) */
+}
+.modal-content{
+    padding: 24px;
+    width: 440px;
+
+    position: fixed;
+    left: 50vw;
+    top: 50vh;
+    transform: translate(-50%, -50%);
+
+    border-radius: 8px;
+    color: #dbdee1;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
+    background-color: #313338; /* 디스코드 다크 모드 배경색 */
+}
+
+.modal-header h2{
+    margin-bottom: 10px;
+    color: white;
+    text-align: center;
+    font-size: 24px;
+}
+
+.modal-body{
+    margin-top: 20px;
+}
+
+.modal-body p{
+    font-size: 14px;
+    color: #b5bac1;
+    margin-bottom: 20px;
+}
+
+.modal-footer{
+    margin-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-cancel {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-join {
+    background-color: #5865f2;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btn-join:hover {
+    background-color: #4752c4;
+}
+
+.btn-back {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-create {
+    background-color: #5865f2;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btn-create:hover {
+    background-color: #4752c4;
+}

@@ -1,6 +1,7 @@
 package com.example.chat.global.security;
 
 import com.example.chat.global.security.authentication.CustomAuthenticationFailureHandler;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -61,6 +62,15 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(exceptions -> exceptions
                         .accessDeniedPage("/403")
+                        .authenticationEntryPoint(((request, response, authException) -> {
+                            // AJAX 요청인지 확인
+                            String ajaxHeader = request.getHeader("X-Requested-With");
+                            if ("XMLHttpRequest".equals(ajaxHeader)) {
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                            } else {
+                                response.sendRedirect("/login");
+                            }
+                        }))
                 )
         ; // Http Basic 인증 비활성화
 

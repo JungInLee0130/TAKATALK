@@ -21,10 +21,14 @@ public enum ErrorCode {
     DUPLICATED_USER(HttpStatus.BAD_REQUEST, "SIGNUP_001", "이미 가입된 회원입니다."),
     /*그룹 에러*/
     GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "GROUP_001", "해당 그룹이 없습니다."),
+    GROUP_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "GROUP_002", "권한이 없습니다."),
     /*카테고리 에러*/
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "CATEGORY_001", "해당 카테고리가 없습니다."),
     /*채널 에러*/
-    CHANNEL_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_001", "해당 채널이 없습니다.");
+    CHANNEL_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_001", "해당 채널이 없습니다."),
+    /*그룹멤버 에러*/
+    GROUP_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "GROUP_MEMBER_001", "해당 그룹멤버가 없습니다.");
+
 
     private final HttpStatus status;
     private final String code;

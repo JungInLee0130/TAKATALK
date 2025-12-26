@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <div th:fragment="groupModal" class="modal" id="groupFormModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">서버 커스터마이즈 하기</h2>
+        <p id="modalDescription">새로운 서버에 이름과 아이콘을 부여해 개성을 드러내 보세요. 나중에 언제든 바꿀수있어요.</p>
+      </div>
+      <div class="modal-body">
+        <div class="profile-wrapper">
+          <input type="file" id="groupProfileInput" accept="image/*" hidden>
+          <div class="upload-circle" onclick="document.getElementById('groupProfileInput').click()">
+            <div class="upload-content">
+              <!-- 카메라 아이콘 (SVG) -->
+              <svg class="camera-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path>
+                <path fill="currentColor" fill-rule="evenodd" d="M7 2a2 2 0 0 0-2 2H3a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2a2 2 0 0 0-2-2H7Zm2.5 6a2.5 2.5 0 1 1 5 0 2.5 2.5 0 0 1-5 0ZM12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" clip-rule="evenodd"></path>
+                <path fill="currentColor" d="M18 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"></path>
+              </svg>
+              <span class="upload-text">UPLOAD</span>
+            </div>
+            <!-- 파란색 + 배지 -->
+            <div class="plus-badge">
+              <svg width="12" height="12" viewBox="0 0 12 12">
+                <polygon fill="white" points="12 6.857 6.857 6.857 6.857 12 5.143 12 5.143 6.857 0 6.857 0 5.143 5.143 5.143 5.143 0 6.857 0 6.857 5.143 12 5.143"></polygon>
+              </svg>
+            </div>
+            <!-- 이미지 미리보기용 (이미지 선택 시 보임) -->
+            <img id="imagePreview" src="" style="display: none;">
+          </div>
+        </div>
+        <div>
+          <p>서버이름 <span style="color: red">*</span></p>
+          <input type="text" id="groupNameInput" placeholder="서버이름">
+        </div>
+          <p>서버를 만들면 TAKATALK의 <span style="color: skyblue">커뮤니티 지침</span>에 동의하게 됩니다.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-back" onclick="closeGroupFormModal()">뒤로가기</button>
+        <button type="button" id="groupSubmitBtn" class="btn-create">만들기</button>
+      </div>
+    </div>
+  </div>
+</html>

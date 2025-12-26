@@ -74,3 +74,10 @@ spring:
 file:
   upload:
     upload-path: ${UPLOAD_DIR}
+---
+server:
+  servlet:
+    session:
+      timeout: 5m
+      cookie:
+        http-only: true

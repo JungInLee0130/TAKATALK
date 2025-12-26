@@ -22,27 +22,30 @@ public class FileService {
     * 파일을 저장하고 저장된 고유 파일명을 반환합니다.
     * */
     public String storeFile(MultipartFile file, String oldFilename) throws IOException {
+        // file이 null이면 null 반환 (기본 이미지 적용)
         if (file == null || file.isEmpty()) {
             return null;
         }
 
+        // 1. 업로드 경로
         String uploadDir = fileProperties.getUploadPath();
         log.info("uploadDir : {}", uploadDir);
 
+        // 2. 원본 파일 이름
         String originalFilename = file.getOriginalFilename();
 
-        // 기존 파일 삭제
+        // 2-1. 기존 파일 삭제 : 업로드경로 + 원본 파일 이름
         new File(uploadDir + oldFilename).delete();
 
-        // 사용자들이 같은 이름으로 올릴수도있으므로 + UUID
+        // 3. 저장 파일 이름 : UUID + 원본 파일 이름
         String savedFileName = UUID.randomUUID().toString() + "_" + originalFilename;
 
-        // 파일 경로 저장
+        // 4. 파일 만들기 : 업로드 경로 + 새로운 파일 이름
         File saveFile = new File(uploadDir + savedFileName);
 
         if (!saveFile.exists()) saveFile.mkdirs();  // 폴더가 없으면 상위 폴더까지 만듬.
 
-        // 서버 지정위치에 파일 저장
+        // 5. 파일 저장
         file.transferTo(saveFile);
 
         // 파일 이름 리턴

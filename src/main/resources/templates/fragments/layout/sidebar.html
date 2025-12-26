@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="sidebar" class="left-bar">
+        <div th:if="${groups != null}">
+            <div class="group-icon-wrapper" th:each="group : ${groups}" th:data-group-id = "${group.id}">
+                <a th:href="@{/group/access/{groupId}(groupId = ${group.id})}" class="group-link">
+                    <img class="group-icon" th:src="${group.profile}" th:alt="${group.name} + '아이콘'">
+                    <!--<span th:if="${group.hasNewMessage}" class="notification-badge">
+                          <span th:text="${group.newMessageCount}">1</span>
+                        </span>-->
+                </a>
+            </div>
+        </div>
+        <!--1. 그룹 생성 모달-->
+        <div class="group-plus-icon-wrapper" onclick="openCreateGroupModal()">
+            <p class="plus-icon">+</p>
+        </div>
+    </div>
+</html>

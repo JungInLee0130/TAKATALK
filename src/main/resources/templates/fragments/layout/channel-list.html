@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--채팅방 목록-->
+    <div th:fragment="channelList" class="left">
+        <div class="left-header">
+            <div>
+                <h2>방제목</h2>
+            </div>
+            <div>
+                <p>dropdown</p>
+            </div>
+            <!--그룸생성 페이지 이동-->
+            <div class="group-invite-wrapper" onclick="openInviteGroupModal()">
+                <!--<div class="group-plus-icon-wrapper" onclick="openInviteModal()">-->
+                <!--<a th:href="@{/group/createPage}" id="groupSubmitBtn">-->
+                <p class="plus-icon">+</p>
+                <!--</a>-->
+            </div>
+        </div>
+        <div class="left-body">
+            <div th:if="${currentGroup}">
+                <a th:href="@{/category/create/{groupId}(groupId = ${currentGroup.id})}">카테고리 생성</a>
+            </div>
+            <div th:if="${currentGroup}">
+                <a th:href="@{/channel/create(groupId = ${currentGroup.id})}">채널생성</a>
+            </div>
+            <!--만들어진 채널들이 있다면-->
+            <div class="channel-categorized-group" th:if="${channelGroupResponse}">
+                <table class="categorized-channel-table" th:each="categories : ${channelGroupResponse.categorizedChannels}">
+                    <!--카테고리를 가진 채널이 있다면-->
+                    <thead th:if="${categories}">
+                    <th th:text="${categories.name}"></th>
+                    <th>
+                        <a th:href="@{/channel/create(groupId = ${currentGroup.id}, categoryId = ${categories.id})}">채널생성</a>
+                    </th>
+                    </thead>
+                    <tbody class="categorized-channel-table-body">
+                    <tr class="categorized-channel-table-row" th:each="channel : ${categories.channels}">
+                        <th th:text="${channel.name}"></th>
+                        <td th:text="${channel.type}"></td>
+                        <td th:text="${channel.isSecret}"></td>
+                        <td>
+                            <a th:href="@{/channel/enter/{channelId}(channelId = ${channel.id}, groupId = ${currentGroup.id})}">채널입장</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr/>
+            <!--카테고리 없는 채널-->
+            <div class="channel-uncategorized-group" th:if="${channelGroupResponse}">
+                <table th:each="channels : ${channelGroupResponse.uncategorizedChannels}">
+                    <tbody th:if="${channels}" >
+                    <tr th:each="channel : ${channels}">
+                        <th th:text="${channel.name}"></th>
+                        <td th:text="${channel.type}"></td>
+                        <td th:text="${channel.isSecret}"></td>
+                        <td>
+                            <a th:href="@{/channel/enter/{channelId}(channelId = ${channel.id}, groupId = ${currentGroup.id})}">채널입장</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div th:fragment="myProfile">
+        <!--프로필 하단바-->
+        <a th:href="@{/templates/profile}" class="profile-link">
+            <div class="left-profile-wrapper" id="leftProfileWrapper">
+                <div class="profile-image-wrapper">
+                    <img th:src="${user.profile}" class="profile-image">
+                </div>
+                <div class="profile-nickname-wrapper">
+                    <p th:text="${user.nickname}"></p>
+                </div>
+                <div>
+                    <img src="#" class="mic-image">
+                </div>
+                <div>
+                    <img src="#" class="headphone-image">
+                </div>
+                <div>
+                    <img src="#" class="setting-image">
+                </div>
+            </div>
+        </a>
+    </div>
+</html>

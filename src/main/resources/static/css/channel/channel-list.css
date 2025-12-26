@@ -1,0 +1,28 @@
+.left {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+
+    width: 250px;
+    height: 90vh;
+
+    background-color: beige;
+    box-sizing: border-box;
+
+
+    /*x축 스크롤 관련*/
+    overflow-x: auto;
+    overflow: hidden;
+}
+.left-header {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin: 10px 0;
+    width: 100%;
+}
+.left-header h2{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+}

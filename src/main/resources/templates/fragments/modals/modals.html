@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- 초대 코드 모달 조각 -->
+<div th:fragment="inviteJoinModal">
+    <div id="inviteJoinModal" class="modal">
+        <!-- 모달 HTML -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>서버 참가하기</h2>
+            </div>
+            <div class="modal-body">
+                <p>친구에게 받은 초대 코드를 아래에 입력하여 기존 서버에 참가하세요.</p>
+                <label class="input-label">초대 코드</label>
+                <input type="text" id="inviteCodeInput" class="invite-input" placeholder="h7s2k9Lp">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="closeInviteModal()">취소</button>
+                <button type="button" class="btn-join" onclick="joinServer()">서버 참가</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        /* 모달 제어 함수 */
+        function openInviteModal() {
+            document.getElementById('inviteJoinModal').style.display = 'block';
+        }
+        function closeInviteModal() {
+            document.getElementById('inviteJoinModal').style.display = 'none';
+            document.getElementById('inviteCodeInput').value = '';
+        }
+    </script>
+</div>
+<div th:fragment="inviteManageModal">
+    <div id="inviteManageModal" class="modal">
+        <!-- 모달 HTML -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>친구 초대하기</h2>
+            </div>
+            <div class="modal-body">
+                <p>친구에게 아래 코드를 공유하여 서버로 초대하세요.</p>
+                <label class="input-label">초대 코드</label>
+                <div class="invite-display-group">
+                    <input type="text" id="displayInviteCode" class="invite-input" readonly>
+                    <button type="button" class="btn-join" onclick="copyInviteCode()">복사</button>
+                </div>
+                <p id="inviteCodeErrorMsg" class="error-msg" style="display: none"></p>
+                <p class="helper-text">코드를 재설정하면 이전 코드는 무효화됩니다.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="resetInviteCode()" style="color: #ed4245;">코드 초기화</button>
+                <button type="button" class="btn-cancel" onclick="closeManageModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

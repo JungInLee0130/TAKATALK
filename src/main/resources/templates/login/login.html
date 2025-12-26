@@ -1,157 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--<link rel="icon" type="image/x-icon" href="/images/favicon.ico">-->
     <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/login/login-modal.css}"/>
+    <link rel="stylesheet" th:href="@{/css/login/login.css}"/>
     <meta charset="UTF-8">
     <title>로그인</title>
 </head>
-<style>
-    body{
-        margin: 0;
-        min-height: 100vh;
-        background-image: linear-gradient(to right,#18004D,#1E55DC);
-    }
-    .container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        min-height: 100vh;
-
-        background-image: url("/images/discord-background.svg");
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
-    .container .login-logo {
-        position: absolute;
-        top:50px;
-        left:50px;
-    }
-    .container .login-logo img {
-        object-fit: none;
-    }
-    .container .login {
-        border: 1px solid black;
-        border-radius: 10px;
-        padding: 0 40px;
-        padding-top : 10px;
-        padding-bottom: 40px;
-        width: 480px;
-        background-color: #393A41;
-    }
-    .login h2{
-        text-align: center;
-        color: #FFFFFF;
-    }
-    .login label {
-        display: block;
-        margin-bottom: 5px;
-        font-size: 16px;
-        color: #FFFFFF;
-    }
-    .login input {
-        float: left;
-        width: 100%;
-        height: 40px;
-
-        border: none;
-        border-radius: 5px;
-        padding: 1px 10px;
-        margin-bottom: 10px;
-        font-size: 16px;
-
-        background-color: #2E2E34;
-        color:#A5A6AC;
-
-        /*부모 가용너비에 정확히 맞춰짐 : border-box*/
-        -ms-box-sizing: border-box; /* ie8 */
-        -khtml-box-sizing: border-box; /* konqueror */
-        -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-        -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-        box-sizing: border-box;         /* Opera/IE 8+ */
-        box-sizing: border-box; /* css3 rec */
-    }
-
-    .login input:focus {
-        border: 1px solid black;
-        border-color: #5865F2;
-        outline: none;
-    }
-
-    .login a {
-        display: block;
-        padding-bottom: 10px;
-        color: #6C6D74;
-    }
-    .login .send-change-password-wrapper {
-
-    }
-    .login .send-change-password-wrapper button {
-        padding: 0;
-        background: none;
-        border: none;
-        font-size: 16px;
-        margin-bottom: 10px;
-        color: #93A7FD;
-    }
-
-    .login .login-button-wrapper{
-
-    }
-    .login .login-button-wrapper button {
-        float: left;
-        width: 100%;
-        -ms-box-sizing: border-box; /* ie8 */
-        -khtml-box-sizing: border-box; /* konqueror */
-        -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-        -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-        box-sizing: border-box;         /* Opera/IE 8+ */
-        box-sizing: border-box; /* css3 rec */
-        height: 40px;
-        border: 1px solid black;
-        border-radius: 5px;
-        margin-right: 10px;
-        margin: 1px 0;
-        font-size: 16px;
-        background-color: #4452BB;
-        color: white;
-    }
-    .login .find-account {
-        float: left;
-        width: 100%;
-        -ms-box-sizing: border-box; /* ie8 */
-        -khtml-box-sizing: border-box; /* konqueror */
-        -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-        -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-        box-sizing: border-box;         /* Opera/IE 8+ */
-        box-sizing: border-box; /* css3 rec */
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 10px;
-        text-align: center;
-    }
-    .login .find-account p {
-        margin: 10px 0;
-        color: #ADAEB4;
-    }
-    .login .find-account a {
-        padding: 0;
-        color: #7380BA;
-    }
-
-    .error-msg {
-        margin: 10px 0px;
-        color: #E88985;
-    }
-    .field-error {
-        margin: 10px 0px;
-        color: #E88985;
-    }
-</style>
-<style th:replace="~{login/login-modal :: login-modal-css}"></style>
 <body>
     <div class="container">
         <div class="login-logo">
@@ -177,7 +32,7 @@
                 <div class="send-change-password-wrapper">
                     <button type="button" id="sendChangePasswordBtn">비밀번호를 잊으셨나요?</button>
                     <!--비밀번호 재설정 클릭시-->
-                    <div th:replace="~{login/login-modal :: login-modal-fragment}"></div>
+
                 </div>
                 <div class="login-button-wrapper">
                     <button type="submit" id="loginBtn">로그인</button>
@@ -193,96 +48,19 @@
             </form>
       </div>
   </div>
+    <!--로그인 모달-->
+    <div th:replace="~{login/login-modal :: passwordChangeNotificationModal}"></div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<script th:replace="~{login/login-modal :: login-modal-js}"></script>
+<!--2. 타임리프 변수 선언-->
 <script th:inline="javascript">
-    /*
-    * ajax 요청시 자동으로 header에 csrf 토큰 삽입
-    * */
-    $(function () {
-        var csrfToken = [[${_csrf.token}]];
-        var csrfHeader = [[${_csrf.headerName}]];
-
-        $(document).ajaxSend(function (e, xhr, options) {
-            xhr.setRequestHeader(csrfHeader, csrfToken);
-        });
-    })
-
-    document.addEventListener('DOMContentLoaded', (event) => {
-        /*
-        * 로그인 버튼 클릭시
-        * */
-
-        /*
-        * 이메일 검증
-        * */
-        function validateEmail(email) {
-            var emailRegex = new RegExp("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
-
-            if (email == '' || email == null) {
-                document.getElementById("emailErrorMsg").innerText = "필수 입력칸이에요.";
-                return false;
-            } else if (!email.match(emailRegex)) {
-                // 이메일 정규표현식 만족못하면
-                console.log("이메일 형식을 다시 작성해주세요.")
-                document.getElementById("emailErrorMsg").innerText = "이메일 형식을 다시 작성해주세요.";
-                return false;
-            }
-            return true;
-        }
-
-        /*
-        * 비밀번호 재설정 메일 버튼 클릭시
-        * */
-        document.getElementById("sendChangePasswordBtn").onclick = () => {
-            var email = document.getElementById("email").value;
-            console.log(email);
-
-            if(!validateEmail(email)) return;
-
-            /*
-            * 유효성 검증 성공시 modal창 활성화
-            * */
-            modal.style.display = "block";
-
-            $.ajax({
-                type: 'POST',
-                url: '/login/send-change-password',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                   mail : email
-                }),
-                success: function (response) {
-                  if (response === "SUCCESS") {
-                      document.getElementById("emailErrorMsg").innerText = "";
-                      document.getElementById("passwordErrorMsg").innerText = "";
-                  } else {
-                      alert(response);
-                  }
-                },
-                error : function (request, error) {
-                    let errorCode = request.responseJSON.code;
-                    let errorMsg = request.responseJSON.message;
-                    console.log(errorCode + ": " + errorMsg);
-
-                    switch (errorCode) {
-                        case "COMMON_001" :
-                            document.getElementById("emailErrorMsg").innerText = "유효하지않는 아이디 또는 비밀번호 입니다.";
-                            break;
-                        case "MEMBER_001":
-                            document.getElementById("emailErrorMsg").innerText = "존재하지 않는 이메일이에요.";
-                            document.getElementById("passwordErrorMsg").innerText = "";
-                            break;
-                        default :
-                            // SERVER_ERROR
-                            alert("임시 비밀번호 발송에 실패했습니다. 다시 시도해주세요.");
-                            document.getElementById("emailErrorMsg").innerText = "임시 비밀번호 발송에 실패했습니다. 다시 시도해주세요.";
-                            break;
-                    }
-                }
-            });
-        };
-    });
+    const csrfToken = [[${_csrf.token}]];
+    const csrfHeader = [[${_csrf.headerName}]];
 </script>
+<!--3. UI/공통 로직-->
+<script th:src="@{/js/login/login-ui-controller.js}"></script>
+<!--4. 비즈니스 로직-->
+<script th:src="@{/js/login/login-controller.js}"></script>
+<!--5. 메인 실행 파일-->
+<script th:scr="@{/js/common/main.js}"></script>
 </html>
