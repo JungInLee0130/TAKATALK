@@ -25,6 +25,12 @@
     background-color: #313338; /* 디스코드 다크 모드 배경색 */
 }
 
+.modal-header {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .modal-header h2{
     margin-bottom: 10px;
     color: white;
@@ -80,7 +86,7 @@
     font-size: 14px;
 }
 
-.btn-create {
+.btn-primary {
     background-color: #5865f2;
     color: white;
     border: none;
@@ -91,6 +97,6 @@
     transition: background-color 0.2s;
 }
 
-.btn-create:hover {
+.btn-primary:hover {
     background-color: #4752c4;
 }

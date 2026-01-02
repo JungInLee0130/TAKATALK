@@ -29,11 +29,7 @@ body {
     flex-direction: row;
     box-sizing: border-box;
 }
-.profile-link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-}
+
 .left-profile-wrapper {
     margin: 0;
     display: flex;
@@ -42,22 +38,7 @@ body {
     background-color: darkgray;
     height: 10vh;
 }
-.profile-image-wrapper {
-    margin: 0;
-    margin-left: 5px;
-}
-.profile-image-wrapper .profile-image {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-}
-.profile-nickname-wrapper {
-    margin: 0;
-}
-.profile-nickname-wrapper p{
-    margin : 0;
-    line-height: 10vh;
-}
+
 .left .chat-list {
     border: 1px solid black;
     margin: 0 5px;
@@ -79,20 +60,7 @@ body {
     margin: 0;
 }
 
-.channel-categorized-group {
-    width: 100%;
-    box-sizing: border-box;
-}
-.categorized-channel-table {
-    width: 100%;
-    border: 1px solid black;
-}
-.categorized-channel-table-body {
 
-}
-.categorized-channel-table-row {
-    border: 1px solid black;
-}
 
 .chat-list .chat-list-header {
     display: flex;
@@ -471,19 +439,4 @@ body {
     color: #b5bac1;
     margin-bottom: 8px;
     text-transform: uppercase;
-}
-
-.invite-input {
-    width: 100%;
-    padding: 10px;
-    background-color: #1e1f22;
-    border: none;
-    color: #dbdee1;
-    border-radius: 3px;
-    font-size: 16px;
-}
-
-.invite-display-group {
-    display: flex;
-    gap: 8px;
 }

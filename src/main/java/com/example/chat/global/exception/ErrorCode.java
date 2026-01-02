@@ -27,7 +27,9 @@ public enum ErrorCode {
     /*채널 에러*/
     CHANNEL_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_001", "해당 채널이 없습니다."),
     /*그룹멤버 에러*/
-    GROUP_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "GROUP_MEMBER_001", "해당 그룹멤버가 없습니다.");
+    GROUP_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "GROUP_MEMBER_001", "해당 그룹멤버가 없습니다."),
+    /*메일 에러*/
+    MAIL_CREATE_ERROR(HttpStatus.BAD_REQUEST, "MAIL_001", "비밀번호 재설정 요청 메일 생성 실패 오류");
 
 
     private final HttpStatus status;

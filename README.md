@@ -67,7 +67,6 @@
 - **Channels / Categories**: 서버 내 하위 계층 관리.
 - **ChatMessages**: 채널별 메시지 영속화.
   ![ERD](https://github.com/user-attachments/assets/f9635d5d-dcca-4f41-9943-e811478dd29a)
-  <img width="1333" height="693" alt="Image" src="" />
 
 
 <br/>
@@ -92,5 +91,6 @@
 - refactor : 리팩토링
 - test : 테스트
 - chore : 빌드 업무 수정
-</ul>
 
+
+(본 프로젝트는 학습 목적으로 제작된 디스코드 클론 코딩 프로젝트입니다. 사용된 이미지 및 디자인의 저작권은 Discord에 있으며, 상업적인 용도로 사용하지 않습니다.)

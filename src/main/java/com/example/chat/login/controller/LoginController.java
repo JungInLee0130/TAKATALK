@@ -1,6 +1,5 @@
 package com.example.chat.login.controller;
 
-import com.example.chat.global.aop.annotation.Timer;
 import com.example.chat.login.dto.MailRequest;
 import com.example.chat.login.dto.PasswordChangeRequest;
 import com.example.chat.login.dto.UserLoginForm;
@@ -8,7 +7,6 @@ import com.example.chat.login.dto.VerificationResetTokenRequest;
 import com.example.chat.login.service.LoginService;
 import com.example.chat.login.service.MailService;
 import com.example.chat.login.service.TokenService;
-import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -19,8 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.concurrent.CompletableFuture;
-
 @Slf4j
 @Controller
 @RequestMapping("/login")
@@ -30,6 +26,7 @@ public class LoginController {
 
     private final MailService mailService;
     private final TokenService tokenService;
+    private final LoginService loginService;
 
     /*
     * 로그인 페이지
@@ -68,7 +65,7 @@ public class LoginController {
     * 비밀번호 변경 페이지 이동
     * */
     @GetMapping("/change-password")
-    public String changePasswordPage(@RequestParam("token") String token,
+    public String changePasswordPage(@RequestParam(name = "token") String token,
                                      Model model) {
         String email = tokenService.validateTokenAndGetEmail(token);
 
@@ -83,24 +80,26 @@ public class LoginController {
     /*
      * 비밀번호 변경 메일보내기(비동기처리)
      * */
-    @PostMapping("/send-change-password")
+    /*@PostMapping("/send-change-password")
     public CompletableFuture<ResponseEntity<String>> sendChangePasswordMail(@Valid @RequestBody MailRequest request) {
-        SiteUser siteUser = userService.findByEmail(request.mail());
+        loginService.requestPasswordChange(request.mail());
+
         return mailService.sendChangePasswordMail(siteUser)
                 .thenApply(str -> ResponseEntity.ok(str));
+    }*/
+
+    @PostMapping("/send-change-password")
+    public ResponseEntity<String> sendChangePasswordMail(@Valid @RequestBody MailRequest request) {
+        loginService.requestPasswordChange(request.mail());
+        return ResponseEntity.ok().build();
     }
     
     /*
     * 비밀번호 변경
     * */
     @PostMapping("/change-password")
-    public ResponseEntity<String> changePassword(@Valid @RequestBody PasswordChangeRequest request) {
-        String token = request.token();
-        String newPassword = request.password();
-
-        String email = tokenService.validateTokenAndGetEmail(token);
-
-        userService.changePassword(email, newPassword, token);
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody PasswordChangeRequest request) {
+        userService.resetPassword(request.password(), request.token());
 
         return ResponseEntity.ok("SUCCESS");
     }

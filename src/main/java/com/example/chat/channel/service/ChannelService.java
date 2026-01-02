@@ -46,7 +46,7 @@ public class ChannelService {
         if (categoryId != null) {
             Categories category = categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
-            channel.setCategories(category);
+            channel.updateCategories(category);
         }
 
         channelRepository.save(channel);

@@ -42,13 +42,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
             data: JSON.stringify({
                 mail : email
             }),
-            success: function (response) {
-                if (response === "SUCCESS") {
+            success: function () {
+                document.getElementById("emailErrorMsg").innerText = "";
+                document.getElementById("passwordErrorMsg").innerText = "";
+                /*if (response === "SUCCESS") {
                     document.getElementById("emailErrorMsg").innerText = "";
                     document.getElementById("passwordErrorMsg").innerText = "";
                 } else {
                     alert(response);
-                }
+                }*/
             },
             error : function (request, error) {
                 let errorCode = request.responseJSON.code;

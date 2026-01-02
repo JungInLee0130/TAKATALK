@@ -1,9 +1,10 @@
 $(document).ready(function () {
-
+    // 이미지 올릴때
     document.getElementById("groupProfileInput").addEventListener('change', function (event) {
         const file = event.target.files[0];
         const preview = document.getElementById('imagePreview');
         const uploadContent = document.querySelector('.upload-content');
+        const plusBadge = document.querySelector('.plus-badge');
 
         if (file) {
             const reader = new FileReader();
@@ -11,6 +12,7 @@ $(document).ready(function () {
                 preview.src = e.target.result;
                 preview.style.display = 'block';
                 uploadContent.style.visibility = 'hidden';
+                plusBadge.style.display = "none";
             }
             reader.readAsDataURL(file);
         }
@@ -67,7 +69,9 @@ function resetInviteCode() {
 function openCreateGroupModal() {
     // 1. 초기화
     document.getElementById("modalTitle").textContent = "서버 생성하기";
+    // 1-2. 그룹 이름
     document.getElementById("groupNameInput").value = "";
+    // 1-3. 그룹 프로필
     document.getElementById("imagePreview").style.display = "none";
     document.querySelector('.upload-content').style.visibility = "visible";
 

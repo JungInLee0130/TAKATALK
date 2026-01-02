@@ -1,6 +1,5 @@
 package com.example.chat.group.entity;
 
-import com.example.chat.user.entity.SiteUser;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,9 +33,18 @@ public class Groups {
     private Boolean isDeleted = false;
 
     @Builder
-    public Groups(String name) {
+    private Groups(String name, String inviteCode) {
         this.name = name;
-        generateInviteCode();
+        this.inviteCode = inviteCode;
+    }
+
+    public static Groups create(String name) {
+        String inviteCode = UUID.randomUUID().toString().substring(0, 8);
+
+        return Groups.builder()
+                .name(name)
+                .inviteCode(inviteCode)
+                .build();
     }
 
     public void updateName(String name) {
@@ -49,8 +57,8 @@ public class Groups {
         }
     }
 
-    // 서버 생성시 자동으로 초대코드 생성
-    public void generateInviteCode(){
+    // 초대 코드 업데이트
+    public void updateInviteCode(){
         this.inviteCode = UUID.randomUUID().toString().substring(0, 8);
     }
 }

@@ -1,6 +1,8 @@
 package com.example.chat.groupmember.entity;
 
 import com.example.chat.global.auditing.BaseTimeEntity;
+import com.example.chat.global.exception.CustomException;
+import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.group.entity.Groups;
 import com.example.chat.groupmember.domain.GroupRole;
 import com.example.chat.user.entity.SiteUser;
@@ -30,13 +32,27 @@ public class GroupMember extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private GroupRole role;
 
-    private Boolean isOnline;
+    private Boolean isOnline = false;
 
     @Builder
-    public GroupMember(SiteUser siteUser, Groups group, GroupRole role) {
+    private GroupMember(SiteUser siteUser, Groups group, GroupRole role) {
         this.siteUser = siteUser;
         this.group = group;
         this.role = role;
-        this.isOnline = false;
+    }
+
+    public static GroupMember create(SiteUser siteUser, Groups group, GroupRole role) {
+        return GroupMember.builder()
+                .siteUser(siteUser)
+                .group(group)
+                .role(role)
+                .build();
+    }
+
+    public void validateManagerRole(GroupRole role) {
+        if (role != GroupRole.OWNER
+                && role != GroupRole.ADMIN) {
+            throw new CustomException(ErrorCode.GROUP_PERMISSION_DENIED);
+        }
     }
 }

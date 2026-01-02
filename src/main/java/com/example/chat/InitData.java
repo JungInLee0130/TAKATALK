@@ -1,5 +1,7 @@
 package com.example.chat;
 
+import com.example.chat.category.entity.Categories;
+import com.example.chat.category.repository.CategoryRepository;
 import com.example.chat.channel.domain.ChannelType;
 import com.example.chat.channel.domain.ChatMessageType;
 import com.example.chat.channel.entity.Channels;
@@ -14,12 +16,16 @@ import com.example.chat.groupmember.repository.GroupMemberRepository;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class InitData implements CommandLineRunner {
@@ -27,6 +33,7 @@ public class InitData implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
 
     private final GroupRepository groupRepository;
+    private final CategoryRepository categoryRepository;
 
     private final ChannelRepository channelRepository;
     private final ChatMessageRepository chatMessageRepository;
@@ -36,86 +43,191 @@ public class InitData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (!userRepository.existsByEmail("test@naver.com")) {
-            SiteUser siteUser1 = SiteUser.builder()
-                    .username("테스트1")
-                    .nickname("테스트1")
-                    .email("test1@naver.com")
-                    .password(passwordEncoder.encode("qwer1234"))
-                    .birthday(LocalDate.parse("2013-03-03"))
-                    .profile(null)
-                    .build();
 
-            SiteUser siteUser2 = SiteUser.builder()
-                    .username("테스트2")
-                    .nickname("테스트2")
-                    .email("test2@naver.com")
-                    .password(passwordEncoder.encode("qwer1234"))
-                    .birthday(LocalDate.parse("2013-03-04"))
-                    .profile(null)
-                    .build();
+            Map<Long, SiteUser> siteUserMap = createUsers();
 
-            userRepository.save(siteUser1);
-            userRepository.save(siteUser2);
+            List<Groups> groupList = createGroups();
 
-            System.out.println("======테스트용 초기 데이터 생성 완료 (ID : test1@naver.com / PW : qwer1234) ========");
-            System.out.println("======테스트용 초기 데이터 생성 완료 (ID : test2@naver.com / PW : qwer1234) ========");
+            log.info("siteUserMap : {}", siteUserMap.get(1L));
 
+            setGroupMembers(siteUserMap, groupList);
 
-            Groups group1 = Groups.builder()
-                    .name("그룹1")
-                    .build();
+            List<Channels> channelList = setupCategoriesAndChannels(groupList);
 
-            GroupMember groupMember1 = GroupMember.builder()
-                    .group(group1)
-                    .role(GroupRole.OWNER)
-                    .siteUser(siteUser1)
-                    .build();
+            createChatMessages(siteUserMap.get(1), channelList);
 
-            GroupMember groupMember2 = GroupMember.builder()
-                    .group(group1)
-                    .role(GroupRole.USER)
-                    .siteUser(siteUser2)
-                    .build();
+            System.out.println("======모든 더미데이터 생성완료! ========");
+        }
+    }
 
-            groupRepository.save(group1);
-            groupMemberRepository.save(groupMember1);
-            groupMemberRepository.save(groupMember2);
+    private void createChatMessages(SiteUser siteUser, List<Channels> channelList) {
+        List<ChatMessages> chatMessageList = new ArrayList<>();
+        for (Channels channel : channelList) {
+            for (int i = 1; i <= 30; i++) {
+                ChatMessages chatMessages = ChatMessages.create(
+                        "dd" + i,
+                        channel,
+                        siteUser,
+                        ChatMessageType.TALK
+                );
 
-            System.out.println("======그룹 초기 데이터 생성 완료 (name : group1 / siteUser : 테스트1) ========");
+                chatMessageList.add(chatMessages);
+            }
+        }
 
-            Channels channel1 = Channels.builder()
-                    .type(ChannelType.TEXT)
-                    .name("채널1")
-                    .isSecret(false)
-                    .group(group1)
-                    .build();
+        chatMessageRepository.saveAll(chatMessageList);
 
-            Channels channel2 = Channels.builder()
-                    .type(ChannelType.TEXT)
-                    .name("채널2")
-                    .isSecret(false)
-                    .group(group1)
-                    .build();
+        System.out.println("======채팅메시지 초기 데이터 생성 완료 (개수 : 30개) ========");
+    }
 
-            channelRepository.save(channel1);
-            channelRepository.save(channel2);
+    private List<Channels> setupCategoriesAndChannels(List<Groups> groupList) {
+        Map<Groups, List<Categories>> categoryMap = new HashMap<>();
 
-            System.out.println("======채널 초기 데이터 생성 완료 (name : channel1 / siteUser : 테스트1) ========");
-            System.out.println("======채널 초기 데이터 생성 완료 (name : channel2 / siteUser : 테스트1) ========");
+        for (Groups group : groupList) {
+            List<Categories> categoryList = new ArrayList<>();
+            for (int i = 1; i <= 5; i++) {
+                Categories category = Categories.create(
+                        "카테고리 " + i,
+                        false,
+                        group
+                );
+                categoryList.add(category);
+            }
+            categoryMap.put(group, categoryList);
+
+        }
+
+        List<Categories> allCategories = categoryMap.values()
+                .stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+        categoryRepository.saveAll(allCategories);
+
+        System.out.println("======카테고리 초기 데이터 생성 완료 (name : 카테고리) ========");
 
 
-            for (int i = 1; i <= 100; i++) {
-                ChatMessages chatMessages = ChatMessages.builder()
-                        .content("dd" + i)
-                        .channel(channel1)   // 중간에 누군가가 채널을 삭제할수있기때문에 직접 불러와야함.
-                        .siteUser(siteUser1)
-                        .type(ChatMessageType.TALK)
-                        .build();
+        List<Channels> channelList = new ArrayList<>();
+        for(Map.Entry<Groups, List<Categories>> entry : categoryMap.entrySet()) {
+            Groups group = entry.getKey();
+            List<Categories> categories = entry.getValue();
 
-                chatMessageRepository.save(chatMessages);
+            // categorizedChannel
+            for (Categories category : categories) {
+                for (int i = 1; i <= 3; i++) {
+                    Channels channel = Channels.create(
+                            "채널" + i,
+                            ChannelType.TEXT,
+                            false,
+                            group,
+                            category
+                    );
+                    channelList.add(channel);
+                }
             }
 
-            System.out.println("======채팅메시지 초기 데이터 생성 완료 (개수 : 100개 /channel : channel1 / siteUser : 테스트1) ========");
+            // uncategorizedChannel
+            for(int i = 1; i <= 5; i++) {
+                Channels channel = Channels.create(
+                        "채널" + i,
+                        ChannelType.TEXT,
+                        false,
+                        group
+                );
+                channelList.add(channel);
+            }
         }
+
+        channelRepository.saveAll(channelList);
+
+        System.out.println("======채널 초기 데이터 생성 완료 (name : 채널) ========");
+        return channelList;
+    }
+
+    private void setGroupMembers(Map<Long, SiteUser> siteUserMap, List<Groups> groupList) {
+        List<GroupMember> groupMemberList = new ArrayList<>();
+        for (Groups group : groupList) {
+            for (int i = 1; i <= 10; i++) {
+                GroupRole groupRole = assignRole(i);
+
+                GroupMember groupMember = GroupMember.create(
+                        siteUserMap.get((long) i),
+                        group,
+                        groupRole
+                );
+
+                groupMemberList.add(groupMember);
+            }
+        }
+
+        groupMemberRepository.saveAll(groupMemberList);
+    }
+
+    private static GroupRole assignRole(int i) {
+        GroupRole groupRole;
+        switch(i) {
+            case 1:
+                groupRole = GroupRole.ADMIN;
+                break;
+            case 2:
+            case 3:
+            case 4:
+                groupRole = GroupRole.OWNER;
+                break;
+            default:
+                groupRole = GroupRole.USER;
+                break;
+        }
+        return groupRole;
+    }
+
+    private List<Groups> createGroups() {
+        List<Groups> groupList = new ArrayList<>();
+        for (int i = 1; i <= 10; i++) {
+            Groups group = Groups.create(
+                    "그룹" + i
+            );
+            groupList.add(group);
+        }
+        groupRepository.saveAll(groupList);
+
+        System.out.println("======그룹멤버 초기 데이터 생성 완료 (name : 그룹) ========");
+        return groupList;
+    }
+
+    private Map<Long, SiteUser> createUsers() {
+        Map<Long, SiteUser> siteUserMap = new HashMap<>();
+        // 유저 100명
+        List<SiteUser> siteUsers = new ArrayList<>();
+        // 관리자
+        SiteUser admin = SiteUser.create("관리자",
+                "관리자",
+                "admin@naver.com",
+                "qwer1234",
+                LocalDate.of(2013,03,03),
+                null,
+                passwordEncoder
+        );
+        siteUsers.add(admin);
+        siteUserMap.put(1L, admin);
+
+        for (int i = 2; i <= 10; i++) {
+            SiteUser siteUser = SiteUser.create("테스트" + i,
+                    "테스트" + i,
+                    "test" + i + "@naver.com",
+                    "qwer1234",
+                    LocalDate.of(2013,03,03),
+                    null,
+                    passwordEncoder
+            );
+            siteUsers.add(siteUser);
+            siteUserMap.put((long) i, siteUser);
+        }
+
+        userRepository.saveAll(siteUsers);
+
+        System.out.println("======유저 데이터 생성 완료 관리자 1명, 유저 9명 (ID : test2~9@naver.com / PW : qwer1234) ========");
+
+        return siteUserMap;
     }
 }
