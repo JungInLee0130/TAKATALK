@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../../static/css/common/common.css">
+    <link rel="stylesheet" href="../../../static/css/common/common-modal.css">
+    <link rel="stylesheet" href="../../../static/css/channel/channel-create-modal.css">
+</head>
+<body>
+  <div class="modal" id="channelCreateModalWrapper" style="display: flex">
+    <div id="channelCreateModal" class="modal-content channel-modal">
+      <div class="modal-header">
+        <h2>채널 만들기</h2>
+        <div class="modal-close-btn" onclick="closeChannelCreateModal()">
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+                  d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
+          </svg>
+        </div>
+      </div>
+      <div class="modal-body">
+
+        <div class="section">
+          <p class="section-title">채널 유형</p>
+          <div class="type-list">
+
+            <!--히든-->
+            <label class="type-item selected">
+              <input type="radio" name="channelType" value="TEXT" checked hidden>
+              <div class="radio-indicator"></div>
+              <div class="type-icon">#</div>
+              <div class="type-info">
+                <p class="type-label">텍스트</p>
+                <p class="type-desc">메시지,이미지,GIF,의견,농담을 전송하세요</p>
+              </div>
+            </label>
+
+            <label class="type-item">
+              <input type="radio" name="channelType" value="VOICE" hidden>
+              <div class="radio-indicator"></div>
+              <div class="type-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24">
+                  <path fill="currentColor"
+                        d="M12 3a9 9 0 0 0-9 9v7c0 1.1.9 2 2 2h4v-8H5v-1a7 7 0 0 1 14 0v1h-4v8h4c1.1 0 2-.9 2-2v-7a9 9 0 0 0-9-9Z"></path>
+                </svg>
+              </div>
+              <div class="type-info">
+                <p class="type-label">음성</p>
+                <p class="type-desc">음성, 영상, 화면공유로 함께 어울리세요</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+          <div class="section">
+            <p class="section-title">채널 이름</p>
+            <div class="input-wrapper">
+              <span id="channelNamePrefix">#</span>
+              <input type="text" id="channelNameInput" class="text-input" placeholder="새로운 채널" maxlength="100">
+            </div>
+          </div>
+        <div class="section toggle-section">
+
+          <div class="toggle-info">
+            <div class="label-with-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M17 11V7a5 5 0 0 0-10 0v4H5v11h14V11h-2Zm-8 0V7a3 3 0 0 1 6 0v4H9Z"></path>
+              </svg>
+              <p class="type-label">비공개 채널</p>
+            </div>
+            <p class="type-desc">선택된 멤버들과 역할만 이 채널을 볼 수 있어요.</p>
+          </div>
+          <!--스위치 버튼-->
+          <label class="switch">
+            <!--hidden-->
+            <input type="checkbox" id="isSecretToggle">
+            <span class="slider"></span>
+          </label>
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeChannelCreateModal()">취소</button>
+        <button type="button" id="submitChannelBtn" class="btn-primary" disabled>채널 만들기</button>
+      </div>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> <!--JQUERY-->
+  <script src="../../../static/js/channel/channel-list-controller.js"></script>
+</body>
+</html>

@@ -14,16 +14,8 @@ public class ChannelGroupResponse {
     private List<CategoryResponse> categorizedChannels = new ArrayList<>();
     private List<ChannelResponse> uncategorizedChannels = new ArrayList<>();
 
-    //private List<Visitors> visitorsList = new ArrayList<>();;
-
     public ChannelGroupResponse(List<CategoryResponse> categorizedChannels, List<ChannelResponse> uncategorizedChannels) {
         this.categorizedChannels = categorizedChannels;
         this.uncategorizedChannels = uncategorizedChannels;
     }
-
-
-
-    /*public void setVisitorsList(List<Visitors> visitorsList) {
-        this.visitorsList = visitorsList;
-    }*/
 }

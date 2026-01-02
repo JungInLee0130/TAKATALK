@@ -20,15 +20,14 @@ import org.springframework.stereotype.Service;
 public class LoginService {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-
     private final UserDetailsService userDetailsService;
+    private final MailService mailService;
+    private final TokenService tokenService;
 
     public void login(UserLoginForm userLoginForm) {
         SiteUser siteUser = userService.findByEmail(userLoginForm.getEmail());
 
-        if (!passwordEncoder.matches(userLoginForm.getPassword(), siteUser.getPassword())) {
-            throw new CustomException(ErrorCode.INVALID_INPUT_EMAIL_OR_PASSWORD);
-        }
+        siteUser.isPasswordMatched(passwordEncoder, siteUser.getPassword());
 
         // 2. 인증 객체 생성 및 Context 저장
         // a. UserDetails 정보 가져오기
@@ -42,5 +41,13 @@ public class LoginService {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    public void requestPasswordChange(String email) {
+        SiteUser siteUser = userService.findByEmail(email);
+
+        String token = tokenService.createAndSaveToken(email);
+
+        mailService.sendChangePasswordMail(token, siteUser);
     }
 }

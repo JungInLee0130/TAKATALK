@@ -26,3 +26,42 @@
     text-align: center;
     margin-bottom: 10px;
 }
+.left-body {
+    display: flex;
+    flex-direction: column;
+}
+.profile-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+.profile-image-wrapper {
+    margin: 0;
+    margin-left: 5px;
+}
+.profile-image-wrapper .profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.profile-nickname-wrapper {
+    margin: 0;
+}
+.profile-nickname-wrapper p{
+    margin : 0;
+    line-height: 10vh;
+}
+.channel-categorized-group {
+    width: 100%;
+    box-sizing: border-box;
+}
+.categorized-channel-table {
+    width: 100%;
+    border: 1px solid black;
+}
+.categorized-channel-table-body {
+
+}
+.categorized-channel-table-row {
+    border: 1px solid black;
+}

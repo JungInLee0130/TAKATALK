@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class TokenService {
@@ -21,18 +19,9 @@ public class TokenService {
     @Transactional
     public String createAndSaveToken(String mail) {
         // 토큰 생성 + 만료시간 -> h2에 저장
-        ResetToken resetToken = createToken(mail);
+        ResetToken resetToken = ResetToken.create(mail);
         resetTokenRepository.save(resetToken);
         return resetToken.getUuid();
-    }
-
-    private ResetToken createToken(String mail) {
-        ResetToken resetToken = ResetToken.builder()
-                .uuid(UUID.randomUUID().toString())
-                .email(mail)
-                .expirationMinutes(15L)   // 15분
-                .build();
-        return resetToken;
     }
 
     /*

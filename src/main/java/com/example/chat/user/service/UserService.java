@@ -59,7 +59,7 @@ public class UserService {
         }
     }
 
-    public SiteUser create (UserCreateForm userCreateForm){
+    public SiteUser create(UserCreateForm userCreateForm){
         /*중복 회원 체크*/
         userRepository.findByEmail(userCreateForm.email())
                 .ifPresent(error -> {
@@ -89,7 +89,7 @@ public class UserService {
                 .username(userCreateForm.username())
                 .email(userCreateForm.email())
                 .nickname(nickname)
-                .password(passwordEncoder.encode(userCreateForm.password()))
+                .password(userCreateForm.password())
                 .birthday(dateTime)
                 .profile(null)
                 .build();
@@ -115,16 +115,19 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-
-    public void changePassword(String email, String password) {
+    // 비즈니스 로직 : 이메일로 유저를 찾아서 비밀번호를 암호화해서 저장한다.
+    @Transactional
+    public void updatePassword(String email, String newPassword) {
         SiteUser siteUser = findByEmail(email);
-        siteUser.updatePassword(password);
+        siteUser.updatePassword(passwordEncoder, newPassword);
     }
 
+    // 시나리오 로직 : 토큰을 검증하고, 비밀번호를 변경하고, 토큰을 삭제한다.
     @Transactional
-    public void changePassword(String email, String newPassword, String token) {
+    public void resetPassword(String newPassword, String token) {
+        String email = tokenService.validateTokenAndGetEmail(token);
         // 비밀번호 변경
-        changePassword(email, newPassword);
+        updatePassword(email, newPassword);
         // 토큰은 1회용이므로 삭제
         tokenService.deleteToken(token);
     }

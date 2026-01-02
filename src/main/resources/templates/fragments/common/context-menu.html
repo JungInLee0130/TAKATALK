@@ -8,4 +8,13 @@
       </ul>
     </div>
   </div>
+  <div th:fragment="channelListContextMenu">
+    <div id="channelListContextMenu" class="context-menu">
+      <ul>
+        <li onclick="createCategoryModal()">카테고리 만들기</li>
+        <li onclick="createChannelModal()">채널 만들기</li>
+        <li onclick="inviteGroupModal()">서버에 초대하기</li>
+      </ul>
+    </div>
+  </div>
 </html>
