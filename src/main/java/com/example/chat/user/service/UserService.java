@@ -4,6 +4,7 @@ import com.example.chat.global.file.FileService;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.login.service.TokenService;
+import com.example.chat.user.domain.RoleType;
 import com.example.chat.user.dto.ProfileRequest;
 import com.example.chat.user.domain.UserCreateForm;
 import com.example.chat.user.dto.UserResponse;
@@ -61,38 +62,33 @@ public class UserService {
 
     public SiteUser create(UserCreateForm userCreateForm){
         /*중복 회원 체크*/
-        userRepository.findByEmail(userCreateForm.email())
+        duplicateUser(userCreateForm.email());
+        SiteUser siteUser = createUser(userCreateForm);
+        return userRepository.save(siteUser);
+    }
+
+    private void duplicateUser(String email) {
+        userRepository.findByEmail(email)
                 .ifPresent(error -> {
                     throw new CustomException(ErrorCode.DUPLICATED_USER);
                 });
-
-        SiteUser siteUser = createUser(userCreateForm);
-        userRepository.save(siteUser);
-
-        return siteUser;
     }
 
     private SiteUser createUser(UserCreateForm userCreateForm) {
-        String nickname = userCreateForm.nickname();
-        /*닉네임이 없다면*/
-        if (!StringUtils.hasText(userCreateForm.nickname())) {
-            nickname = userCreateForm.username();
-        }
-
         int year = Integer.parseInt(userCreateForm.birthYear());
         int month = Integer.parseInt(userCreateForm.birthMonth());
         int day = Integer.parseInt(userCreateForm.birthDay());
+        LocalDate birthDay = LocalDate.of(year, month, day);
 
-        LocalDate dateTime = LocalDate.of(year, month, day);
-
-        SiteUser siteUser = SiteUser.builder()
-                .username(userCreateForm.username())
-                .email(userCreateForm.email())
-                .nickname(nickname)
-                .password(userCreateForm.password())
-                .birthday(dateTime)
-                .profile(null)
-                .build();
+        SiteUser siteUser = SiteUser.create(
+                userCreateForm.username(),
+                userCreateForm.nickname(),
+                userCreateForm.email(),
+                userCreateForm.password(),
+                birthDay,
+                null,
+                passwordEncoder
+        );
 
         return siteUser;
     }
@@ -133,8 +129,7 @@ public class UserService {
     }
 
     public UserResponse getUserDetails(Long siteUserId) {
-        SiteUser siteUser = userRepository.findById(siteUserId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        SiteUser siteUser = findById(siteUserId);
 
         UserResponse response = UserResponse.builder()
                 .nickname(siteUser.getNickname())

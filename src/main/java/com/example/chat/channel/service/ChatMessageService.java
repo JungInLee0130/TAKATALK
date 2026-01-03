@@ -3,7 +3,7 @@ package com.example.chat.channel.service;
 import com.example.chat.channel.domain.ChatMessageType;
 import com.example.chat.channel.dto.ChatMessageRequest;
 import com.example.chat.channel.dto.ChatMessageResponse;
-import com.example.chat.channel.entity.Channels;
+import com.example.chat.channel.entity.Channel;
 import com.example.chat.channel.entity.ChatMessages;
 import com.example.chat.channel.repository.ChatMessageRepository;
 import com.example.chat.user.entity.SiteUser;
@@ -28,7 +28,7 @@ public class ChatMessageService {
     private final UserService userService;
 
     public ChatMessageResponse save(CustomUserDetails userDetails, ChatMessageRequest request) {
-        Channels channel = channelService.findById(request.getChannelId()); // 쿼리 1번
+        Channel channel = channelService.findById(request.getChannelId()); // 쿼리 1번
 
         SiteUser siteUser = userService.findById(userDetails.getId());  // 쿼리 x. 실제로 id값을 제외한 다른 value를 조회할때 쿼리나감.
 
@@ -87,7 +87,7 @@ public class ChatMessageService {
     }
 
     public ChatMessages saveSystemMessage(Long channelId, Long siteUserId, String content, ChatMessageType type) {
-        Channels channel = channelService.getReferenceById(channelId);
+        Channel channel = channelService.getReferenceById(channelId);
         SiteUser siteUser = userService.getReferenceById(siteUserId);
         ChatMessages welcomeMsg = ChatMessages.builder()
                 .channel(channel)

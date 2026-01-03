@@ -289,14 +289,63 @@ $(document).ready(function () {
     }
 });
 
-function createChannel() {
+/* 카테고리 생성 */
+function createCategory(groupId) {
+    const categoryName = document.getElementById("categoryNameInput").value;
+    const isSecret = document.getElementById("isSecretCategoryToggle");
+
+    if (!categoryName) {
+        alert("비어있는 항목이 있습니다!");
+        return;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: `/category/create`,
+        contentType: 'application/json',
+        data: JSON.stringify({
+            groupId : groupId,
+            categoryName : categoryName,
+            isSecret : isSecret ? isSecret.checked : false
+        }),
+        statusCode: {
+            201 : function (data,textStatus,jqXHR) {
+                console.log(jqXHR);
+                const newLocation = jqXHR.getResponseHeader('Location');
+                if (newLocation) {
+                    location.href = newLocation;
+                } else {
+                    alert("location is null");
+                }
+            },
+        },
+        success : function () {
+            console.log("category create success");
+        },
+        error : function (jqXHR) {
+            console.log(jqXHR.status);
+            console.log(jqXHR);
+        }
+    })
+}
+
+/*채널 생성*/
+function createChannel(groupId, categoryId) {
+    const channelName = document.getElementById("channelNameInput").value;
+    const channelType = document.querySelector('input[name = "channelType"]:checked').value;
+    const isSecret = document.getElementById("isSecretToggle");
+
+    if (!channelName || !channelType) { // isSecret은 default = false
+        alert("비어있는 항목이 있습니다!");
+        return;
+    }
     /* requestbody */
     const requestBodyData = {
         groupId : groupId,
-        categoryId : categoryId,
-        channelName : document.getElementById("createChannelName").value,
-        channelType : document.querySelector('input[name = "channelType"]:checked').value,
-        isSecret : document.getElementById("createChannelIsSecret").checked
+        categoryId : categoryId,    // currentCategoryId ? categories.id : null
+        channelName : channelName,
+        channelType : channelType,
+        isSecret : isSecret ? isSecret.checked : false
     }
 
     $.ajax({
@@ -321,6 +370,7 @@ function createChannel() {
             }
         },
         error : function (request, error) {
+            // parameter id == null 일때 예외처리
             console.log(request);
         }
     });

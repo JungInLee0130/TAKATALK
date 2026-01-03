@@ -1,10 +1,8 @@
 package com.example.chat.group.service;
 
-import com.example.chat.category.entity.Categories;
 import com.example.chat.category.repository.CategoryRepository;
 import com.example.chat.category.dto.CategoryResponse;
 import com.example.chat.channel.dto.ChannelResponse;
-import com.example.chat.channel.entity.Channels;
 import com.example.chat.channel.repository.ChannelRepository;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
@@ -12,7 +10,7 @@ import com.example.chat.global.file.FileService;
 import com.example.chat.group.dto.ChannelGroupResponse;
 import com.example.chat.group.dto.GroupResponse;
 import com.example.chat.group.dto.GroupFormRequest;
-import com.example.chat.group.entity.Groups;
+import com.example.chat.group.entity.Group;
 import com.example.chat.group.repository.GroupRepository;
 import com.example.chat.groupmember.domain.GroupRole;
 import com.example.chat.groupmember.entity.GroupMember;
@@ -25,11 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +42,7 @@ public class GroupService {
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         // 1. 닉네임 저장 그룹 생성
-        Groups group = Groups.create(request.name());
+        Group group = Group.create(request.name());
         GroupMember groupMember = GroupMember.create(siteUser, group, GroupRole.OWNER);
 
         // 2. 프로필이 null이 아니면 업데이트
@@ -64,25 +58,15 @@ public class GroupService {
         return group.getId();
     }
 
+    @Transactional(readOnly = true)
     public ChannelGroupResponse accessGroup(Long groupId) {
-        List<Channels> channels = channelRepository.findByGroupId(groupId);
-
-        Map<Categories, List<ChannelResponse>> categoriesListMap = channels.stream()
-                .filter(channel -> channel.getCategories() != null)     // 1. 카테고리가 있는것
-                .collect(Collectors.groupingBy(Channels::getCategories, // 2. Category, ChannelResponse로 Mapping
-                        Collectors.mapping(ChannelResponse::from, Collectors.toList())));
-
-        List<CategoryResponse> categorizedChannels = categoriesListMap
-                .entrySet().stream()
-                .map(entry -> new CategoryResponse(
-                        entry.getKey().getId(),     // 1. id
-                        entry.getKey().getName(),   // 2. name
-                        entry.getValue()            // 3. channelResponse 리스트
-                ))
+        List<CategoryResponse> categorizedChannels = categoryRepository.findAllByGroupIdWithChannels(groupId)
+                .stream()
+                .map(CategoryResponse::from)
                 .toList();
 
-        List<ChannelResponse> uncategorizedChannels = channels.stream()
-                .filter(channel -> channel.getCategories() == null)
+        List<ChannelResponse> uncategorizedChannels = channelRepository.findByGroupIdAndCategoryIsNull(groupId)
+                .stream()
                 .map(ChannelResponse::from)
                 .toList();
 
@@ -93,7 +77,7 @@ public class GroupService {
         return response;
     }
 
-    public Groups findById(Long groupId) {
+    public Group findById(Long groupId) {
         return groupRepository.findById(groupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
     }
@@ -103,7 +87,7 @@ public class GroupService {
         // 권한 체크 : 방장이나 관리자만 확인가능
         validateGroupMemberManagerRole(groupId, siteUserId);
 
-        Groups group = groupRepository.findById(groupId)
+        Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
         return group.getInviteCode();
     }
@@ -117,7 +101,7 @@ public class GroupService {
     }
 
     public GroupResponse getGroupInfo(Long groupId) {
-        Groups group = findById(groupId);
+        Group group = findById(groupId);
         return GroupResponse.builder()
                 .id(group.getId())
                 .name(group.getName())
@@ -129,7 +113,7 @@ public class GroupService {
         // 권한 체크 : 방장이나 관리자만 확인가능
         validateGroupMemberManagerRole(groupId, siteUserId);
 
-        Groups group = findById(groupId);
+        Group group = findById(groupId);
         group.updateInviteCode();
         return group.getInviteCode();
     }
@@ -147,7 +131,7 @@ public class GroupService {
         // 1. 수정과 삭제는 권한 검증
         validateGroupMemberManagerRole(groupId, userDetails.getId());
         // 2. 그룹 수정
-        Groups group = findById(groupId);   // 영속성 컨텍스트에 저장
+        Group group = findById(groupId);   // 영속성 컨텍스트에 저장
 
         group.updateName(request.name());
         // 프로필 이미지가 null 이면 null 저장 (기본 이미지 적용)

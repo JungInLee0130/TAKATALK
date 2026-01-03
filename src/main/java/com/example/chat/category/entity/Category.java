@@ -1,18 +1,18 @@
 package com.example.chat.category.entity;
 
-import com.example.chat.group.entity.Groups;
+import com.example.chat.channel.entity.Channel;
+import com.example.chat.group.entity.Group;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Categories {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
@@ -24,18 +24,24 @@ public class Categories {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", nullable = false)
-    private Groups group;
+    private Group group;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<Channel> channels = new ArrayList<>();
 
     @Builder
-    private Categories(String name, Boolean isSecret, Groups group) {
+    private Category(Long id, String name, Boolean isSecret, Group group, List<Channel> channels) {
+        this.id = id; // 테스트용. 어짜피 save 시도하려해도 jpa가 무시.
         this.name = name;
         this.isSecret = isSecret;
         this.group = group;
+        this.channels = (channels == null) ? new ArrayList<>() : channels;
     }
 
-    @Builder
-    public static Categories create(String name, Boolean isSecret, Groups group) {
-        return Categories.builder()
+
+    public static Category create(String name, Boolean isSecret, Group group) {
+        return Category.builder()
                 .name(name)
                 .isSecret(isSecret)
                 .group(group)
@@ -51,7 +57,7 @@ public class Categories {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Categories that = (Categories) o;
+        Category that = (Category) o;
         return Objects.equals(id, that.id);
     }
 

@@ -10,9 +10,9 @@
     box-sizing: border-box;
 
 
-    /*x축 스크롤 관련*/
+    /*스크롤 관련*/
     overflow-x: auto;
-    overflow: hidden;
+    overflow-y: scroll;
 }
 .left-header {
     display: flex;

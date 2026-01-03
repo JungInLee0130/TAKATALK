@@ -1,5 +1,6 @@
 package com.example.chat.group.controller;
 
+import com.example.chat.category.dto.CategoryResponse;
 import com.example.chat.group.dto.ChannelGroupResponse;
 import com.example.chat.group.dto.GroupResponse;
 import com.example.chat.group.service.GroupService;

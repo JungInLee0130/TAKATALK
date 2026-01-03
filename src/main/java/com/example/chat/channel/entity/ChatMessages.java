@@ -24,7 +24,7 @@ public class ChatMessages extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "channel_id")
-    private Channels channel;
+    private Channel channel;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "siteuser_id")
@@ -37,7 +37,7 @@ public class ChatMessages extends BaseTimeEntity {
 
     @Builder
     public ChatMessages(String content,
-                        Channels channel,
+                        Channel channel,
                         SiteUser siteUser,
                         ChatMessageType type) {
         this.content = content;
@@ -48,7 +48,7 @@ public class ChatMessages extends BaseTimeEntity {
 
     @Builder
     public static ChatMessages create (String content,
-                                       Channels channel,
+                                       Channel channel,
                                        SiteUser siteUser,
                                        ChatMessageType type) {
         return ChatMessages.builder()

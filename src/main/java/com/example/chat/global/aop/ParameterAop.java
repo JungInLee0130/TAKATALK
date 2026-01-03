@@ -23,9 +23,10 @@ public class ParameterAop {
         this.objectMapper = objectMapper;
     }
 
+    //  ||" +
+    //            "execution(* com.example.chat..service..*.*(..))
     // com.example.chat.login.controller 하위클래스 모두 적용. (연습)
-    @Pointcut("execution(* com.example.chat..controller..*.*(..)) ||" +
-            "execution(* com.example.chat..service..*.*(..))")
+    @Pointcut("execution(* com.example.chat..controller..*.*(..))")
     private void cut() {
 
     }

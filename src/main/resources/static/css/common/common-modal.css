@@ -1,6 +1,7 @@
-/* inviteModal 전용 스타일 */
+/* 공통 모달 스타일 */
 .modal {
     display: none;
+    flex-direction: column;
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -24,45 +25,76 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
     background-color: #313338; /* 디스코드 다크 모드 배경색 */
 }
-
 .modal-header {
     display:flex;
     justify-content: space-between;
     align-items: center;
 }
-
 .modal-header h2{
     margin-bottom: 10px;
     color: white;
     text-align: center;
     font-size: 24px;
 }
-
 .modal-body{
     margin-top: 20px;
 }
-
 .modal-body p{
     font-size: 14px;
     color: #b5bac1;
     margin-bottom: 20px;
 }
-
 .modal-footer{
     margin-top: 28px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 8px;
 }
 
+/* 섹션 */
+.section {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+.section-title {
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+/*입력창*/
+.input-wrapper {
+    display:flex;
+    align-items: center;
+    background-color: #1e1f22;
+    padding: 10px;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+.input-wrapper input {
+    border: none;
+    outline: none;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 버튼 */
 .btn-cancel {
-    background: none;
+    flex: 1;
+    background: #2E2E34;
     border: none;
     color: white;
     cursor: pointer;
     font-size: 14px;
-}
 
+    padding: 10px 24px;
+    border-radius: 7px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+.btn-cancel:hover {
+    background-color: #3f4147;
+}
 .btn-join {
     background-color: #5865f2;
     color: white;
@@ -72,12 +104,11 @@
     cursor: pointer;
     font-weight: 500;
     transition: background-color 0.2s;
+    white-space: nowrap;  /* 줄바꿈 x */
 }
-
 .btn-join:hover {
     background-color: #4752c4;
 }
-
 .btn-back {
     background: none;
     border: none;
@@ -85,18 +116,98 @@
     cursor: pointer;
     font-size: 14px;
 }
-
 .btn-primary {
+    flex: 1;
     background-color: #5865f2;
     color: white;
     border: none;
     padding: 10px 24px;
-    border-radius: 3px;
+    border-radius: 7px;
     cursor: pointer;
     font-weight: 500;
     transition: background-color 0.2s;
 }
-
 .btn-primary:hover {
     background-color: #4752c4;
+}
+
+/* 비공개 토글 슬라이더*/
+.toggle-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+.toggle-info {
+    flex: 1;    /*나머지 가용공간 모두 차지*/
+}
+
+/*비공개여부 슬라이드*/
+.switch {
+    margin-top: 20px;
+    flex-shrink: 0;     /*부모 공간이 좁아져도 줄어들지않음.*/
+    position: relative;
+    width: 40px;
+    height: 24px;
+    background: #6C6D74;
+    border-radius: 24px;
+    display: inline-block; /*히트박스, 다른 곳으로 옮겨도 잘나오려면 있어야함.*/
+}
+.switch input {
+    position: absolute; /* 문서 흐름에서 완전히 제외 (다른 요소를 밀지 않음) */
+    opacity: 0;
+    width: 0;
+    height: 0; /* 유령 클릭 방지*/
+}
+.slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #80848e;
+
+    border-radius: 24px;
+    cursor: pointer;
+
+    transition: .4s;
+}
+.slider:before { /*slider 안에 동그란 버튼*/
+    position: absolute; /*switch 기준*/
+    content: "x";
+
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: white;
+
+    color: #6C6D74;
+
+    /*요소 정렬*/
+    display: flex;
+    justify-content: center; /* 가로 중앙 */
+    align-items: center;     /* 세로 중앙 */
+
+    /*약간의 공백 마련*/
+    top: 3px;
+    left: 3px;
+
+    transition: .4s;
+}
+.switch input:checked + .slider { /* input이 checked 되면 slider를 */
+    background-color: #5865f2;
+}
+.switch input:checked + .slider:before {
+    transform: translateX(16px); /*16px 만큼 X축으로 이동*/
+    content: "✓"; /* content 변경 */
+    color: #5865f2;
+}
+
+.label-with-icon {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+.label-with-icon p {
+    margin-bottom: 0px;
 }

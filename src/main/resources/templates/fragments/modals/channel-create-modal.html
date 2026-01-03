@@ -1,18 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="../../../static/css/common/common.css">
-    <link rel="stylesheet" href="../../../static/css/common/common-modal.css">
-    <link rel="stylesheet" href="../../../static/css/channel/channel-create-modal.css">
-</head>
-<body>
-  <div class="modal" id="channelCreateModalWrapper" style="display: flex">
-    <div id="channelCreateModal" class="modal-content channel-modal">
+<html xmlns:th="http://www.thymeleaf.org">
+  <div th:fragment="channelCreateModal" id="channelCreateModal" class="modal">
+    <div class="modal-content channel-modal">
       <div class="modal-header">
         <h2>채널 만들기</h2>
-        <div class="modal-close-btn" onclick="closeChannelCreateModal()">
+        <div class="modal-close-btn" onclick="closeModal(this)">
           <svg width="24" height="24" viewBox="0 0 24 24">
             <path fill="currentColor"
                   d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
@@ -53,15 +45,15 @@
           </div>
         </div>
 
-          <div class="section">
-            <p class="section-title">채널 이름</p>
-            <div class="input-wrapper">
-              <span id="channelNamePrefix">#</span>
-              <input type="text" id="channelNameInput" class="text-input" placeholder="새로운 채널" maxlength="100">
-            </div>
+        <div class="section">
+          <p class="section-title">채널 이름</p>
+          <div class="input-wrapper">
+            <span id="channelNamePrefix">#</span>
+            <input type="text" id="channelNameInput" class="text-input" placeholder="새로운 채널" maxlength="100">
           </div>
-        <div class="section toggle-section">
+        </div>
 
+        <div class="toggle-section">
           <div class="toggle-info">
             <div class="label-with-icon">
               <svg width="16" height="16" viewBox="0 0 24 24">
@@ -82,12 +74,9 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn-cancel" onclick="closeChannelCreateModal()">취소</button>
-        <button type="button" id="submitChannelBtn" class="btn-primary" disabled>채널 만들기</button>
+        <button type="button" class="btn-cancel" onclick="closeModal(this)">취소</button>
+        <button type="button" id="submitChannelBtn" class="btn-primary">채널 만들기</button>
       </div>
     </div>
   </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> <!--JQUERY-->
-  <script src="../../../static/js/channel/channel-list-controller.js"></script>
-</body>
 </html>

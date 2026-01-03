@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <div th:fragment="categoryCreateModal" id="categoryCreateModal" class="modal">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h2>카테고리 생성</h2>
+        <div class="modal-close-btn" onclick="closeModal(this)">
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+                  d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="section">
+          <p class="section-title">카테고리 이름</p>
+          <div class="input-wrapper">
+            <input type="text" id="categoryNameInput" class="text-input" placeholder="새로운 카테고리" maxlength="100">
+          </div>
+        </div>
+
+        <div class="toggle-section">
+          <div class="toggle-info">
+            <div class="label-with-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M17 11V7a5 5 0 0 0-10 0v4H5v11h14V11h-2Zm-8 0V7a3 3 0 0 1 6 0v4H9Z"></path>
+              </svg>
+              <p class="type-label">비공개 카테고리</p>
+            </div>
+            <p class="type-desc">
+              카테고리를 비공개로 만들면 선택한 멤버들과 역할만 이 카테고리를 볼 수 있어요. 이 설정은 이 카테고리에 연결된 채널들에도 자동으로 적용돼요.
+            </p>
+          </div>
+          <!--스위치 버튼-->
+          <label class="switch">
+            <!--hidden-->
+            <input type="checkbox" id="isSecretCategoryToggle">
+            <span class="slider"></span>
+          </label>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeModal(this)">취소</button>
+        <button type="button" id="submitCategoryBtn" class="btn-primary">카테고리 만들기</button>
+      </div>
+    </div>
+  </div>
+</html>

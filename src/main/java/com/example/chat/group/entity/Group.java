@@ -16,7 +16,7 @@ import java.util.UUID;
 @SQLRestriction("is_deleted = false")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Groups {
+public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id")
@@ -33,15 +33,15 @@ public class Groups {
     private Boolean isDeleted = false;
 
     @Builder
-    private Groups(String name, String inviteCode) {
+    private Group(String name, String inviteCode) {
         this.name = name;
         this.inviteCode = inviteCode;
     }
 
-    public static Groups create(String name) {
+    public static Group create(String name) {
         String inviteCode = UUID.randomUUID().toString().substring(0, 8);
 
-        return Groups.builder()
+        return Group.builder()
                 .name(name)
                 .inviteCode(inviteCode)
                 .build();

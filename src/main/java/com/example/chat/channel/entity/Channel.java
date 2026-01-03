@@ -1,8 +1,8 @@
 package com.example.chat.channel.entity;
 
-import com.example.chat.category.entity.Categories;
+import com.example.chat.category.entity.Category;
 import com.example.chat.channel.domain.ChannelType;
-import com.example.chat.group.entity.Groups;
+import com.example.chat.group.entity.Group;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Channels {
+public class Channel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "channel_id")
@@ -32,36 +32,36 @@ public class Channels {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", nullable = false)
-    private Groups group;
+    private Group group;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = true)
-    private Categories categories;
+    private Category category;
 
     @Builder
-    private Channels(String name, ChannelType type, Boolean isSecret, Groups group, Categories categories) {
+    private Channel(String name, ChannelType type, Boolean isSecret, Group group, Category category) {
         this.name = name;
         this.type = type;
         this.isSecret = isSecret;
         this.group = group;
-        this.categories = categories;
+        this.category = category;
     }
 
     @Builder
-    public static Channels create(String name, ChannelType type, Boolean isSecret, Groups group,
-                                 Categories categories) {
-        return Channels.builder()
+    public static Channel create(String name, ChannelType type, Boolean isSecret, Group group,
+                                 Category category) {
+        return Channel.builder()
                 .name(name)
                 .type(type)
                 .isSecret(isSecret)
                 .group(group)
-                .categories(categories)
+                .category(category)
                 .build();
     }
 
     @Builder
-    public static Channels create(String name, ChannelType type, Boolean isSecret, Groups group) {
-        return Channels.builder()
+    public static Channel create(String name, ChannelType type, Boolean isSecret, Group group) {
+        return Channel.builder()
                 .name(name)
                 .type(type)
                 .isSecret(isSecret)
@@ -69,8 +69,8 @@ public class Channels {
                 .build();
     }
 
-    public void updateCategories(Categories categories) {
-        this.categories = categories;
+    public void updateCategories(Category category) {
+        this.category = category;
     }
 
 
@@ -78,8 +78,8 @@ public class Channels {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Channels channels = (Channels) o;
-        return Objects.equals(id, channels.id);
+        Channel channel = (Channel) o;
+        return Objects.equals(id, channel.id);
     }
 
     @Override

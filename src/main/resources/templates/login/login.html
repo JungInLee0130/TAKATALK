@@ -29,11 +29,11 @@
                 <div class="global-error-msg-wrapper">
                     <p id = "globalErrorMsg" class="error-msg"></p>
                 </div>
+
                 <div class="send-change-password-wrapper">
                     <button type="button" id="sendChangePasswordBtn">비밀번호를 잊으셨나요?</button>
-                    <!--비밀번호 재설정 클릭시-->
-
                 </div>
+
                 <div class="login-button-wrapper">
                     <button type="submit" id="loginBtn">로그인</button>
                 </div>
@@ -41,6 +41,7 @@
                 <form th:action="@{/logout}">
                     <button type="submit">로그아웃</button>
                 </form>
+
                 <div class="find-account">
                     <p>계정이 필요한가요?</p>
                     <a th:href="@{/user/signup}">가입하기</a>
@@ -49,7 +50,7 @@
       </div>
   </div>
     <!--로그인 모달-->
-    <div th:replace="~{login/login-modal :: passwordChangeNotificationModal}"></div>
+    <div th:replace="~{fragments/modals/login-modal :: passwordChangeNotificationModal}"></div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <!--2. 타임리프 변수 선언-->
@@ -62,5 +63,5 @@
 <!--4. 비즈니스 로직-->
 <script th:src="@{/js/login/login-controller.js}"></script>
 <!--5. 메인 실행 파일-->
-<script th:scr="@{/js/common/main.js}"></script>
+<script th:src="@{/js/common/main.js}"></script>
 </html>

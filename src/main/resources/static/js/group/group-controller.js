@@ -1,3 +1,7 @@
+const groupFormModal = document.getElementById('groupFormModal');
+const inviteGroupModal = document.getElementById('inviteGroupModal');
+const inviteManageModal = document.getElementById('inviteManageModal');
+
 $(document).ready(function () {
     // 이미지 올릴때
     document.getElementById("groupProfileInput").addEventListener('change', function (event) {
@@ -84,7 +88,7 @@ function openCreateGroupModal() {
         submitGroupForm("POST", "/group/create");
     };
 
-    openModal('groupFormModal');
+    openModal(groupFormModal);
 }
 
 // 그룹 편집 모달
@@ -116,7 +120,7 @@ function openEditGroupModal() {
             };
 
             // 4. groupFormModal 열기
-            openModal('groupFormModal');
+            openModal(groupFormModal);
         },
         error : function (jqXHR) {
             if (jqXHR.responseJSON) {
@@ -167,12 +171,12 @@ function submitGroupForm(method, url) {
                     console.log("Location 헤더를 찾을수없습니다.")
                 }
 
-                closeModal('groupFormModal');
+                closeModal(groupFormModal);
             }
         },
         success: function () {
             console.log("그룹이 성공적으로 수정되었습니다.");
-            closeModal('groupFormModal');
+            closeModal(groupFormModal);
         },
         error: function (jqXHR) {
             if (jqXHR.status) {
@@ -184,6 +188,47 @@ function submitGroupForm(method, url) {
             } else {
                 console.log(error);
             }
+        }
+    });
+}
+/* 관리용 모달 열기2 */
+function openInviteManageModal() {
+    if (!currentGroupId) {
+        alert('서버를 먼저 선택해주세요.');
+        return;
+    }
+
+    $.ajax({
+        type: 'GET',
+        url: `/group/${currentGroupId}/invite-code`,
+        success: function (code) {
+            console.log(code);
+            document.getElementById("displayInviteCode").value = code;
+            openModal(inviteManageModal);
+        },
+        error : function (xhr) {
+            alert(xhr.responseJSON.message);
+        }
+    });
+}
+
+/* 관리용 모달 열기 */
+function openInviteGroupModal() {
+    if (!currentGroupId) {
+        alert('서버를 먼저 선택해주세요.');
+        return;
+    }
+
+    $.ajax({
+        type: 'GET',
+        url: `/group/${currentGroupId}/invite-code`,
+        success: function (code) {
+            console.log(code);
+            document.getElementById("inviteCode").value = code;
+            openModal(inviteGroupModal);
+        },
+        error : function (xhr) {
+            alert(xhr.responseJSON.message);
         }
     });
 }
