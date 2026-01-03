@@ -1,52 +1,94 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <div th:fragment="invite-modal">
-    <div class="modal" id="inviteGroupModal">
-      <div class="modal-content" th:if="${currentGroup != null}">
-        <div class="modal-header">
-          <div class="modal-header-text">
-            <h2>친구를 <span th:text="${currentGroup.name}" style="font-weight: bold">그룹 1</span> 그룹으로 초대하기</h2>
-          </div>
-          <div class="modal-close-btn-wrapper" onclick="closeInviteGroupModal()">
-            <p>X</p>
+  <div th:fragment="inviteGroupmodal" class="modal" id="inviteGroupModal">
+    <div class="modal-content" th:if="${currentGroup != null}">
+
+      <div class="modal-header">
+        <div class="modal-header-text">
+          <h2>친구를 <span th:text="${currentGroup.name}" style="font-weight: bold">그룹 1</span> 그룹으로 초대하기</h2>
+        </div>
+        <div class="modal-close-btn-wrapper" onclick="closeModal(this)">
+          <p>X</p>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="section">
+          <p class="section-title">수신자는 # <span th:text="${currentGroup.name}"></span>에 도착해요</p>
+        </div>
+        <div class="section">
+          <div class="input-wrapper">
+            <!--아마 검색버튼없이 자동으로 되야할거임(동적이벤트)"src="../../../static/images/search-icon.svg-->
+            <img class="search-icon" th:src="@{/images/search-icon.svg}">
+            <input class="text-input" type="text" placeholder="사용자명을 입력해주세요.">
           </div>
         </div>
-        <div class="modal-body">
-          <div>
-            <p>수신자는 # <span th:text="${currentGroup.name}"></span>에 도착해요</p>
-          </div>
-          <div class="search-friends">
-            <!--아마 검색버튼없이 자동으로 되야할거임(동적이벤트)-->
-            <img class="search-icon" th:src="@{/images/search-icon.svg}">
-            <!--<img class="search-icon" src="../../static/images/search-icon.svg">-->
-            <input class="search-input" type="text" placeholder="사용자명을 입력해주세요.">
-          </div>
+        <div class="section">
           <div class="friends-list">
             <!--검색되는 friendslist div 도배. 일정개수 넘어가면 스크롤-->
             <div class="friends-info">
               <div class="profile-wrapper">
                 <img th:src="@{/images/meeng.png}">
-                <!--<img src="../../static/images/meeng.png">-->
+                <!--<img src="../../../static/images/meeng.png">-->
               </div>
               <div class="nickname-wrapper">
                 <p>이정인</p>
               </div>
             </div>
-              <div class="btn-invite" onclick="inviteMember()">
-                <p>초대하기</p>
-              </div>
-          </div>
-          <div class="share-link-wrapper">
-            <p>또는 초대 코드 전송하기</p>
-            <div class="share-link-input-wrapper">
-              <input type="text" placeholder="CSDFWE" readonly>
-              <div class="btn-copy">
-                <p>복사하기</p>
-              </div>
+
+            <div class="btn-invite" onclick="inviteMember()">
+              <p>초대하기</p>
             </div>
-            <p>초대 링크가 7일 후에 만료돼요.</p>
+
           </div>
         </div>
+
+        <div class="section">
+          <p class="section-title">또는 초대 코드 전송하기</p>
+          <div class="input-wrapper">
+            <input type="text" class="text-input" placeholder="CSDFWE" id="inviteCode"readonly>
+            <div class="btn-copy">
+              <p>복사</p>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <p>초대 링크가 7일 후에 만료돼요.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div th:fragment="inviteManageModal" id="inviteManageModal" class="modal">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h2>친구 초대하기</h2>
+        <div class="modal-close-btn" onclick="closeModal(this)">
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+                  d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="section">
+          <p class="section-title">친구에게 아래 코드를 공유하여 서버로 초대하세요.</p>
+          <p class="section-title">초대 코드</p>
+          <div class="input-wrapper">
+            <input type="text" id="displayInviteCode" class="text-input" readonly>
+            <button type="button" class="btn-join" onclick="copyInviteCode()">복사</button>
+          </div>
+        </div>
+        <p id="inviteCodeErrorMsg" class="error-msg" style="display: none"></p>
+        <div class="section">
+          <p class="helper-text">코드를 재설정하면 이전 코드는 무효화됩니다.</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="resetInviteCode()" style="color: #ed4245;">코드 초기화</button>
+        <button type="button" class="btn-cancel" onclick="closeModal(this)">닫기</button>
       </div>
     </div>
   </div>

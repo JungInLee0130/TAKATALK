@@ -1,26 +1,6 @@
+const passwordChangeNotificationModal = document.getElementById('passwordChangeNotificationModal');
+
 document.addEventListener('DOMContentLoaded', (event) => {
-    /*
-    * 로그인 버튼 클릭시
-    * */
-
-    /*
-    * 이메일 검증
-    * */
-    function validateEmail(email) {
-        var emailRegex = new RegExp("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
-
-        if (email == '' || email == null) {
-            document.getElementById("emailErrorMsg").innerText = "필수 입력칸이에요.";
-            return false;
-        } else if (!email.match(emailRegex)) {
-            // 이메일 정규표현식 만족못하면
-            console.log("이메일 형식을 다시 작성해주세요.")
-            document.getElementById("emailErrorMsg").innerText = "이메일 형식을 다시 작성해주세요.";
-            return false;
-        }
-        return true;
-    }
-
     /*
     * 비밀번호 재설정 메일 버튼 클릭시
     * */
@@ -30,11 +10,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         if(!validateEmail(email)) return;
 
-        /*
-        * 유효성 검증 성공시 modal창 활성화
-        * */
-        modal.style.display = "block";
-
         $.ajax({
             type: 'POST',
             url: '/login/send-change-password',
@@ -43,17 +18,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 mail : email
             }),
             success: function () {
+                /*
+                * 유효성 검증 성공시 modal창 활성화
+                * */
+                passwordChangeNotificationModal.style.display = 'flex';
+
                 document.getElementById("emailErrorMsg").innerText = "";
                 document.getElementById("passwordErrorMsg").innerText = "";
-                /*if (response === "SUCCESS") {
-                    document.getElementById("emailErrorMsg").innerText = "";
-                    document.getElementById("passwordErrorMsg").innerText = "";
-                } else {
-                    alert(response);
-                }*/
             },
             error : function (request, error) {
-                let errorCode = request.responseJSON.code;
+                console.log(request, error);
+                let errorCode = request.status;
                 let errorMsg = request.responseJSON.message;
                 console.log(errorCode + ": " + errorMsg);
 
@@ -75,3 +50,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     };
 });
+
+/*
+* 이메일 검증
+* */
+function validateEmail(email) {
+    var emailRegex = new RegExp("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
+
+    if (email == '' || email == null) {
+        document.getElementById("emailErrorMsg").innerText = "필수 입력칸이에요.";
+        return false;
+    } else if (!email.match(emailRegex)) {
+        // 이메일 정규표현식 만족못하면
+        console.log("이메일 형식을 다시 작성해주세요.")
+        document.getElementById("emailErrorMsg").innerText = "이메일 형식을 다시 작성해주세요.";
+        return false;
+    }
+    return true;
+}

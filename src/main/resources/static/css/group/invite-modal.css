@@ -1,82 +1,14 @@
-#inviteGroupModal.modal {
-    display: none;
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 1000;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(2px); /* 배경 살짝 흐리게 (디스코드 느낌) */
-}
-
 #inviteGroupModal .modal-content {
     padding: 32px 40px;
-    width: 600px;
-
-    background-color: #313338; /* 디스코드 다크 모드 배경색 */
-
-    position: fixed;
-    left: 50vw;
-    top: 50vh;
-    transform: translate(-50%, -50%);
-
-    color: #dbdee1;
-    border-radius: 10px;
-    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
-
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    color: white;
-    font-size: 16px;
+    width: 500px;
 }
 
 #inviteGroupModal .modal-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin: 10px 0px;
 }
 
-#inviteGroupModal .modal-header h2 {
-    margin: 0;
-}
-
-#inviteGroupModal .modal-header-text {
-}
-
-#inviteGroupModal .modal-body {
-    width: 100%;
-
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-#inviteGroupModal .modal-body h2{
-    margin-bottom: 10px;
-}
-
-#inviteGroupModal .modal-body p {
-    margin: 0;
-}
-
-#inviteGroupModal .search-friends {
-    width: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-
-    box-sizing: border-box;
-}
 #inviteGroupModal .search-icon {
-    padding: 5px;
-    height: 40px;
+    margin-right: 5px;
     box-sizing: border-box;
 }
 
@@ -90,12 +22,15 @@
 
 #inviteGroupModal .friends-list {
     margin-bottom: 10px;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     overflow-y: auto;
     box-sizing: border-box;
 }
+
 #inviteGroupModal .friends-info {
     display: flex;
     align-items: center;
@@ -122,55 +57,37 @@
     object-fit: cover;
     box-sizing: border-box;
 }
-#inviteGroupModal .nickname-wrapper {
+#inviteGroupModal .nickname-wrapper{
     box-sizing: border-box;
 }
-#inviteGroupModal .nickname-wrapper p {
-
+#inviteGroupModal .nickname-wrapper p{
+    margin: 0;
 }
 #inviteGroupModal .btn-invite {
     box-sizing: border-box;
     cursor: pointer;
+    background-color: #6C6D74;
+    padding: 7px 15px; /* 버튼 크기 조절 */
+    border: none;
+    border-radius: 7px;
 }
-#inviteGroupModal .friends-table {
+#inviteGroupModal .btn-invite p {
     margin: 0;
     color: white;
 }
 
-#inviteGroupModal .friends-table-row {
-}
-
-
-#inviteGroupModal .share-link-wrapper {
-
-}
-
-#inviteGroupModal .share-link-input-wrapper{
-    width: 100%;
-    height: 40px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 5px;
-    margin: 10px 0;
-
-    box-sizing: border-box;
-}
-
-#inviteGroupModal .share-link-input-wrapper input{
-    height: 40px;
-    padding: 5px;
-    border-radius: 7px;
-    width: 100%;
-}
-
 #inviteGroupModal .btn-copy{
+    background-color: #5865f2; /* 디스코드 브랜드 색상 */
+    padding: 7px 18px; /* 버튼 크기 조절 */
+    border: none;
+    border-radius: 7px;
+    box-sizing: border-box;
     cursor: pointer;
 }
 #inviteGroupModal .btn-copy p {
     white-space: nowrap;  /* 줄바꿈 x */
+    margin: 0;
+    color: white;
 }
 
 #inviteGroupModal .invite-channel-modal .confirm-btn-wrapper {
@@ -213,4 +130,9 @@
 .invite-display-group {
     display: flex;
     gap: 8px;
+    height: 40px;
+}
+
+#inviteManageModal .modal-content {
+    padding: 32px 40px;
 }

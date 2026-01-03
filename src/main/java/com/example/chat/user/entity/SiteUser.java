@@ -7,6 +7,7 @@ import com.example.chat.user.domain.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 
@@ -54,6 +55,14 @@ public class SiteUser extends BaseTimeEntity {
     public static SiteUser create(String username, String nickname, String email,
                                   String rawPassword, LocalDate birthDay, String profile,
                                   PasswordEncoder passwordEncoder) {
+        /*닉네임이 없다면 : nickname에 username 값을 대입*/
+        if (!StringUtils.hasText(nickname)) {
+            nickname = username;
+        }
+        if (!StringUtils.hasText(profile)) {
+            profile = null;
+        }
+
         // 먼저 validation 가능
         return SiteUser.builder()
                 .username(username)

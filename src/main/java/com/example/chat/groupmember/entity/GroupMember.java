@@ -3,7 +3,7 @@ package com.example.chat.groupmember.entity;
 import com.example.chat.global.auditing.BaseTimeEntity;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
-import com.example.chat.group.entity.Groups;
+import com.example.chat.group.entity.Group;
 import com.example.chat.groupmember.domain.GroupRole;
 import com.example.chat.user.entity.SiteUser;
 import jakarta.persistence.*;
@@ -27,7 +27,7 @@ public class GroupMember extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id")
-    private Groups group;
+    private Group group;
 
     @Enumerated(EnumType.STRING)
     private GroupRole role;
@@ -35,13 +35,13 @@ public class GroupMember extends BaseTimeEntity {
     private Boolean isOnline = false;
 
     @Builder
-    private GroupMember(SiteUser siteUser, Groups group, GroupRole role) {
+    private GroupMember(SiteUser siteUser, Group group, GroupRole role) {
         this.siteUser = siteUser;
         this.group = group;
         this.role = role;
     }
 
-    public static GroupMember create(SiteUser siteUser, Groups group, GroupRole role) {
+    public static GroupMember create(SiteUser siteUser, Group group, GroupRole role) {
         return GroupMember.builder()
                 .siteUser(siteUser)
                 .group(group)

@@ -3,7 +3,7 @@ package com.example.chat.groupmember.service;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.group.dto.GroupResponse;
-import com.example.chat.group.entity.Groups;
+import com.example.chat.group.entity.Group;
 import com.example.chat.group.repository.GroupRepository;
 import com.example.chat.groupmember.domain.GroupRole;
 import com.example.chat.groupmember.entity.GroupMember;
@@ -24,7 +24,7 @@ public class GroupMemberService {
     private final UserRepository userRepository;
 
     public List<GroupResponse> getGroupList(Long siteUserId) {
-        List<Groups> groupList = groupMemberRepository.findGroupBySiteUserId(siteUserId);
+        List<Group> groupList = groupMemberRepository.findGroupBySiteUserId(siteUserId);
 
         return groupList.stream()
                 .map(group -> GroupResponse.builder()
@@ -37,7 +37,7 @@ public class GroupMemberService {
 
     public void joinGroup(String inviteCode, Long siteUserId){
         // 1. 그룹 찾기
-        Groups group = groupRepository.findByInviteCode(inviteCode)
+        Group group = groupRepository.findByInviteCode(inviteCode)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
 
         if (groupMemberRepository.existsByGroupIdAndSiteUserId(group.getId(), siteUserId)) {

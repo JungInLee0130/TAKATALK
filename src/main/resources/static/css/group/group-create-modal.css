@@ -1,35 +1,11 @@
 #groupFormModal .modal-content{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
     padding: 32px 40px;
-    color: white;
 }
 
 #groupFormModal .modal-header{
     text-align: center;
 }
 
-#groupFormModal .modal-body{
-    margin: 0;
-}
-
-#groupFormModal p {
-    margin: 0;
-    color: white;
-}
-
-#groupFormModal input {
-    margin: 10px 0;
-    padding: 10px 5px;
-    width: 100%;
-    height: 40px;
-    border-radius: 7px;
-}
-
-#groupFormModal .profile-wrapper {
-
-}
 #groupFormModal .profile-wrapper {
     display: flex;
     flex-direction: column;

@@ -1,16 +1,16 @@
 package com.example.chat.channel.service;
 
-import com.example.chat.category.entity.Categories;
+import com.example.chat.category.entity.Category;
 import com.example.chat.category.repository.CategoryRepository;
 import com.example.chat.channel.dto.*;
-import com.example.chat.channel.entity.Channels;
+import com.example.chat.channel.entity.Channel;
 import com.example.chat.channel.repository.ChannelRepository;
 import com.example.chat.channel.repository.ChatMessageRepository;
 import com.example.chat.friends.FriendService;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.group.repository.GroupRepository;
-import com.example.chat.group.entity.Groups;
+import com.example.chat.group.entity.Group;
 import com.example.chat.user.repository.UserRepository;
 import com.example.chat.groupmember.repository.GroupMemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +33,10 @@ public class ChannelService {
 
     @Transactional
     public ChannelCreateResponse createChannel(Long categoryId, Long groupId, CreateChannelRequest request) {
-        Groups group = groupRepository.findById(groupId)
+        Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
 
-        Channels channel = Channels.builder()
+        Channel channel = Channel.builder()
                 .type(request.channelType())
                 .name(request.channelName())
                 .isSecret(request.isSecret())
@@ -44,7 +44,7 @@ public class ChannelService {
                 .build();
 
         if (categoryId != null) {
-            Categories category = categoryRepository.findById(categoryId)
+            Category category = categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
             channel.updateCategories(category);
         }
@@ -95,7 +95,7 @@ public class ChannelService {
     }*/
 
     public List<ChannelResponse> getChannels(Long groupId) {
-        List<Channels> channels = channelRepository.findByGroupId(groupId);
+        List<Channel> channels = channelRepository.findByGroupId(groupId);
 
         return channels.stream()
                 .map(channel -> new ChannelResponse(channel.getId(),
@@ -105,18 +105,18 @@ public class ChannelService {
                 .collect(Collectors.toList());
     }
 
-    public Channels findById(Long channelId) {
-        Channels channel = channelRepository.findById(channelId)
+    public Channel findById(Long channelId) {
+        Channel channel = channelRepository.findById(channelId)
                 .orElseThrow(() -> new CustomException(ErrorCode.CHANNEL_NOT_FOUND));
         return channel;
     }
 
-    public Channels getReferenceById(Long channelId) {
+    public Channel getReferenceById(Long channelId) {
         return channelRepository.getReferenceById(channelId);
     }
 
     public ChannelResponse getChannelInfo(Long channelId) {
-        Channels channel = findById(channelId);
+        Channel channel = findById(channelId);
         return ChannelResponse.builder()
                 .id(channel.getId())
                 .name(channel.getName())

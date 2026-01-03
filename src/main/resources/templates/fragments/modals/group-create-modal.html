@@ -4,9 +4,16 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2 id="modalTitle">서버 커스터마이즈 하기</h2>
-        <p id="modalDescription">새로운 서버에 이름과 아이콘을 부여해 개성을 드러내 보세요. 나중에 언제든 바꿀수있어요.</p>
+        <div class="modal-close-btn" onclick="closeModal(this)">
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <path fill="currentColor"
+                  d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
+          </svg>
+        </div>
       </div>
       <div class="modal-body">
+        <p id="modalDescription">새로운 서버에 이름과 아이콘을 부여해 개성을 드러내 보세요. 나중에 언제든 바꿀수있어요.</p>
+
         <div class="profile-wrapper">
           <input type="file" id="groupProfileInput" accept="image/*" hidden>
           <div class="upload-circle" onclick="document.getElementById('groupProfileInput').click()">
@@ -29,14 +36,22 @@
             <img id="imagePreview" src="" style="display: none;">
           </div>
         </div>
-        <div>
-          <p>서버이름 <span style="color: red">*</span></p>
-          <input type="text" id="groupNameInput" placeholder="서버이름">
+
+        <div class="section">
+          <p class="section-title">서버이름 <span style="color: red">*</span></p>
+          <div class="input-wrapper">
+            <input type="text" id="groupNameInput" class="text-input" placeholder="서버이름">
+          </div>
         </div>
-          <p>서버를 만들면 TAKATALK의 <span style="color: skyblue">커뮤니티 지침</span>에 동의하게 됩니다.</p>
+
+        <div class="section">
+          <p class="section-title">서버를 만들면 TAKATALK의 <span style="color: skyblue">커뮤니티 지침</span>에 동의하게 됩니다.</p>
+        </div>
+
       </div>
+
       <div class="modal-footer">
-        <button type="button" class="btn-back" onclick="closeGroupFormModal()">뒤로가기</button>
+        <button type="button" class="btn-back" onclick="closeModal(this)">뒤로가기</button>
         <button type="button" id="groupSubmitBtn" class="btn-primary">만들기</button>
       </div>
     </div>

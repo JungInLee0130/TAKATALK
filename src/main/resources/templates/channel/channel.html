@@ -28,13 +28,20 @@
     <div th:replace="~{fragments/layout/member-list :: memberList}"></div>
   </div>
   <!-- 가입용 모달 -->
-  <!--<div th:replace="~{fragments/modals :: inviteJoinModal}"></div>-->
+  <div th:replace="~{fragments/modals/modals :: inviteJoinModal}"></div>
   <!-- 관리용 모달 -->
-  <!--<div th:replace="~{fragments/modals :: inviteManageModal}"></div>-->
-  <div th:replace="~{fragments/modals/invite-modal :: invite-modal}"></div>
+  <div th:replace="~{fragments/modals/invite-modal :: inviteManageModal}"></div>
+  <div th:replace="~{fragments/modals/invite-modal :: inviteGroupmodal}"></div>
+  <!-- 그룹 생성 모달 -->
   <div th:replace="~{fragments/modals/group-create-modal :: groupModal}"></div>
-  <!-- 2. 그룹 우클릭 이벤트 모달 -->
+  <!-- 카테고리 생성 모달 -->
+  <div th:replace="~{fragments/modals/category-create-modal :: categoryCreateModal}"></div>
+  <!-- 채널 생성 모달 -->
+  <div th:replace="~{fragments/modals/channel-create-modal :: channelCreateModal}"></div>
+  <!-- 그룹 우클릭 이벤트 모달 -->
   <div th:replace="~{fragments/common/context-menu :: groupContextMenu}"></div>
+  <!-- 채널 우클릭 이벤트 모달 -->
+  <div th:replace="~{fragments/common/context-menu :: channelListContextMenu}"></div>
 </body>
 <!--1. 외부 js 로직-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script> <!--SOCKJS-->
@@ -43,6 +50,7 @@
 <!--2. 타임리프 변수 선언-->
 <script th:inline="javascript">
   const currentGroupId = [[${currentGroup != null ? currentGroup.id : null}]];
+  const currentCategoryId = [[${categories != null ? categories.id : null}]];
   const currentChannelId = [[${currentChannel != null ? currentChannel.id : null}]];
   const csrfToken = [[${_csrf.token}]];
   const csrfHeader = [[${_csrf.headerName}]];
@@ -52,6 +60,8 @@
 <script th:src="@{/js/common/ui-controller.js}"></script>
 <script th:src="@{/js/common/context-menu.js}"></script>
 <script th:src="@{/js/group/group-controller.js}"></script>
+<script th:src="@{/js/channel/channel-list-controller.js}"></script>
+<script th:src="@{/js/category/category-controller.js}"></script>
 <!--4. 메인 실행 파일-->
 <script th:src="@{/js/common/main.js}"></script>
 </html>

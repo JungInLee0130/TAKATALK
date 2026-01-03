@@ -5,6 +5,8 @@
 @import "../group/invite-modal.css";
 @import "../group/group-create-modal.css";
 @import "../common/context-menu.css";
+@import "../channel/channel-create-modal.css";
+@import "../category/category-create-modal.css";
 
 
 body {

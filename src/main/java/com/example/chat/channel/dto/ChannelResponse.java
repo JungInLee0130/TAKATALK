@@ -1,7 +1,7 @@
 package com.example.chat.channel.dto;
 
 import com.example.chat.channel.domain.ChannelType;
-import com.example.chat.channel.entity.Channels;
+import com.example.chat.channel.entity.Channel;
 import lombok.Builder;
 
 @Builder
@@ -10,7 +10,7 @@ public record ChannelResponse(Long id,
                               ChannelType type,
                               Boolean isSecret) {
 
-    public static ChannelResponse from (Channels channel){
+    public static ChannelResponse from (Channel channel){
         return ChannelResponse.builder()
                 .id(channel.getId())
                 .name(channel.getName())
