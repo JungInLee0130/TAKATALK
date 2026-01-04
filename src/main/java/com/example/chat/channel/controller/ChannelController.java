@@ -37,13 +37,12 @@ public class ChannelController {
     @PostMapping(value = "/create", produces = "application/string;charset=UTF-8") // UTF-8 설정
     public ResponseEntity<Void> createChannel(@RequestBody CreateChannelRequest request){
         ChannelCreateResponse response = channelService.createChannel(request.categoryId(), request.groupId(), request);
-        return ResponseEntity.created(URI.create("/channel/enter/" + response.getChannelId() + "?groupId=" + response.getGroupId())).build();
+        return ResponseEntity.created(URI.create("/channel/" + response.getChannelId())).build();
     }
-
     /*
     * 채널입장
     * */
-    @GetMapping("/enter/{channelId}")
+    /*@GetMapping("/enter/{channelId}")
     public String enterChannel(@AuthenticationPrincipal CustomUserDetails userDetails,
                                @PathVariable(name = "channelId") Long channelId,
                                @RequestParam(name = "groupId") Long currentGroupId,
@@ -69,6 +68,19 @@ public class ChannelController {
         model.addAttribute("chatMessageResponseList", chatMessageResponseList);
 
         return "channel/channel";
+    }*/
+    /** 채널 입장 : 채널 메시지 불러오기 **/
+    /*@GetMapping("/{channelId}")
+    public ResponseEntity<List<ChatMessageResponse>> enterChannel(@PathVariable(name = "channelId") Long channelId) {
+        List<ChatMessageResponse> chatMessageResponseList = chatMessageService.getOldMessage(channelId, null);
+        return ResponseEntity.ok(chatMessageResponseList);
+    }*/
+
+    @GetMapping("/{channelId}")
+    public String enterChannel(@PathVariable(name = "channelId") Long channelId, Model model) {
+        List<ChatMessageResponse> chatMessageResponseList = chatMessageService.getOldMessage(channelId, null);
+        model.addAttribute("chatMessageResponseList", chatMessageResponseList);
+        return "fragments/layout/chat-area :: messageList";
     }
 
     /*

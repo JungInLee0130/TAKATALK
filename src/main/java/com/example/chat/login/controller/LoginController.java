@@ -78,14 +78,6 @@ public class LoginController {
     /*
      * 비밀번호 변경 메일보내기(비동기처리)
      * */
-    /*@PostMapping("/send-change-password")
-    public CompletableFuture<ResponseEntity<String>> sendChangePasswordMail(@Valid @RequestBody MailRequest request) {
-        loginService.requestPasswordChange(request.mail());
-
-        return mailService.sendChangePasswordMail(siteUser)
-                .thenApply(str -> ResponseEntity.ok(str));
-    }*/
-
     @PostMapping("/send-change-password")
     public ResponseEntity<String> sendChangePasswordMail(@Valid @RequestBody MailRequest request) {
         loginService.requestPasswordChange(request.mail());

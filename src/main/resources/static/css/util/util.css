@@ -1,0 +1,6 @@
+.interactive-item {
+    cursor: pointer;
+}
+.interactive-item:hover {
+    background-color: var(--hover-bg-color);
+}

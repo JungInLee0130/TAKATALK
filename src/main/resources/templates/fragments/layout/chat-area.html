@@ -24,8 +24,9 @@
                 <h2>#<span th:text="${currentChannel.name}"></span>에 오신걸 환영합니다!</h2>
                 <p>#<span th:text="${currentChannel.name}"></span> 채널의 시작이에요.</p>
             </div>
+
             <!-- 채팅 메시지 본문 -->
-            <div id="chatBoxBody" th:if="${chatMessageResponseList}">
+            <div th:fragment="messageList" id="chatBoxBody" th:if="${chatMessageResponseList}">
                 <!--개별 메시지 wrapper : chatMessageResponse 반복, chatMessageId 저장-->
                 <div class="chatmessage-wrapper" th:each="chatMessageResponse : ${chatMessageResponseList}"
                      th:data-id="${chatMessageResponse.chatMessageId}">
@@ -56,6 +57,7 @@
                 </div>
                 <!--사용자가 입력하는 메시지 생성되는 공간-->
             </div>
+
             <div class="chat-input-wrapper">
                 <button type="button" id="uploadFileBtn" class="upload-file-btn" onclick="uploadFile()">File</button>
                 <input id="chatInput" class="chat-input" placeholder="채팅 입력" autofocus>

@@ -19,15 +19,6 @@ public class CategoryController {
     /*
     * 카테고리 생성
     * */
-    /*@PostMapping(value = "/create/{groupId}", produces = "application/string;charset=UTF-8")
-    public String createCategory(@PathVariable(name = "groupId") Long groupId,
-                                 @ModelAttribute(name = "createForm") CateGoryCreateForm createForm,
-                                 RedirectAttributes redirectAttributes) {
-        categoryService.createCategory(groupId, createForm);
-        redirectAttributes.addAttribute("groupId", groupId);
-        return "redirect:/group/access/{groupId}";
-    }*/
-
     @PostMapping(value = "/create", produces = "application/string;charset=UTF-8")
     public ResponseEntity<Void> createCategory(@RequestBody CateGoryCreateRequest request) {
         Category category = categoryService.createCategory(request);

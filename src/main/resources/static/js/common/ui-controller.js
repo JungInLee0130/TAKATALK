@@ -13,6 +13,24 @@ document.addEventListener('click', function (event) {
     }
 })
 
+/* 채널 드롭다운 클릭시 */
+document.addEventListener('click', function (event) {
+    const dropdown = document.querySelector(".category-wrapper");
+
+    if (dropdown && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('active');
+    }
+})
+
+function toggleDropdown(event, element) {
+    if (event && event.target.closest('.category-plus-icon')) {
+        return; // 카테고리 '+' 아이콘 눌렀을경우 실행 X
+    }
+    const wrapper = element.closest('.category-dropdown');
+    wrapper.classList.toggle('active');
+}
+
+
 /* 초대버튼 클릭시 */
 /*document.getElementById("inviteChannelBtn").onclick = () => {
   inviteChannelModal.style.display = 'block';

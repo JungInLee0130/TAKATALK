@@ -3,7 +3,7 @@ package com.example.chat.user.entity;
 import com.example.chat.global.auditing.BaseTimeEntity;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
-import com.example.chat.user.domain.RoleType;
+import com.example.chat.user.domain.SiteUserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,7 +33,7 @@ public class SiteUser extends BaseTimeEntity {
     private LocalDate birthday;
 
     @Enumerated(EnumType.STRING)
-    private RoleType role;
+    private SiteUserRole role;
 
     private String profile;
 
@@ -41,7 +41,7 @@ public class SiteUser extends BaseTimeEntity {
     // 생성자 : 대입만. 외부 호출 차단
     @Builder
     private SiteUser(String nickname, String username, String password, String email
-            , LocalDate birthday, RoleType role, String profile) {
+            , LocalDate birthday, SiteUserRole role, String profile) {
         this.nickname = nickname;
         this.username = username;
         this.password = password;
@@ -70,7 +70,7 @@ public class SiteUser extends BaseTimeEntity {
                 .email(email)
                 .password(passwordEncoder.encode(rawPassword))
                 .birthday(birthDay)
-                .role(RoleType.USER)
+                .role(SiteUserRole.USER)
                 .profile(profile)
                 .build();
     }
@@ -95,6 +95,14 @@ public class SiteUser extends BaseTimeEntity {
     public void isPasswordMatched(PasswordEncoder passwordEncoder, String inputPassword) {
         if (!passwordEncoder.matches(inputPassword, this.password)) {
             throw new CustomException(ErrorCode.INVALID_INPUT_EMAIL_OR_PASSWORD);
+        }
+    }
+
+    public static void validateNicknameIfExist(String nickname) {
+        if (StringUtils.hasText(nickname)) {
+            if (3 > nickname.length() || nickname.length() > 25 ) {
+                throw new IllegalArgumentException("닉네임은 3~25자여야합니다.");
+            }
         }
     }
 }

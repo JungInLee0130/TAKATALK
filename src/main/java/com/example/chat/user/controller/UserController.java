@@ -42,6 +42,7 @@ public class UserController {
         /*
         * 닉네임이 있다면 : 3~25자 사이여야한다.
         * */
+        //SiteUser.validateNicknameIfExist(userCreateForm.nickname());
         if (StringUtils.hasText(userCreateForm.nickname())) {
             if (3 > userCreateForm.nickname().length() || userCreateForm.nickname().length() > 25 ) {
                 bindingResult.rejectValue("nickname", "INVALID_NICKNAME_SIZE", "닉네임은 3~25자여야합니다.");
