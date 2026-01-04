@@ -11,15 +11,16 @@
     box-sizing: border-box;
 
     /*스크롤 관련*/
-    overflow-x: scroll;
-    overflow-y: scroll;
+    overflow: auto;
 }
 .left-header {
     display: flex;
     gap: 5px;
     align-items: center;
+    justify-content: space-between;
     margin: 10px 0;
     width: 100%;
+    box-sizing: border-box;
 }
 .left-header h2{
     width: 100%;
@@ -33,7 +34,7 @@
 .category-dropdown {
 }
 .category-dropdown.active .channel-list{
-    display: none; /*active하면 channel-list : block*/
+    display: block; /*active하면 channel-list : block*/
 }
 .category-dropdown.active .category-dropdown-icon {
     transform: rotate(-90deg);
@@ -60,7 +61,7 @@
     cursor: pointer;
 }
 .channel-list {
-    display: block;
+    display: none;
     width: 100%;
     background: #1A1A1E;
 }

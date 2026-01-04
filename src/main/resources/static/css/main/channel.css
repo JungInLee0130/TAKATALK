@@ -1,13 +1,16 @@
 @import "sidebar.css";
 @import "../channel/channel-list.css";
 @import "../common/common.css";
-@import "../common/common-modal.css";
 @import "../group/invite-modal.css";
 @import "../group/group-create-modal.css";
-@import "../common/context-menu.css";
 @import "../channel/channel-create-modal.css";
 @import "../category/category-create-modal.css";
 @import "../util/util.css";
+@import "../component/context-menus.css";
+@import "../component/modals.css";
+@import "../component/titles.css";
+@import "../component/buttons.css";
+@import "../component/inputs.css";
 
 
 body {
@@ -102,12 +105,15 @@ body {
 
     background-color: #006d77;
 }
+#inviteArea .center-header{
+    justify-content: normal;
+}
+.header-tabs {
+    display: flex;
+}
 .center-header h2{
     margin-left: 10px;
     text-align: center;
-}
-.center-header .icon {
-
 }
 .center-header .chat-userlist, #chatUserlist {
     margin: 10px 0;
@@ -127,7 +133,7 @@ body {
     min-height: 0;
     background-color: #1E55DC;
 }
-.chatbox-upper-wrapper {
+.chatbox-welcome-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: end;
@@ -136,8 +142,8 @@ body {
     background-color: #5865F2;
     box-sizing: border-box;
 }
-.chatbox-upper-wrapper h2,
-.chatbox-upper-wrapper p {
+.chatbox-welcome-wrapper h2,
+.chatbox-welcome-wrapper p {
     padding: 0 10px;
 }
 .system-message-wrapper {
@@ -289,43 +295,6 @@ body {
     height: 50%;
     border: 1px solid black;
 }
-.btn-invite-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-.btn-accept-invite{
-    height: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid black;
-    cursor: pointer;
-}
-.btn-accept-invite p{
-    margin: 0;
-}
-
-.btn-deny-invite{
-    margin: 0;
-    height: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid black;
-    cursor: pointer;
-}
-
-.btn-deny-invite p{
-    margin: 0;
-
-}
-
 .center textarea{
     /*width: 890px;
     height: 530px;*/
@@ -426,7 +395,7 @@ body {
 
 .enterButton{
     border: 1px solid black;
-    padding: 2px;
+    padding: 2px 0px;
     padding-left: 5px;
     padding-right: 5px;
     text-decoration: none;

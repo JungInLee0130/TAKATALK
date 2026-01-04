@@ -1,6 +1,7 @@
 package com.example.chat.channel.dto;
 
 import com.example.chat.channel.domain.ChatMessageType;
+import com.example.chat.channel.entity.ChatMessage;
 import com.example.chat.global.file.FileUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
@@ -22,7 +23,7 @@ public class ChatMessageResponse {
     private ChatMessageType type;    // 메시지타입
 
     @Builder
-    public ChatMessageResponse(Long channelId, String profile, String nickname, LocalDateTime createdAt, String content, Boolean isModified,
+    private ChatMessageResponse(Long channelId, String profile, String nickname, LocalDateTime createdAt, String content, Boolean isModified,
                                Long chatMessageId, ChatMessageType type) {
         this.channelId = channelId;
         this.profile = FileUtil.getEffectiveProfile(profile);
@@ -32,5 +33,32 @@ public class ChatMessageResponse {
         this.isModified = isModified;
         this.chatMessageId = chatMessageId;
         this.type = type;
+    }
+
+    /*public static ChatMessageResponse create(Long channelId, String profile, String nickname, LocalDateTime createdAt, String content, Boolean isModified,
+                                             Long chatMessageId, ChatMessageType type) {
+        return ChatMessageResponse.builder()
+                .type(type)
+                .channelId(channelId)
+                .profile(profile)
+                .nickname(nickname)
+                .content(content)
+                .createdAt(createdAt)
+                .isModified(isModified)
+                .chatMessageId(chatMessageId)
+                .build();
+    }*/
+
+    public static ChatMessageResponse from(ChatMessage chatMessage) {
+        return ChatMessageResponse.builder()
+                .channelId(chatMessage.getChannel().getId())
+                .profile(chatMessage.getSiteUser().getProfile())
+                .nickname(chatMessage.getSiteUser().getNickname())
+                .content(chatMessage.getContent())
+                .createdAt(chatMessage.getCreatedAt())
+                .isModified(chatMessage.getIsModified())
+                .chatMessageId(chatMessage.getId())
+                .type(chatMessage.getType())
+                .build();
     }
 }

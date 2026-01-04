@@ -21,8 +21,10 @@
     </div>
 
     <!--4. 채팅 영역-->
-    <div th:replace="~{fragments/layout/chat-area :: chatArea}"></div>
-    <div th:replace="~{fragments/layout/chat-area :: inviteArea}"></div>
+    <main id="mainChatWrapper">
+      <div th:replace="~{fragments/layout/chat-area :: inviteArea}"></div>
+      <div th:replace="~{fragments/layout/chat-area :: chatArea}"></div>
+    </main>
 
     <!--5. 우측 접속자 목록-->
     <div th:replace="~{fragments/layout/member-list :: memberList}"></div>

@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <!--****채팅방****-->
-<div th:fragment="chatArea" class="center">
-    <div class="center" id="chatArea" th:if="${currentGroup != null}">
+<div th:fragment="chatArea" class="center" th:if="${currentChannel}" id="chatArea">
+    <div class="center">
         <div class="center-header">
-            <div th:if="${currentChannel != null}">
-                <h2 th:text="${currentChannel.name}"></h2> <!--채팅방 title-->
-            </div>
-            <div class="icon">
+            <h2 th:text="${currentChannel.name}"></h2> <!--채팅방 title-->
+            <div class="user-list-icon">
                 <button type="button" id="chatUserlist" class="chat-userlist">user</button> <!--채팅방 visitor 햄버거버튼-->
             </div>
         </div>
         <!--메시지 공간 90vh-->
-        <div id="chatBox" class="chat-box" th:if="${currentChannel != null}">
+        <div id="chatBox" class="chat-box">
             <!-- 빈공간-->
             <div id="transparentSpacer"></div>
             <!-- 서버 환영메시지 -->
@@ -20,13 +18,13 @@
             <!--<div class="chatbox-upper-wrapper" th:if="${#lists.isEmpty(groups)}">
               <h2>가입한 서버가 없습니다. 서버를 생성하거나 초대코드를 입력하세요!</h2>
             </div>-->
-            <div class="chatbox-upper-wrapper" style="display: none">
+            <div class="chatbox-welcome-wrapper" style="display: none">
                 <h2>#<span th:text="${currentChannel.name}"></span>에 오신걸 환영합니다!</h2>
                 <p>#<span th:text="${currentChannel.name}"></span> 채널의 시작이에요.</p>
             </div>
 
             <!-- 채팅 메시지 본문 -->
-            <div th:fragment="messageList" id="chatBoxBody" th:if="${chatMessageResponseList}">
+            <div id="chatBoxBody" th:if="${chatMessageResponseList}">
                 <!--개별 메시지 wrapper : chatMessageResponse 반복, chatMessageId 저장-->
                 <div class="chatmessage-wrapper" th:each="chatMessageResponse : ${chatMessageResponseList}"
                      th:data-id="${chatMessageResponse.chatMessageId}">
@@ -66,17 +64,23 @@
         </div>
     </div>
 </div>
-<div th:fragment="inviteArea" class="center" id="inviteArea" th:if="${currentGroup == null}">
+<!--****채팅방****-->
+<div th:fragment="inviteArea" class="center" id="inviteArea" th:unless="${currentChannel}" >
     <div class="center-header">
-        <div>
-            <h2></h2> <!--채팅방 title-->
+        <div class="center-header-title">
+            <p>친구</p> <!--채팅방 title-->
         </div>
-        <div class="icon">
-            <button type="button" class="chat-userlist">user</button> <!--채팅방 visitor 햄버거버튼-->
+        <div class="header-tabs">
+            <p class="header-title">모두</p> <!--채팅방 title-->
+            <p class="header-title">대기중</p> <!--채팅방 title-->
+        </div>
+        <div class="btn-primary">
+            친구 추가하기
         </div>
     </div>
     <!--초대 공간 90vh-->
-    <div id="inviteBox" class="chat-box" th:if="${inviteResponseList != null}">
+    <div id="inviteBox" class="chat-box">
+        <th:block th:if="${inviteResponseList}">
         <div class="invite-list" th:each="inviteResponse : ${inviteResponseList}">
             <div class="invite-info-wrapper">
                 <div class="chatmessage-profile-wrapper">
@@ -107,15 +111,7 @@
                 </div>
             </div>
         </div>
+        </th:block>
     </div>
 </div>
-<script>
-    if (currentGroupId != null) {
-        document.getElementById("chatArea").style.display = "flex";
-        document.getElementById("inviteArea").style.display = "none";
-    } else {
-        document.getElementById("inviteArea").style.display = "flex";
-        document.getElementById("chatArea").style.display = "none";
-    }
-</script>
 </html>

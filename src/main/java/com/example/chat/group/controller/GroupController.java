@@ -61,7 +61,7 @@ public class GroupController {
                                             @PathVariable(name = "groupId") Long groupId,
                                             @Valid GroupFormRequest request) throws IOException {
         groupService.editGroup(userDetails, groupId, request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.created(URI.create("/group/access/" + groupId)).build();
     }
 
     /*

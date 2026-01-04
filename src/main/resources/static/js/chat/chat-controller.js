@@ -10,10 +10,6 @@ chatBox.scrollTop = chatBox.scrollHeight;
 * 돔 렌더링 모두 완료되고 실행
 * */
 $(document).ready(function () {
-    if ($(".chatmessage-wrapper").length < 20) {
-        $(".chatbox-upper-wrapper").css("display", "flex");
-    }
-
     /* 무한 스크롤 로직 */
     const handleScroll = function () {
         // scroll이 맨위에 닿았을때
@@ -56,16 +52,15 @@ $(document).ready(function () {
         },
         success : function (data) {
             if (data.length > 0) {
-
                 // 2. 받아온 데이터를 반복문을 돌려서 HTML 생성
                 // 3. chatBox의 가장 윗부분(prepend)에 갖다 붙임.
                 data.slice().reverse().forEach((msg) => {
                     renderOldMessages(msg);
                 });
-
+                
+                // 3-1. 환영메시지 출력 여부
                 if (data.length < 20) {
-                    chatBox.removeEventListener('scroll', handleScroll);
-                    $(".chatbox-upper-wrapper").css("display", "flex");
+                    visibleWelcomeMessage(data);
                 }
 
                 // 4. [핵심] 스크롤 위치 보정
@@ -77,8 +72,7 @@ $(document).ready(function () {
                 isFetching = false;
             } else {
                 console.log("더이상 과거 메시지가 없습니다.");
-                chatBox.removeEventListener('scroll', handleScroll);
-                $(".chatbox-upper-wrapper").css("display", "flex");
+                visibleWelcomeMessage();
                 firstMessageId = null;
             }
         }
@@ -374,4 +368,30 @@ function createChannel(groupId, categoryId) {
             console.log(request);
         }
     });
+}
+
+/* 환영(초기) 메시지를 보이게하는함수 */
+function visibleWelcomeMessage() {
+    chatBox.removeEventListener('scroll', handleScroll);
+    document.querySelector('.chatbox-welcome-wrapper').style.display = "flex";
+}
+
+/* 채널 접속시 채팅 메시지 출력 */
+function initChatArea(htmlResponse) {
+    // fragment의 부모에 붙이기
+    const mainChatWrapper = document.getElementById("mainChatWrapper");
+
+    if (mainChatWrapper) {
+        mainChatWrapper.innerHTML = htmlResponse;
+        const chatBoxBody = document.getElementById("chatBoxBody");
+
+        if (chatBoxBody) {
+            chatBoxBody.scrollTop = chatBoxBody.scrollHeight;   // 스크롤 맨 아래로
+        }
+
+        const chatMessages = document.getElementsByClassName('chatmessage-wrapper');
+        if (chatMessages.length < 20) {
+            visibleWelcomeMessage(chatMessages);
+        }
+    }
 }

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatMessages extends BaseTimeEntity {
+public class ChatMessage extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "chatmessage_id")
@@ -36,22 +36,21 @@ public class ChatMessages extends BaseTimeEntity {
     private ChatMessageType type;
 
     @Builder
-    public ChatMessages(String content,
-                        Channel channel,
-                        SiteUser siteUser,
-                        ChatMessageType type) {
+    public ChatMessage(String content,
+                       Channel channel,
+                       SiteUser siteUser,
+                       ChatMessageType type) {
         this.content = content;
         this.channel = channel;
         this.siteUser = siteUser;
         this.type = type;
     }
 
-    @Builder
-    public static ChatMessages create (String content,
-                                       Channel channel,
-                                       SiteUser siteUser,
-                                       ChatMessageType type) {
-        return ChatMessages.builder()
+    public static ChatMessage create (String content,
+                                      Channel channel,
+                                      SiteUser siteUser,
+                                      ChatMessageType type) {
+        return ChatMessage.builder()
                 .content(content)
                 .channel(channel)
                 .siteUser(siteUser)

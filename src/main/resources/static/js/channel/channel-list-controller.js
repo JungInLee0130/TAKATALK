@@ -17,27 +17,11 @@ $(document).ready(function () {
     /* 채널 아이템 클릭 시 : 채널입장 */
     document.addEventListener('click', function (event) {
         const channelTarget = event.target.closest(".channel-item");
+        if (!channelTarget) return;
 
-        if (channelTarget) {
-            selectedChannelId = channelTarget.getAttribute('data-channel-id');
-            console.log(selectedChannelId);
+        selectedChannelId = channelTarget.getAttribute('data-channel-id');
+        console.log(selectedChannelId);
 
-            $.ajax({
-                type: 'GET',
-                url: `/channel/${selectedChannelId}`,
-                success: function (response) {
-                    const chatBoxBody = document.getElementById("chatBoxBody");
-
-                    if (chatBoxBody) {
-                        chatBoxBody.innerHTML = response;
-                        chatBoxBody.scrollTop = chatBoxBody.scrollHeight;
-                    }
-                },
-                error: function (jqXHR) {
-                    console.log(jqXHR.status, jqXHR);
-                }
-
-            });
-        }
+        ChannelService.getOldMessage(selectedChannelId, initChatArea, handleAjaxError);
     })
 });

@@ -2,7 +2,8 @@ package com.example.chat.global.websocket;
 
 import com.example.chat.channel.domain.ChatMessageType;
 import com.example.chat.channel.dto.ChatMessageResponse;
-import com.example.chat.channel.entity.ChatMessages;
+import com.example.chat.channel.entity.ChatMessage;
+import com.example.chat.channel.repository.ChatMessageRepository;
 import com.example.chat.channel.service.ChatMessageService;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.service.CustomUserDetails;
@@ -77,18 +78,11 @@ public class WebSocketEventListener {
             CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
 
             SiteUser loginUser = userService.findById(userDetails.getId());
-
-            VisitorDto visitor = VisitorDto.builder()
-                    .siteUserId(userDetails.getId())
-                    .profile(loginUser.getProfile())
-                    .nickname(loginUser.getNickname())
-                    .build();
+            VisitorDto visitor = VisitorDto.create(loginUser.getId(), loginUser.getProfile(), loginUser.getNickname());
 
             String sessionId = headerAccessor.getSessionId();
-
             CHANNEL_USERS.computeIfAbsent(channelId, k -> ConcurrentHashMap.newKeySet()).add(visitor);
             SESSION_CHANNEL.put(sessionId, channelId);
-
             log.info("User Entered : {} -> Channel {}", visitor.toString(), channelId);
 
             String[] welcomeMessages = {
@@ -98,21 +92,13 @@ public class WebSocketEventListener {
                     "님이 야생에서 나타났습니다.",
                     "님이 오셨어요. 환영해주세요!"
             };
-
             String randomMsg = welcomeMessages[new Random().nextInt(welcomeMessages.length)];
 
-            ChatMessages saveSystemMessage = chatMessageService.saveSystemMessage(channelId,
-                    userDetails.getId(),
+            ChatMessage saveSystemMessage = chatMessageService.saveSystemMessage(channelId,
+                    loginUser.getId(),
                     randomMsg,
                     ChatMessageType.ENTER);
-
-            ChatMessageResponse welcomeMsg = ChatMessageResponse.builder()
-                    .type(ChatMessageType.ENTER)
-                    .channelId(channelId)
-                    .nickname(loginUser.getNickname())
-                    .content(saveSystemMessage.getContent())    // DB에 저장된 내용과 시각
-                    .createdAt(saveSystemMessage.getCreatedAt())
-                    .build();
+            ChatMessageResponse welcomeMsg = ChatMessageResponse.from(saveSystemMessage);
 
             messagingTemplate.convertAndSend("/sub/channel/" + channelId, welcomeMsg);
             sendUserListToChannel(channelId);
