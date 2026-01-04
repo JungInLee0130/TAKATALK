@@ -127,7 +127,7 @@ public class GroupService {
     }
 
     @Transactional
-    public void editGroup(CustomUserDetails userDetails, Long groupId, GroupFormRequest request) throws IOException {
+    public Long editGroup(CustomUserDetails userDetails, Long groupId, GroupFormRequest request) throws IOException {
         // 1. 수정과 삭제는 권한 검증
         validateGroupMemberManagerRole(groupId, userDetails.getId());
         // 2. 그룹 수정
@@ -137,5 +137,7 @@ public class GroupService {
         // 프로필 이미지가 null 이면 null 저장 (기본 이미지 적용)
         String updatedFileName = fileService.storeFile(request.profile(), group.getProfile());
         group.updateProfile(updatedFileName);
+
+        return group.getId();
     }
 }

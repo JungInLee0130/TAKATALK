@@ -5,7 +5,7 @@ import com.example.chat.category.repository.CategoryRepository;
 import com.example.chat.channel.domain.ChannelType;
 import com.example.chat.channel.domain.ChatMessageType;
 import com.example.chat.channel.entity.Channel;
-import com.example.chat.channel.entity.ChatMessages;
+import com.example.chat.channel.entity.ChatMessage;
 import com.example.chat.channel.repository.ChannelRepository;
 import com.example.chat.channel.repository.ChatMessageRepository;
 import com.example.chat.group.repository.GroupRepository;
@@ -61,17 +61,17 @@ public class InitData implements CommandLineRunner {
     }
 
     private void createChatMessages(SiteUser siteUser, List<Channel> channelList) {
-        List<ChatMessages> chatMessageList = new ArrayList<>();
+        List<ChatMessage> chatMessageList = new ArrayList<>();
         for (Channel channel : channelList) {
             for (int i = 1; i <= 30; i++) {
-                ChatMessages chatMessages = ChatMessages.create(
+                ChatMessage chatMessage = ChatMessage.create(
                         "dd" + i,
                         channel,
                         siteUser,
                         ChatMessageType.TALK
                 );
 
-                chatMessageList.add(chatMessages);
+                chatMessageList.add(chatMessage);
             }
         }
 

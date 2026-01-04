@@ -1,26 +1,30 @@
 const channelCreateModal = document.getElementById('channelCreateModal');
 const categoryCreateModal = document.getElementById('categoryCreateModal');
 // ESC 닫기 전역 이벤트
-document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape') {
-        closeAllModals();
-    }
-})
+$(document).ready(function () {
+    /** ESC 버튼 클릭시 모달 전체 닫기 **/
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            closeAllModals();
+        }
+    })
 
-document.addEventListener('click', function (event) {
-    if (event.target.classList.contains('modal')) {
-        event.target.style.display = 'none';
-    }
-})
+    /** 모달 바깥 클릭시 닫기 **/
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    })
 
-/* 채널 드롭다운 클릭시 */
-document.addEventListener('click', function (event) {
-    const dropdown = document.querySelector(".category-wrapper");
+    /** 채널 드롭다운 클릭시 보이게 **/
+    document.addEventListener('click', function (event) {
+        const dropdown = document.querySelector(".category-wrapper");
 
-    if (dropdown && !dropdown.contains(event.target)) {
-        dropdown.classList.remove('active');
-    }
-})
+        if (dropdown && !dropdown.contains(event.target)) {
+            dropdown.classList.remove('active');
+        }
+    })
+});
 
 function toggleDropdown(event, element) {
     if (event && event.target.closest('.category-plus-icon')) {

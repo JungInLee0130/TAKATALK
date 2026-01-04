@@ -2,12 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <div th:fragment="channelList" class="left">
         <div class="left-header">
-            <div class="header-text">
-                <h2>방제목</h2>
-            </div>
-            <div class="header-dropdown"> <!--동일하게 contextMenu-->
-                <span>v</span>
-            </div>
+            <th:block th:if="${currentGroup}" >
+                <div class="header-title title">
+                    <h3 th:text="${currentGroup.id}"></h3>
+                    <span class="dropdown-icon">v</span><!--동일하게 contextMenu-->
+                </div>
+                <div class="invite-group-icon">
+                    사람
+                </div>
+            </th:block>
+            <th:block th:unless="${currentGroup}">
+                <p class="main-title title interactive-item">대화 찾기 또는 시작하기</p>
+            </th:block>
         </div>
         <div class="left-body">
             <th:block  th:if="${channelGroupResponse}">

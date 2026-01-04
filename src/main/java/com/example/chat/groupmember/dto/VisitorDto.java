@@ -13,10 +13,19 @@ public class VisitorDto {
     private String profile;
 
     @Builder
-    public VisitorDto(Long siteUserId, String nickname, String profile) {
+    private VisitorDto(Long siteUserId, String nickname, String profile) {
         this.siteUserId = siteUserId;
         this.nickname = nickname;
         this.profile = FileUtil.getEffectiveProfile(profile);
+    }
+
+
+    public static VisitorDto create(Long siteUserId, String nickname, String profile) {
+        return VisitorDto.builder()
+                .siteUserId(siteUserId)
+                .nickname(nickname)
+                .profile(profile)
+                .build();
     }
 
     @Override

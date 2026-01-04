@@ -77,10 +77,21 @@ public class ChannelController {
     }*/
 
     @GetMapping("/{channelId}")
-    public String enterChannel(@PathVariable(name = "channelId") Long channelId, Model model) {
+    public String enterChannel(@AuthenticationPrincipal CustomUserDetails userDetails,
+                               @PathVariable(name = "channelId") Long channelId, Model model) {
+        // 1. 채널 정보
+        ChannelResponse currentChannel = channelService.getChannelInfo(channelId);
+        model.addAttribute("currentChannel", currentChannel);
+
+        // 2. 이전 채팅 메시지
         List<ChatMessageResponse> chatMessageResponseList = chatMessageService.getOldMessage(channelId, null);
         model.addAttribute("chatMessageResponseList", chatMessageResponseList);
-        return "fragments/layout/chat-area :: messageList";
+
+        // 3. 유저 정보
+        UserResponse user = userService.getUserDetails(userDetails.getId());
+        model.addAttribute("user", user);
+
+        return "fragments/layout/chat-area :: chatArea";
     }
 
     /*

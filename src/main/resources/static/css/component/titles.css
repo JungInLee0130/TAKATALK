@@ -1,0 +1,18 @@
+.title {
+    padding: 5px 10px;
+    border-radius: 7px;
+    transition: 0.2s;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.header-title:hover {
+    background: #3f4147;
+}
+.main-title{
+
+}

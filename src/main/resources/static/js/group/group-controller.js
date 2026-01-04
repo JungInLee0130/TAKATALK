@@ -134,6 +134,7 @@ function openEditGroupModal() {
     })
 }
 
+/** 그룹 생성, 편집 **/
 function submitGroupForm(method, url) {
     const groupName = document.getElementById("groupNameInput").value;
     const fileInput = document.getElementById("groupProfileInput");
@@ -154,17 +155,16 @@ function submitGroupForm(method, url) {
 
     // 생성, 수정 둘다
     $.ajax({
-        type: method,
+        type: method,   // POST, PATCH
         url: url,
         data: formData,
         processData: false,
         contentType: false,
         statusCode: {
             201: function (data, textStatus, jqXHR) {
-                console.log("그룹이 성공적으로 생성되었습니다.");
+                console.log("그룹이 성공적으로 생성(수정)되었습니다.");
 
                 const newLocation = jqXHR.getResponseHeader('Location');
-
                 if (newLocation) {
                     window.location.href = newLocation;
                 } else {
@@ -175,8 +175,8 @@ function submitGroupForm(method, url) {
             }
         },
         success: function () {
-            console.log("그룹이 성공적으로 수정되었습니다.");
-            closeModal(groupFormModal);
+            //console.log("그룹이 성공적으로 수정되었습니다.");
+            //closeModal(groupFormModal);
         },
         error: function (jqXHR) {
             if (jqXHR.status) {
