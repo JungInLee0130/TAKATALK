@@ -1,5 +1,6 @@
 package com.example.chat.category.service;
 
+import com.example.chat.category.dto.CategoryResponse;
 import com.example.chat.category.entity.Category;
 import com.example.chat.category.repository.CategoryRepository;
 import com.example.chat.category.dto.CateGoryCreateRequest;
@@ -23,10 +24,10 @@ public class CategoryService {
 
 
     public List<CategoryGetResponse> getCategories(Long groupId) {
-        List<Category> categories = categoryRepository.findByGroupId(groupId);
-        return categories.stream()
-                .map(category -> new CategoryGetResponse(category.getId(), category.getName()))
-                .collect(Collectors.toList());
+        return categoryRepository.findByGroupId(groupId)
+                .stream()
+                .map(CategoryGetResponse::from)
+                .toList();
     }
 
     @Transactional

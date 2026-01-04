@@ -4,7 +4,6 @@ import com.example.chat.global.file.FileService;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.login.service.TokenService;
-import com.example.chat.user.domain.RoleType;
 import com.example.chat.user.dto.ProfileRequest;
 import com.example.chat.user.domain.UserCreateForm;
 import com.example.chat.user.dto.UserResponse;

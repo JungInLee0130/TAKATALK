@@ -6,48 +6,43 @@
                 <h2>방제목</h2>
             </div>
             <div class="header-dropdown"> <!--동일하게 contextMenu-->
-                <p>dropdown</p>
+                <span>v</span>
             </div>
         </div>
         <div class="left-body">
-            <!--만들어진 채널들이 있다면-->
-            <div class="channel-categorized-group" th:if="${channelGroupResponse}">
-                <table class="categorized-channel-table" th:each="category : ${channelGroupResponse.categorizedChannels}">
-                    <!--카테고리를 가진 채널이 있다면-->
-                    <thead th:if="${category}">
-                        <th th:text="${category.name}"></th>
-                        <th>
-                            <a th:href="@{/channel/create(groupId = ${currentGroup.id}, categoryId = ${category.id})}">채널생성</a>
-                        </th>
-                    </thead>
-                    <tbody class="categorized-channel-table-body">
-                    <tr class="categorized-channel-table-row" th:each="channel : ${category.channels}">
-                        <th th:text="${channel.name}"></th>
-                        <td th:text="${channel.type}"></td>
-                        <td th:text="${channel.isSecret}"></td>
-                        <td>
-                            <a th:href="@{/channel/enter/{channelId}(channelId = ${channel.id}, groupId = ${currentGroup.id})}">채널입장</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+            <th:block  th:if="${channelGroupResponse}">
+            <div class="category-section">
+
+                <div class="category-dropdown" th:each="category : ${channelGroupResponse.categorizedChannels}">
+                    <!--클릭 감지 트리거 토글-->
+                    <div class="category-wrapper interactive-item" onclick="toggleDropdown(event, this)">
+                        <div class="category-header">
+                            <p th:text="${category.name}"></p> <!--카테고리 이름-->
+                            <span class="category-dropdown-icon">v</span>
+                        </div>
+                        <!--채널 생성 모달-->
+                        <div class="category-plus-icon" onclick="openChannelCreateModal()">
+                            +
+                        </div>
+                    </div>
+                    <!-- 드롭다운 목록 -->
+                    <div class="categorized-channel-list channel-list">
+                    <th:block th:each="channel : ${category.channels}">
+                        <div th:replace="~{::channelRow(${channel})}"></div>
+                    </th:block>
+                    </div>
+                </div>
+
             </div>
-            <hr/>
+
             <!--카테고리 없는 채널-->
-            <div class="channel-uncategorized-group" th:if="${channelGroupResponse}">
-                <table>
-                    <tbody>
-                        <tr th:each="channel : ${channelGroupResponse.uncategorizedChannels}">
-                            <th th:text="${channel.name}"></th>
-                            <td th:text="${channel.type}"></td>
-                            <td th:text="${channel.isSecret}"></td>
-                            <td>
-                                <a th:href="@{/channel/enter/{channelId}(channelId = ${channel.id}, groupId = ${currentGroup.id})}">채널입장</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="uncategorized-channel-list channel-list">
+            <th:block th:each="channel : ${channelGroupResponse.uncategorizedChannels}">
+                <div th:replace="~{::channelRow(${channel})}"></div>
+            </th:block>
             </div>
+
+            </th:block>
         </div>
     </div>
     <div th:fragment="myProfile">
@@ -71,5 +66,10 @@
                 </div>
             </div>
         </a>
+    </div>
+    <!-- 채널 행 -->
+    <div th:fragment="channelRow(channel)" th:data-channel-id="${channel.id}" class="channel-item interactive-item">
+        <span class="channel-prefix">#</span>
+        <span th:text="${channel.name}"></span>
     </div>
 </html>
