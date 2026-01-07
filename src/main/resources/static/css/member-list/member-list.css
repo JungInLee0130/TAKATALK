@@ -1,0 +1,78 @@
+/**********************접속자 창 css********************************/
+.right {
+    width: 20vw;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-bg-color);
+    color: var(--main-font-color);
+    box-sizing: border-box;
+    padding: 20px;
+    gap: 10px
+}
+.right-header {
+    margin: 0;
+    text-align: center;
+}
+.right-header h2{
+    margin: 0;
+    text-align: center;
+}
+.online-visitorlist-wrapper{
+    width: 100%;
+    background-color: #FFFFFF;
+}
+.visitor-item {
+    padding: 5px;
+    display: flex;
+    width: 100%;
+    height: 40px;
+    align-items: center;
+    background-color: #006d77;
+    gap: 10px;
+    box-sizing: border-box;
+}
+.visitor-image-wrapper {
+    margin: 0;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+}
+.visitor-item img {
+    margin: 0;
+    width: 40px;
+    height: 40px;
+    background-color: #1E55DC;
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+.visitor-image-wrapper .green-dot {
+    z-index: 1;
+}
+
+.visitor-item p {
+    margin: 0;
+    padding: 0 10px;
+    line-height: 40px;
+    width: 100%;
+    height: 40px;
+    background-color: #1E55DC;
+}
+
+.chatRoom .roomPeopleCount{
+    background-color: skyblue;
+    border: 1px solid black;
+}
+
+.enterButton{
+    border: 1px solid black;
+    padding: 2px 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-decoration: none;
+}
+.enterButton:hover{
+    text-decoration: underline;
+}

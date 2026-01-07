@@ -1,7 +1,10 @@
 :root {
     --hover-bg-color: #6C6D74;
-    --font-color: white;
     --font-desc-size: 12px;
+    --main-bg-color: #1A1A1E;
+    --main-font-color: white;
+    --chat-area-bg-color: #2E2E34;
+    --border-radius: 7px;
 }
 * {
     margin: 0;

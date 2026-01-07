@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="myProfile">
+  <!--프로필 하단바-->
+  <a th:href="@{/templates/profile}" class="profile-link">
+    <div class="left-profile-wrapper" id="leftProfileWrapper">
+      <div class="profile-image-wrapper">
+        <img th:src="${user.profile}" class="profile-image">
+      </div>
+      <div class="profile-nickname-wrapper">
+        <p th:text="${user.nickname}"></p>
+      </div>
+      <div>
+        <img src="#" class="mic-image">
+      </div>
+      <div>
+        <img src="#" class="headphone-image">
+      </div>
+      <div>
+        <img src="#" class="setting-image">
+      </div>
+    </div>
+  </a>
+</div>
+</html>

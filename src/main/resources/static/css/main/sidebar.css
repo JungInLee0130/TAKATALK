@@ -6,7 +6,8 @@
     gap: 5px;
     width: 60px;
     height: 90vh;
-    background-color: skyblue;
+    background-color: var(--main-bg-color);
+    color: var(--main-font-color);
     box-sizing: border-box;
 }
 .group-icon-wrapper {

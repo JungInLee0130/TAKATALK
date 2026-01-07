@@ -161,3 +161,12 @@
 .label-with-icon p {
     margin-bottom: 0px;
 }
+
+.input-label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    color: #b5bac1;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
