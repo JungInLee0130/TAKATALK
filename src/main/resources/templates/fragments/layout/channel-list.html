@@ -21,13 +21,13 @@
 
                 <div class="category-dropdown" th:each="category : ${channelGroupResponse.categorizedChannels}">
                     <!--클릭 감지 트리거 토글-->
-                    <div class="category-wrapper interactive-item" onclick="toggleDropdown(event, this)">
+                    <div class="categorized-channel-dropdown interactive-item">
                         <div class="category-header">
                             <p th:text="${category.name}"></p> <!--카테고리 이름-->
                             <span class="category-dropdown-icon">v</span>
                         </div>
                         <!--채널 생성 모달-->
-                        <div class="category-plus-icon" onclick="openChannelCreateModal()">
+                        <div class="category-plus-icon">
                             +
                         </div>
                     </div>
@@ -50,28 +50,6 @@
 
             </th:block>
         </div>
-    </div>
-    <div th:fragment="myProfile">
-        <!--프로필 하단바-->
-        <a th:href="@{/templates/profile}" class="profile-link">
-            <div class="left-profile-wrapper" id="leftProfileWrapper">
-                <div class="profile-image-wrapper">
-                    <img th:src="${user.profile}" class="profile-image">
-                </div>
-                <div class="profile-nickname-wrapper">
-                    <p th:text="${user.nickname}"></p>
-                </div>
-                <div>
-                    <img src="#" class="mic-image">
-                </div>
-                <div>
-                    <img src="#" class="headphone-image">
-                </div>
-                <div>
-                    <img src="#" class="setting-image">
-                </div>
-            </div>
-        </a>
     </div>
     <!-- 채널 행 -->
     <div th:fragment="channelRow(channel)" th:data-channel-id="${channel.id}" class="channel-item interactive-item">

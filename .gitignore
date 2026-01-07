@@ -39,3 +39,6 @@ out/
 ### env.yml
 src/main/resources/env.yml
 src/main/resources/import.sql
+
+### node_modules
+node_modules

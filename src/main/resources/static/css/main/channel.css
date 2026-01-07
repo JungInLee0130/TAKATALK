@@ -1,16 +1,20 @@
-@import "sidebar.css";
-@import "../channel/channel-list.css";
 @import "../common/common.css";
+@import "../main/sidebar.css";
+@import "../main/my-profile.css";
 @import "../group/invite-modal.css";
 @import "../group/group-create-modal.css";
+@import "../channel/channel-list.css";
 @import "../channel/channel-create-modal.css";
+@import "../chat/chat-area.css";
 @import "../category/category-create-modal.css";
+@import "../member-list/member-list.css";
 @import "../util/util.css";
 @import "../component/context-menus.css";
 @import "../component/modals.css";
 @import "../component/titles.css";
 @import "../component/buttons.css";
 @import "../component/inputs.css";
+
 
 
 body {
@@ -35,14 +39,14 @@ body {
     flex-direction: row;
     box-sizing: border-box;
 }
-
-.left-profile-wrapper {
+.profile-image-wrapper {
     margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background-color: darkgray;
-    height: 10vh;
+    margin-left: 5px;
+}
+.profile-image-wrapper .profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
 .left .chat-list {
@@ -85,330 +89,3 @@ body {
     border-radius: 10px;
 }
 /*****************************************************************/
-/**********************채팅창 css********************************/
-.center{
-    display: flex;
-    flex-direction: column;
-    width: 60vw;
-    background-color: skyblue;
-    gap: 5px;
-    padding: 10px;
-    box-sizing: border-box;
-}
-.center-header{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    height: 10vh;
-
-    background-color: #006d77;
-}
-#inviteArea .center-header{
-    justify-content: normal;
-}
-.header-tabs {
-    display: flex;
-}
-.center-header h2{
-    margin-left: 10px;
-    text-align: center;
-}
-.center-header .chat-userlist, #chatUserlist {
-    margin: 10px 0;
-    width: 50px;
-    height: 45px;
-    margin-right: 10px;
-}
-.chat-box {
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto; /*내용이 넘치면 자동으로 스크롤 생성*/
-    height: 90vh;
-    box-sizing: border-box;
-}
-#transparentSpacer {
-    flex-grow: 1;
-    min-height: 0;
-    background-color: #1E55DC;
-}
-.chatbox-welcome-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
-    margin: 0;
-    width: 100%;
-    background-color: #5865F2;
-    box-sizing: border-box;
-}
-.chatbox-welcome-wrapper h2,
-.chatbox-welcome-wrapper p {
-    padding: 0 10px;
-}
-.system-message-wrapper {
-    width: 100%;
-    display: flex;
-    background-color: #1E55DC;
-    margin: 10px 0;
-}
-.system-message-wrapper p{
-    margin : 0;
-    padding : 0 10px;
-}
-.chatmessage-wrapper {
-
-}
-.chatmessage-talk-wrapper,
-.inputmessage-wrapper{
-    display: flex;
-    width: 100%;
-    height: 80px;
-    font-size: 16px;
-    margin: 0;
-    gap: 10px;
-    box-sizing: border-box;
-    border: 1px solid black;
-}
-.chatmessage-profile-wrapper {
-    width: 80px;
-    height: 80px;
-    box-sizing: border-box;
-    border: 1px solid black;
-}
-.chatmessage-profile {
-    padding: 5px;
-    width: 100%;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 1px solid black;
-    box-sizing: border-box;
-}
-.chatmessage-second-wrapper{
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    border: 1px solid black;
-}
-.chatmessage-upper-wrapper {
-    margin: 0;
-    display: flex;
-    border: 1px solid black;
-    gap: 10px;
-    box-sizing: border-box;
-}
-.chatmessage-nickname-wrapper {
-    margin: 0;
-}
-.chatmessage-nickname {
-    margin: 0;
-    padding: 5px;
-}
-.chatmessage-createdat-wrapper {
-    margin: 0;
-}
-.chatmessage-createdat {
-    margin: 0;
-    padding: 5px;
-}
-.chatmessage-content-wrapper {
-    margin: 0;
-    padding: 5px;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    border: 1px solid black;
-}
-.chatmessage-content {
-    margin: 0;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0px 5px;
-    border: 1px solid black;
-}
-/*초대 영역 css*/
-.invite-list {
-    width: 100%;
-    height: 80px;
-    font-size: 16px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-
-    border: 1px solid black;
-
-    box-sizing: border-box;
-}
-.invite-info-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 5px;
-    height: 100%;
-
-    box-sizing: border-box;
-}
-.invite-second-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-
-    flex-direction: column;
-    box-sizing: border-box;
-}
-.invite-upper-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 5px;
-    height: 50%;
-
-    box-sizing: border-box;
-}
-.invite-username-wrapper,
-.invite-nickname-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    height: 50%;
-
-    border: 1px solid black;
-
-    box-sizing: border-box;
-}
-.invite-second-wrapper .invite-status {
-    display: flex;
-    align-items: center;
-    justify-content: left;
-
-    width: 100%;
-    height: 50%;
-    border: 1px solid black;
-}
-.center textarea{
-    /*width: 890px;
-    height: 530px;*/
-    padding: 10px;
-
-    width: 100%;
-    height: 80vh;
-}
-
-.center .chat-input-wrapper{
-    display: flex;
-    flex-direction: row;
-    height: 10vh;
-}
-.center .chat-input-wrapper #uploadFileBtn{
-    width: 5%;
-    height: 45px;
-}
-.chat-input-wrapper input {
-    font-size: 15px;
-    padding: 0 10px;
-    width: 85%;
-    height: 45px;
-    margin: 0 5px;
-}
-.chat-input-wrapper #sendMsgBtn {
-    margin: 0;
-    width: 10%;
-    height: 45px;
-}
-/*****************************************************************/
-/**********************접속자 창 css********************************/
-.right {
-    width: 20vw;
-    display: flex;
-    flex-direction: column;
-    background-color: darkgray;
-    box-sizing: border-box;
-    padding: 20px;
-    gap: 10px
-}
-.right-header {
-    margin: 0;
-    text-align: center;
-}
-.right-header h2{
-    margin: 0;
-    text-align: center;
-}
-.online-visitorlist-wrapper{
-    width: 100%;
-    background-color: #FFFFFF;
-}
-.visitor-item {
-    padding: 5px;
-    display: flex;
-    width: 100%;
-    height: 40px;
-    align-items: center;
-    background-color: #006d77;
-    gap: 10px;
-    box-sizing: border-box;
-}
-.visitor-image-wrapper {
-    margin: 0;
-    padding: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    box-sizing: border-box;
-}
-.visitor-item img {
-    margin: 0;
-    width: 40px;
-    height: 40px;
-    background-color: #1E55DC;
-    border-radius: 50%;
-    box-sizing: border-box;
-}
-.visitor-image-wrapper .green-dot {
-    z-index: 1;
-}
-
-.visitor-item p {
-    margin: 0;
-    padding: 0 10px;
-    line-height: 40px;
-    width: 100%;
-    height: 40px;
-    background-color: #1E55DC;
-}
-
-.chatRoom .roomPeopleCount{
-    background-color: skyblue;
-    border: 1px solid black;
-}
-
-.enterButton{
-    border: 1px solid black;
-    padding: 2px 0px;
-    padding-left: 5px;
-    padding-right: 5px;
-    text-decoration: none;
-}
-.enterButton:hover{
-    text-decoration: underline;
-}
-
-.input-label {
-    display: block;
-    font-size: 12px;
-    font-weight: bold;
-    color: #b5bac1;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-}

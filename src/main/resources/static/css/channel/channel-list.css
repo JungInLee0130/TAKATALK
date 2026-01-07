@@ -6,8 +6,8 @@
     width: 250px;
     height: 90vh;
 
-    background-color: #2E2E34;
-    color: white;
+    background-color: var(--main-bg-color);
+    color: var(--main-font-color);
     box-sizing: border-box;
 
     /*스크롤 관련*/
@@ -39,7 +39,7 @@
 .category-dropdown.active .category-dropdown-icon {
     transform: rotate(-90deg);
 }
-.category-wrapper {
+.categorized-channel-dropdown {
     display: flex;
     align-items: center;
     gap: 5px;
@@ -75,22 +75,6 @@
     display: block;
     text-decoration: none;
     color: inherit;
-}
-.profile-image-wrapper {
-    margin: 0;
-    margin-left: 5px;
-}
-.profile-image-wrapper .profile-image {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-}
-.profile-nickname-wrapper {
-    margin: 0;
-}
-.profile-nickname-wrapper p{
-    margin : 0;
-    line-height: 10vh;
 }
 .channel-categorized-group {
     width: 100%;

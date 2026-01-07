@@ -4,7 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
   <link rel="stylesheet" th:href="@{/css/main/channel.css}"/>
+  <script type="importmap">
+  {
+    "imports" : {
+      "axios" : "https://cdn.jsdelivr.net/npm/axios@1.13.2/+esm"
+    }
+  }
+  </script>
   <title>channel</title>
 </head>
 <body>
@@ -17,12 +25,12 @@
         <div th:replace="~{fragments/layout/channel-list :: channelList}"></div>
       </div>
       <!--3. 내 프로필 하단바-->
-      <div th:replace="~{fragments/layout/channel-list :: myProfile}"></div>
+      <div th:replace="~{fragments/layout/my-profile :: myProfile}"></div>
     </div>
 
     <!--4. 채팅 영역-->
     <main id="mainChatWrapper">
-      <div th:replace="~{fragments/layout/chat-area :: inviteArea}"></div>
+      <div th:replace="~{fragments/layout/invite-area :: inviteArea}"></div>
       <div th:replace="~{fragments/layout/chat-area :: chatArea}"></div>
     </main>
 
@@ -48,22 +56,16 @@
 <!--1. 외부 js 로직-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script> <!--SOCKJS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script> <!--STOMP-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> <!--JQUERY-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> <!--JQUERY, AJAX-->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!--AXIOS-->
 <!--2. 타임리프 변수 선언-->
 <script th:inline="javascript">
-  const currentGroupId = [[${currentGroup != null ? currentGroup.id : null}]];
-  const currentCategoryId = [[${categories != null ? categories.id : null}]];
-  const currentChannelId = [[${currentChannel != null ? currentChannel.id : null}]];
+  const currentGroupId = [[${currentGroup?.id}]];
+  const currentCategoryId = [[${categories?.id}]];
+  const currentChannelId = [[${currentChannel?.id}]];
   const csrfToken = [[${_csrf.token}]];
   const csrfHeader = [[${_csrf.headerName}]];
 </script>
-<!--3. 기능별 모듈-->
-<script th:src="@{/js/chat/chat-controller.js}"></script>
-<script th:src="@{/js/common/ui-controller.js}"></script>
-<script th:src="@{/js/common/context-menu.js}"></script>
-<script th:src="@{/js/group/group-controller.js}"></script>
-<script th:src="@{/js/channel/channel-list-controller.js}"></script>
-<script th:src="@{/js/category/category-controller.js}"></script>
 <!--4. 메인 실행 파일-->
-<script th:src="@{/js/common/main.js}"></script>
+<script type="module" th:src="@{/js/common/main.js}"></script>
 </html>

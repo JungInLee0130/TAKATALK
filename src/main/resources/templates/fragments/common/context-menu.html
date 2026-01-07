@@ -3,19 +3,20 @@
   <div th:fragment="groupContextMenu">
     <div id="groupContextMenu" class="context-menu">
       <ul>
-        <li class="menu-edit-group" onclick="openEditGroupModal()">그룹 수정</li>
-        <li class="menu-delete-group delete-item" id="deleteGroupMenu">그룹 삭제</li>
-        <li class="menu-create-group" onclick="openCreateGroupModal()">그룹 생성</li>
+        <li id="editGroupMenu" class="menu-edit-group" onclick="openEditGroupModal()">서버 수정</li>
+        <li id="deleteGroupMenu" class="menu-delete-group delete-item">서버 삭제</li>
+        <li id="createGroupMenu" class="menu-create-group" onclick="openCreateGroupModal()">서버 생성</li>
+        <li id="joinGroupMenu">서버에 참여하기</li>
       </ul>
     </div>
   </div>
   <div th:fragment="channelListContextMenu">
     <div id="channelListContextMenu" class="context-menu">
       <ul>
-        <li onclick="openCategoryCreateModal()">카테고리 만들기</li>
-        <li onclick="openChannelCreateModal()">채널 만들기</li>
-        <li onclick="openInviteGroupModal()">서버에 초대하기</li>
-        <!--<li onclick="openInviteManageModal()">서버에 초대하기</li>-->
+        <li id="createCategoryMenu">카테고리 만들기</li>
+        <li id="createChannelMenu">채널 만들기</li>
+        <li id="inviteGroupMenu">서버에 초대하기</li>
+        <li id="inviteManageMenu">서버에 초대하기 ver.2</li>
       </ul>
     </div>
   </div>

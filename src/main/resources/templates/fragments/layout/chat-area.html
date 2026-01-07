@@ -2,116 +2,80 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <!--****채팅방****-->
 <div th:fragment="chatArea" class="center" th:if="${currentChannel}" id="chatArea">
-    <div class="center">
-        <div class="center-header">
-            <h2 th:text="${currentChannel.name}"></h2> <!--채팅방 title-->
-            <div class="user-list-icon">
-                <button type="button" id="chatUserlist" class="chat-userlist">user</button> <!--채팅방 visitor 햄버거버튼-->
-            </div>
-        </div>
-        <!--메시지 공간 90vh-->
-        <div id="chatBox" class="chat-box">
-            <!-- 빈공간-->
-            <div id="transparentSpacer"></div>
-            <!-- 서버 환영메시지 -->
-            <!-- 서버로부터 받아온 메시지가 존재하면 visible.: 이전 채팅데이터 GET-->
-            <!--<div class="chatbox-upper-wrapper" th:if="${#lists.isEmpty(groups)}">
-              <h2>가입한 서버가 없습니다. 서버를 생성하거나 초대코드를 입력하세요!</h2>
-            </div>-->
-            <div class="chatbox-welcome-wrapper" style="display: none">
-                <h2>#<span th:text="${currentChannel.name}"></span>에 오신걸 환영합니다!</h2>
-                <p>#<span th:text="${currentChannel.name}"></span> 채널의 시작이에요.</p>
-            </div>
-
-            <!-- 채팅 메시지 본문 -->
-            <div id="chatBoxBody" th:if="${chatMessageResponseList}">
-                <!--개별 메시지 wrapper : chatMessageResponse 반복, chatMessageId 저장-->
-                <div class="chatmessage-wrapper" th:each="chatMessageResponse : ${chatMessageResponseList}"
-                     th:data-id="${chatMessageResponse.chatMessageId}">
-                    <!--chatMessageResponse.type == 'TALK' 이면 -->
-                    <div class="chatmessage-talk-wrapper" th:if="${chatMessageResponse.type.name() == 'TALK'}">
-                        <div class="chatmessage-profile-wrapper">
-                            <img class="chatmessage-profile" th:src="${chatMessageResponse.profile}">
-                        </div>
-                        <div class="chatmessage-second-wrapper">
-                            <div class="chatmessage-upper-wrapper">
-                                <div class="chatmessage-nickname-wrapper">
-                                    <p class="chatmessage-nickname" th:text="${chatMessageResponse.nickname}"></p>
-                                </div>
-                                <div class="chatmessage-createdat-wrapper">
-                                    <p class="chatmessage-createdat" th:text="${#temporals.format(chatMessageResponse.createdAt, 'HH:mm')}"></p>
-                                </div>
-                            </div>
-                            <div class="chatmessage-content-wrapper">
-                                <p class="chatmessage-content" th:text="${chatMessageResponse.content}"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <!--입장메시지면-->
-                    <div class="system-message-wrapper" th:if="${chatMessageResponse.type.name() == 'ENTER'}">
-                        <p>-> <span th:text="${chatMessageResponse.nickname}" style="font-weight: bold"></span> <span th:text="${chatMessageResponse.content}"></span>
-                        </p>
-                    </div>
-                </div>
-                <!--사용자가 입력하는 메시지 생성되는 공간-->
-            </div>
-
-            <div class="chat-input-wrapper">
-                <button type="button" id="uploadFileBtn" class="upload-file-btn" onclick="uploadFile()">File</button>
-                <input id="chatInput" class="chat-input" placeholder="채팅 입력" autofocus>
-                <button type="button" id="sendMsgBtn" class="send-msg-btn">Send</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--****채팅방****-->
-<div th:fragment="inviteArea" class="center" id="inviteArea" th:unless="${currentChannel}" >
     <div class="center-header">
-        <div class="center-header-title">
-            <p>친구</p> <!--채팅방 title-->
-        </div>
-        <div class="header-tabs">
-            <p class="header-title">모두</p> <!--채팅방 title-->
-            <p class="header-title">대기중</p> <!--채팅방 title-->
-        </div>
-        <div class="btn-primary">
-            친구 추가하기
+        <h2 th:text="${currentChannel.name}"></h2> <!--채팅방 title-->
+        <div class="user-list-icon">
+            <button type="button" id="chatUserlist" class="chat-userlist">user</button> <!--채팅방 visitor 햄버거버튼-->
         </div>
     </div>
-    <!--초대 공간 90vh-->
-    <div id="inviteBox" class="chat-box">
-        <th:block th:if="${inviteResponseList}">
-        <div class="invite-list" th:each="inviteResponse : ${inviteResponseList}">
-            <div class="invite-info-wrapper">
-                <div class="chatmessage-profile-wrapper">
-                    <!--<img class="chatmessage-profile" th:src="${inviteResponse.profile}">-->
-                    <img class="chatmessage-profile" src="../../../static/images/meeng.png">
-                </div>
-                <div class="invite-second-wrapper">
-                    <div class="invite-upper-wrapper">
-                        <div class="invite-username-wrapper">
-                            <p class="invite-nickname" th:text="${inviteResponse.username}"></p>
-                        </div>
-                        <div class="invite-nickname-wrapper">
-                            <p class="invite-nickname" th:text="${inviteResponse.nickname}"></p>
-                        </div>
-                    </div>
-                    <div class="invite-status">
-                        <p th:text="${inviteResponse.isOnline == true}">온라인</p>
-                        <p th:text="${inviteResponse.isOnline == false}">오프라인</p>
-                    </div>
-                </div>
-            </div>
-            <div class="btn-invite-wrapper">
-                <div class="btn-accept-invite" onclick="acceptInvite()">
-                    <p>수락</p>
-                </div>
-                <div class="btn-deny-invite" onclick="denyInvite()">
-                    <p>거절</p>
-                </div>
-            </div>
+    <!--메시지 공간 90vh-->
+    <div id="chatBox" class="chat-box center-body">
+        <!-- 빈공간-->
+        <div id="transparentSpacer"></div>
+        <!-- 서버 환영메시지 -->
+        <!--<div class="chatbox-upper-wrapper" th:if="${#lists.isEmpty(groups)}">
+          <h2>가입한 서버가 없습니다. 서버를 생성하거나 초대코드를 입력하세요!</h2>
+        </div>-->
+        <div class="chatbox-welcome-wrapper" style="display: none">
+            <h2>#<span th:text="${currentChannel.name}"></span>에 오신걸 환영합니다!</h2>
+            <p>#<span th:text="${currentChannel.name}"></span> 채널의 시작이에요.</p>
         </div>
-        </th:block>
+
+        <!-- 채팅 메시지 본문 -->
+        <div id="chatBoxBody" th:if="${chatMessageResponseList}">
+            <!--개별 메시지 wrapper : chatMessageResponse 반복, chatMessageId 저장-->
+            <div class="chatmessage-wrapper" th:each="chatMessageResponse : ${chatMessageResponseList}"
+                 th:data-chatmessage-id="${chatMessageResponse.chatMessageId}">
+                <!--chatMessageResponse.type == 'TALK' 이면 -->
+                <div class="chatmessage-talk-wrapper" th:if="${chatMessageResponse.type.name() == 'TALK'}">
+                    <div class="chatmessage-profile-wrapper">
+                        <img class="chatmessage-profile" th:src="${chatMessageResponse.profile}">
+                    </div>
+                    <div class="chatmessage-second-wrapper">
+                        <div class="chatmessage-upper-wrapper">
+                            <div class="chatmessage-nickname-wrapper">
+                                <p class="chatmessage-nickname" th:text="${chatMessageResponse.nickname}"></p>
+                            </div>
+                            <div class="chatmessage-createdat-wrapper">
+                                <p class="chatmessage-createdat" th:text="${#temporals.format(chatMessageResponse.createdAt, 'HH:mm')}"></p>
+                            </div>
+                        </div>
+                        <div class="chatmessage-content-wrapper">
+                            <p class="chatmessage-content" th:text="${chatMessageResponse.content}"></p>
+                        </div>
+                    </div>
+                </div>
+                <!--입장메시지면-->
+                <div class="system-message-wrapper" th:if="${chatMessageResponse.type.name() == 'ENTER'}">
+                    <p>-> <span th:text="${chatMessageResponse.nickname}" style="font-weight: bold"></span> <span th:text="${chatMessageResponse.content}"></span>
+                    </p>
+                </div>
+            </div>
+            <!--사용자가 입력하는 메시지 생성되는 공간-->
+        </div>
+    </div>
+    <div class="chat-input-wrapper center-footer">
+        <button type="button" id="uploadFileBtn" class="upload-file-btn">+</button>
+        <input id="chatInput" class="chat-input" th:placeholder="|${currentChannel?.name}에 메시지 보내기|" autofocus autocomplete="off">
+        <button type="button" id="sendMsgBtn" class="send-msg-btn">↑</button>
     </div>
 </div>
+<!--<div th:fragment="chatmessageTalk" class="chatmessage-talk-wrapper" data-chatmessage-id="${data.chatMessageId}">
+    <div class="chatmessage-profile-wrapper">
+        <img class="chatmessage-profile" src="${data.profile}">
+    </div>
+    <div class="chatmessage-second-wrapper">
+        <div class="chatmessage-upper-wrapper">
+            <div class="chatmessage-nickname-wrapper">
+                <p class="chatmessage-nickname">${data.nickname}</p>
+            </div>
+            <div class="chatmessage-createdat-wrapper">
+                <p class="chatmessage-createdat">${data.createdAt}</p>
+            </div>
+        </div>
+        <div class="chatmessage-content-wrapper">
+            <p class="chatmessage-content">${data.content}</p>
+        </div>
+    </div>
+</div>-->
 </html>

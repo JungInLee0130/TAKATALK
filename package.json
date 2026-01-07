@@ -1,0 +1,15 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "> **Spring Boot 3.5.3 & Java 21** 기반의 실시간 커뮤니티 플랫폼(Discord 클론) 프로젝트입니다.  \r > 단순한 채팅을 넘어 **데이터 정합성, 파일 시스템 설계, 실시간 동기화** 등 백엔드의 핵심 역량을 다지는 데 집중했습니다.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.13.2"
+  }
+}

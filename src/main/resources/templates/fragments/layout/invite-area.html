@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--****채팅방****-->
+<div th:fragment="inviteArea" class="center" id="inviteArea" th:unless="${currentChannel}" >
+  <div class="center-header">
+    <div class="center-header-title">
+      <p>친구</p> <!--채팅방 title-->
+    </div>
+    <div class="header-tabs">
+      <p class="header-title">모두</p> <!--채팅방 title-->
+      <p class="header-title">대기중</p> <!--채팅방 title-->
+    </div>
+    <div class="btn-primary">
+      친구 추가하기
+    </div>
+  </div>
+  <!--초대 공간 90vh-->
+  <div id="inviteBox" class="chat-box">
+    <th:block th:if="${inviteResponseList}">
+      <div class="invite-list" th:each="inviteResponse : ${inviteResponseList}">
+        <div class="invite-info-wrapper">
+          <div class="chatmessage-profile-wrapper">
+            <!--<img class="chatmessage-profile" th:src="${inviteResponse.profile}">-->
+            <img class="chatmessage-profile" src="../../../static/images/meeng.png">
+          </div>
+          <div class="invite-second-wrapper">
+            <div class="invite-upper-wrapper">
+              <div class="invite-username-wrapper">
+                <p class="invite-nickname" th:text="${inviteResponse.username}"></p>
+              </div>
+              <div class="invite-nickname-wrapper">
+                <p class="invite-nickname" th:text="${inviteResponse.nickname}"></p>
+              </div>
+            </div>
+            <div class="invite-status">
+              <p th:text="${inviteResponse.isOnline == true}">온라인</p>
+              <p th:text="${inviteResponse.isOnline == false}">오프라인</p>
+            </div>
+          </div>
+        </div>
+        <div class="btn-invite-wrapper">
+          <div class="btn-accept-invite" onclick="acceptInvite()">
+            <p>수락</p>
+          </div>
+          <div class="btn-deny-invite" onclick="denyInvite()">
+            <p>거절</p>
+          </div>
+        </div>
+      </div>
+    </th:block>
+  </div>
+</div>
+</html>
