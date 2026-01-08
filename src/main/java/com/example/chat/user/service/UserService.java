@@ -6,6 +6,7 @@ import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.login.service.TokenService;
 import com.example.chat.user.dto.ProfileRequest;
 import com.example.chat.user.domain.UserCreateForm;
+import com.example.chat.user.dto.UserProfileResponse;
 import com.example.chat.user.dto.UserResponse;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.repository.UserRepository;
@@ -138,6 +139,12 @@ public class UserService {
         log.info("profile : {}", siteUser.getProfile());
 
         return response;
+    }
+
+    @Transactional(readOnly = true)
+    public UserProfileResponse getSiteUserProfileInfo(Long siteUserId) {
+        SiteUser siteUser = findById(siteUserId);
+        return UserProfileResponse.from(siteUser);
     }
 }
 

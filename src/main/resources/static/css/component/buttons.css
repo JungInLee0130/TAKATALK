@@ -1,38 +1,45 @@
 .btn-invite-wrapper {
+    margin-right: 5px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
 }
-.btn-accept-invite{
-    height: 100%;
-    padding: 20px;
-    box-sizing: border-box;
+.btn-accept-invite {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    padding: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid black;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--btn-bg-color);
     cursor: pointer;
+    box-sizing: border-box;
 }
-.btn-accept-invite p{
-    margin: 0;
+.btn-accept-invite:hover {
+    color: green;
 }
-
 .btn-deny-invite{
-    margin: 0;
-    height: 100%;
-    padding: 20px;
-    box-sizing: border-box;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    padding: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid black;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--btn-bg-color);
     cursor: pointer;
+    box-sizing: border-box;
 }
-
-.btn-deny-invite p{
-    margin: 0;
-
+.btn-deny-invite:hover{
+    background-color: var(--hover-bg-color);
+    color: red;
 }
 .btn-cancel {
     flex: 1;
@@ -73,7 +80,6 @@
     font-size: 14px;
 }
 .btn-primary {
-    flex: 1;
     background-color: #5865f2;
     color: white;
     border: none;

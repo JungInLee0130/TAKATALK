@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: column;
     width: 60vw;
+    height: 100vh;
     gap: 5px;
     padding: 10px;
     box-sizing: border-box;
@@ -11,17 +12,11 @@
 }
 .center-header{
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     height: 10vh;
 }
-#inviteArea .center-header{
-    justify-content: normal;
-}
-.header-tabs {
-    display: flex;
-}
+
 .center-header h2{
     margin-left: 10px;
     text-align: center;
@@ -34,7 +29,7 @@
     background: none;
     border: none;
 }
-.chat-box.center-body {
+.center-body {
     display: flex;
     flex-direction: column;
     overflow-y: auto; /*내용이 넘치면 자동으로 스크롤 생성*/
@@ -88,18 +83,17 @@
     border: 1px solid black;
 }
 .chatmessage-profile-wrapper {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     box-sizing: border-box;
-    border: 1px solid black;
 }
 .chatmessage-profile {
     padding: 5px;
     width: 100%;
-    height: 80px;
+    height: 100%;
     object-fit: cover;
+    border: none;
     border-radius: 50%;
-    border: 1px solid black;
     box-sizing: border-box;
 }
 .chatmessage-second-wrapper{
@@ -147,71 +141,8 @@
     padding: 0px 5px;
     border: 1px solid black;
 }
-/*초대 영역 css*/
-.invite-list {
-    width: 100%;
-    height: 80px;
-    font-size: 16px;
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
 
-    border: 1px solid black;
-
-    box-sizing: border-box;
-}
-.invite-info-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 5px;
-    height: 100%;
-
-    box-sizing: border-box;
-}
-.invite-second-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-
-    flex-direction: column;
-    box-sizing: border-box;
-}
-.invite-upper-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 5px;
-    height: 50%;
-
-    box-sizing: border-box;
-}
-.invite-username-wrapper,
-.invite-nickname-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    height: 50%;
-
-    border: 1px solid black;
-
-    box-sizing: border-box;
-}
-.invite-second-wrapper .invite-status {
-    display: flex;
-    align-items: center;
-    justify-content: left;
-
-    width: 100%;
-    height: 50%;
-    border: 1px solid black;
-}
 .chat-input-wrapper{
     display: flex;
     flex-direction: row;
@@ -238,7 +169,7 @@
     box-sizing: border-box;
     color: #6C6D74;
 }
-.chat-input:focus {
+.chat-input:focus, .chat-input:active {
     border: none;
 }
 #sendMsgBtn {

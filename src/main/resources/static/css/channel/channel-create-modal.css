@@ -74,3 +74,7 @@
     color: #80848e;
     box-sizing: border-box;
 }
+
+.channel-create-btn{
+    flex: 1;
+}

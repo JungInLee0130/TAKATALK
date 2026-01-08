@@ -1,9 +1,11 @@
 :root {
     --hover-bg-color: #6C6D74;
-    --font-desc-size: 12px;
     --main-bg-color: #1A1A1E;
-    --main-font-color: white;
     --chat-area-bg-color: #2E2E34;
+    --section-bg-color:#3f4147;
+
+    --font-desc-size: 12px;
+    --main-font-color: white;
     --border-radius: 7px;
 }
 * {

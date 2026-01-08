@@ -1,0 +1,97 @@
+.invite-list {
+    width: 100%;
+    padding: 5px;
+    height: 80px;
+    font-size: 16px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+
+    border: 1px solid black;
+    border-radius: var(--border-radius);
+
+    --btn-bg-color: var(--chat-area-bg-color);  /* 기본값 */
+
+    box-sizing: border-box;
+}
+.invite-list:hover {
+    transition: .2s;
+    background-color: var(--hover-bg-color);
+    --btn-bg-color: var(--chat-area-bg-color);  /* btn-bg-color 유지 */
+    cursor: pointer;
+}
+.invite-tab-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    height: 10vh;
+    box-sizing: border-box;
+}
+.tab-title {
+    display:flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 10px;
+}
+.friend-icon {
+    width: 24px;
+    height: 24px;
+
+}
+.invite-friend-btn {
+
+}
+.invite-info-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+    height: 100%;
+
+    box-sizing: border-box;
+}
+.invite-second-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    flex-direction: column;
+    box-sizing: border-box;
+}
+.invite-upper-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+    height: 50%;
+
+    box-sizing: border-box;
+}
+.invite-username-wrapper,
+.invite-nickname-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+
+    height: 50%;
+
+    box-sizing: border-box;
+}
+.invite-status {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 5px;
+    width: 100%;
+    height: 50%;
+    border: none;
+}
+.status-title {
+
+}

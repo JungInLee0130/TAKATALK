@@ -2,11 +2,14 @@ package com.example.chat.user.controller;
 
 import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.user.domain.UserCreateForm;
-import com.example.chat.user.entity.SiteUser;
+import com.example.chat.user.dto.UserProfileResponse;
+import com.example.chat.user.service.CustomUserDetails;
 import com.example.chat.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -131,4 +134,10 @@ public class UserController {
 
         return ResponseEntity.ok("success");
     }*/
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserProfileResponse> getSiteUserInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        UserProfileResponse response = userService.getSiteUserProfileInfo(userDetails.getId());
+        return ResponseEntity.ok(response);
+    }
 }
