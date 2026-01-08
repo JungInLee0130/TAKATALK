@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../../../static/css/common/common.css"/>
+  <link rel="stylesheet" href="../../../static/css/component/modals.css"/>
+  <link rel="stylesheet" href="../../../static/css/user/my-profile-modal.css"/>
+  <title>channel</title>
+</head>
+<body>
+  <div th:fragment="myProfileModal" id="myProfileModal" class="my-profile-modal modal" style="display: flex" th:if="${siteUser}">
+    <div class="profile-modal-content">
+      <div class="transparent-background"></div>
+      <div class="profile-modal-header">
+        <div class="my-profile-image-wrapper">
+          <!--<img class="my-profile-image" th:src="@{siteUser.profile}">-->
+          <img class="my-profile-image" src="../../../static/images/meeng.png">
+        </div>
+        <div class="my-profile-name-wrapper">
+          <p class="my-profile-nickname" th:text="${siteUser.nickname}">dlwjddls0130</p>
+          <p class="my-profile-username" th:text="${siteUser.username}">이정인</p>
+        </div>
+      </div>
+      <div class="profile-modal-body">
+        <div class="profile-section">
+          <p>프로필 편집</p>
+        </div>
+        <div class="profile-section">
+          <p>유저 상태</p>
+        </div>
+      </div>
+      <div class="profile-modal-footer">
+        <div class="logout-btn">
+          <span style="color: #FFFFFF">로그아웃</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

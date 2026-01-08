@@ -35,6 +35,11 @@ public class ProfileController {
         return "profile/profile";
     }
 
+
+
+    /*
+    * 프로필 업데이트 : 경로 바꿔야할듯. PostMapping도 바꿔야할것같고
+    * */
     @PostMapping("/update")
     public ResponseEntity<Void> updateProfile(@Valid ProfileRequest request,
                                               @AuthenticationPrincipal CustomUserDetails userDetails) throws IOException {

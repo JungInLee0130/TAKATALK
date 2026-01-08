@@ -1,16 +1,30 @@
-.left-profile-wrapper {
+.my-profile-wrapper {
     margin: 0;
+    padding: 5px;
+    width: 250px;
+    height: 10vh;
     display: flex;
     align-items: center;
     gap: 5px;
     background-color: var(--main-bg-color);
     color: var(--main-font-color);
-    height: 10vh;
+    box-sizing: border-box;
+    cursor: pointer;
 }
 .profile-nickname-wrapper {
+    flex: 1;
     margin: 0;
+    box-sizing: border-box;
 }
 .profile-nickname-wrapper p{
-    margin : 0;
+    flex:2;
+    margin: 0;
     line-height: 10vh;
+    box-sizing: border-box;
+}
+.profile-icons {
+    flex:1;
+    display: flex;
+    gap: 5px;
+    box-sizing: border-box;
 }

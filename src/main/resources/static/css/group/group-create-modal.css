@@ -64,3 +64,6 @@
     object-fit: cover;
     z-index: 2;
 }
+.group-create-btn {
+    flex: 1;
+}
