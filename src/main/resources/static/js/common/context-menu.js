@@ -1,4 +1,4 @@
-import {selectedGroupId} from "./main.js";
+import {selectedGroupId, setSelectedGroupId} from "./main.js";
 
 export const ContextMenu = {
     init() {
@@ -12,7 +12,7 @@ export const ContextMenu = {
                 console.log(groupTarget);
 
                 if (groupTarget) {
-                    selectedGroupId = groupTarget.getAttribute('data-group-id');
+                    selectedGroupId = setSelectedGroupId(groupTarget.getAttribute('data-group-id'));
                     console.log("selectedGroupId : ", selectedGroupId);
                     toggleGroupMenu(true);
                 } else {
@@ -23,9 +23,11 @@ export const ContextMenu = {
 
             // 2. 채널 리스트 영역
             handleCustomContextMenu(event, '.left', 'channelListContextMenu');
+            //handleCustomContextMenu(event, '#channelHeader', 'channelListContextMenu');
         });
-        document.addEventListener('click', closeAllContextMenus);
+
         // ESC 닫기 전역 이벤트
+        document.addEventListener('click', closeAllContextMenus);
         document.addEventListener('keydown', function (event) {
             if (event.key === 'Escape') {
                 closeAllContextMenus();

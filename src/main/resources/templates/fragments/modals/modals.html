@@ -1,33 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <!-- 초대 코드 모달 조각 -->
-<div th:fragment="inviteJoinModal">
-    <div id="inviteJoinModal" class="modal">
-        <!-- 모달 HTML -->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">서버 참가하기</h2>
-            </div>
-            <div class="modal-body">
-                <p>친구에게 받은 초대 코드를 아래에 입력하여 기존 서버에 참가하세요.</p>
-                <label class="input-label">초대 코드</label>
-                <input type="text" id="inviteCodeInput" class="text-input" placeholder="h7s2k9Lp">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-cancel" onclick="closeInviteModal()">취소</button>
-                <button type="button" class="btn-join" onclick="joinServer()">서버 참가</button>
-            </div>
+<div th:fragment="inviteJoinModal" id="inviteJoinModal" class="modal">
+    <!-- 모달 HTML -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">서버 참가하기</h2>
+        </div>
+        <div class="modal-body">
+            <p>친구에게 받은 초대 코드를 아래에 입력하여 기존 서버에 참가하세요.</p>
+            <label class="input-label">초대 코드</label>
+            <input type="text" id="inviteCodeInput" class="text-input" placeholder="h7s2k9Lp">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-cancel" data-close="modal">취소</button>
+            <button type="button" class="btn-join" data-close="modal">서버 참가</button>
         </div>
     </div>
-    <script>
-        /* 모달 제어 함수 */
-        function openInviteModal() {
-            document.getElementById('inviteJoinModal').style.display = 'block';
-        }
-        function closeInviteModal() {
-            document.getElementById('inviteJoinModal').style.display = 'none';
-            document.getElementById('inviteCodeInput').value = '';
-        }
-    </script>
 </div>
 </html>

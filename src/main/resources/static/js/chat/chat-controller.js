@@ -4,6 +4,7 @@ let stompClient = null;
 let chatBox = null;   // 초기값은 null로 설정
 let isFetching = false; // 채팅 내역 조회 상태 저장
 let firstMessageId = null;  // 채팅 상단 아이디 상태 저장
+let currentChannelId = null;    // 채널입장시 파일 전역변수 저장
 
 /* 채널 접속시 channelId 할당*/
 // 이건 기본적으로 채널 접속시 실행되어야함.
@@ -15,39 +16,42 @@ export const ChatController = {
         mainChatWrapper.addEventListener('click', event => {
             /* 1. 전송버튼 클릭시 */
             if (event.target.closest("#sendMsgBtn")) {
-                sendMessage();
+                sendMessage(currentChannelId);  // 클릭되는 시점에 추가가능
             }
         })
         mainChatWrapper.addEventListener('keydown', event => {
             if (event.target.closest("#chatInput")) {
                 /* 2. chatInput 엔터 클릭시 */
                 if (event.key === "Enter") {
-                    sendMessage();
+                    sendMessage(currentChannelId);
                 }
             }
         })
+        /** 스크롤 이벤트 : init에 한번만 등록 **/
+        mainChatWrapper.addEventListener('scroll', event => {
+            if (event.target.id === 'chatBox') {
+                handleScroll(currentChannelId);
+            }
+        }, true);
     },
     // 2. 채널 접속시
-    enterChannel(currentChannelId) {
-        ChatController.resetChatState();
+    enterChannel(channelId) {
+        ChatController.resetChatState(channelId);
         chatBox = document.getElementById('chatBox');
         if (chatBox) {
             chatBox.scrollTop = chatBox.scrollHeight; // 스크롤 맨 아래로
-            // 무한 스크롤 이벤트 등록
-            chatBox.addEventListener('scroll', () => {
-                handleScroll(currentChannelId); // 현재 채널 정보
-            });
         }
 
         // 소켓 연결
-        if (currentChannelId) {
-            console.log("채널에 접속하여 소켓을 연결합니다. ID : ", currentChannelId);
-            connect();
+        if (channelId) {
+            console.log("채널에 접속하여 소켓을 연결합니다. ID : ", channelId);
+            connect(channelId);
         } else {
             console.log("현재 선택된 채널이 없습니다.");
         }
     },
-    resetChatState() {
+    resetChatState(channelId) {
+        currentChannelId = channelId;
         isFetching = false;
         firstMessageId = null;  // 채널 접속시 상단 ID 초기화
         console.log("채팅 상태 초기화 완료");
@@ -162,7 +166,7 @@ function renderOldMessages(data) {
 }
 
 /* 소켓 연결 함수 */
-function connect() {
+function connect(currentChannelId) {
     const socket = new SockJS('/ws-stomp');
     stompClient = Stomp.over(socket);
 
@@ -261,7 +265,7 @@ function renderMessage(data) {
 }
 
 /* sendMessage 함수 */
-function sendMessage() {
+function sendMessage(currentChannelId) {
     const inputBox = document.getElementById("chatInput");
     if (!inputBox.value || !stompClient) return;
 
@@ -368,13 +372,14 @@ export function createChannel(groupId, categoryId) {
         data: JSON.stringify(requestBodyData),
         statusCode : {
             201 : function (data,textStatus,jqXHR) {
-                let newLocation = jqXHR.getResponseHeader('Location');
+                /*let newLocation = jqXHR.getResponseHeader('Location');
                 if (newLocation) {
                     console.log(newLocation);
                     window.location.href = newLocation;
                 } else {
                     console.log("Location 헤더를 찾을수 없습니다.")
-                }
+                }*/
+                window.location.reload();
             }
         },
         success: function (response) {

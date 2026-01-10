@@ -7,7 +7,7 @@
         <div class="modal-header-text">
           <h2>친구를 <span th:text="${currentGroup.name}" style="font-weight: bold">그룹 1</span> 그룹으로 초대하기</h2>
         </div>
-        <div class="modal-close-btn-wrapper" onclick="closeModal(this)">
+        <div class="modal-close-btn-wrapper" data-close="modal">
           <p>X</p>
         </div>
       </div>
@@ -64,7 +64,7 @@
 
       <div class="modal-header">
         <h2>친구 초대하기</h2>
-        <div class="modal-close-btn" onclick="closeModal(this)">
+        <div class="modal-close-btn" data-close="modal">
           <svg width="24" height="24" viewBox="0 0 24 24">
             <path fill="currentColor"
                   d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
@@ -89,7 +89,7 @@
 
       <div class="modal-footer">
         <button type="button" class="btn-cancel" onclick="resetInviteCode()" style="color: #ed4245;">코드 초기화</button>
-        <button type="button" class="btn-cancel" onclick="closeModal(this)">닫기</button>
+        <button type="button" class="btn-cancel" data-close="modal">닫기</button>
       </div>
     </div>
   </div>

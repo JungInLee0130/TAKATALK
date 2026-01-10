@@ -28,7 +28,7 @@ public class Category {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     @ToString.Exclude
-    private List<Channel> channels = new ArrayList<>();
+    private List<Channel> channels = new ArrayList<>(); // 연관관계라서 DB열에는 포함안됨.
 
     @Builder
     private Category(Long id, String name, Boolean isSecret, Group group, List<Channel> channels) {

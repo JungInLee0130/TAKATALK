@@ -27,7 +27,7 @@
     width: 100%;
     height: 40px;
     align-items: center;
-    background-color: #006d77;
+    background-color: var(--main-bg-color);
     gap: 10px;
     box-sizing: border-box;
 }
@@ -37,14 +37,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
     box-sizing: border-box;
 }
 .visitor-item img {
     margin: 0;
     width: 40px;
     height: 40px;
-    background-color: #1E55DC;
     border-radius: 50%;
     box-sizing: border-box;
 }
@@ -56,9 +54,9 @@
     margin: 0;
     padding: 0 10px;
     line-height: 40px;
+    color: var(--main-font-color);
     width: 100%;
     height: 40px;
-    background-color: #1E55DC;
 }
 
 .chatRoom .roomPeopleCount{

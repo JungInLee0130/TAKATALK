@@ -51,8 +51,8 @@ public class ChatMessageResponse {
 
     public static ChatMessageResponse from(ChatMessage chatMessage) {
         return ChatMessageResponse.builder()
-                .channelId(chatMessage.getChannel().getId())
-                .profile(chatMessage.getSiteUser().getProfile())
+                .channelId(chatMessage.getChannel().getId())    // channel
+                .profile(chatMessage.getSiteUser().getProfile())    // siteUser
                 .nickname(chatMessage.getSiteUser().getNickname())
                 .content(chatMessage.getContent())
                 .createdAt(chatMessage.getCreatedAt())
