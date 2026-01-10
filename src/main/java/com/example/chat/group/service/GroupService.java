@@ -15,20 +15,23 @@ import com.example.chat.group.repository.GroupRepository;
 import com.example.chat.groupmember.domain.GroupRole;
 import com.example.chat.groupmember.entity.GroupMember;
 import com.example.chat.groupmember.repository.GroupMemberRepository;
+import com.example.chat.groupmember.service.GroupMemberService;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.repository.UserRepository;
 import com.example.chat.user.service.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GroupService {
-
+    private final GroupMemberService groupMemberService;
     private final GroupRepository groupRepository;
     private final ChannelRepository channelRepository;
     private final UserRepository userRepository;
@@ -94,9 +97,7 @@ public class GroupService {
 
     // 권한 체크 공통로직
     private void validateGroupMemberManagerRole(Long groupId, Long siteUserId) {
-        GroupMember member = groupMemberRepository.findByGroupIdAndSiteUserId(groupId, siteUserId)
-                .orElseThrow(() -> new CustomException(ErrorCode.GROUP_MEMBER_NOT_FOUND));
-
+        GroupMember member = groupMemberService.findByGroupIdAndSiteUserId(groupId, siteUserId);
         member.validateManagerRole(member.getRole());
     }
 

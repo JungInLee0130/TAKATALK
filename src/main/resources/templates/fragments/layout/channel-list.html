@@ -3,8 +3,8 @@
     <div th:fragment="channelList" class="left">
         <div class="left-header">
             <th:block th:if="${currentGroup}" >
-                <div class="header-title title">
-                    <h3 th:text="${currentGroup.id}"></h3>
+                <div class="header-title title" id="channelHeader">
+                    <h3 th:text="${currentGroup.name}"></h3>
                     <span class="dropdown-icon">v</span><!--동일하게 contextMenu-->
                 </div>
                 <div class="invite-group-icon">
@@ -16,7 +16,7 @@
             </th:block>
         </div>
         <div class="left-body">
-            <th:block  th:if="${channelGroupResponse}">
+            <th:block th:if="${channelGroupResponse}">
             <div class="category-section">
 
                 <div class="category-dropdown" th:each="category : ${channelGroupResponse.categorizedChannels}">

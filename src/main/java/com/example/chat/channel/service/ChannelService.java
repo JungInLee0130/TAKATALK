@@ -24,84 +24,29 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChannelService {
     private final ChannelRepository channelRepository;
-    private final ChatMessageRepository chatMessageRepository;
-    private final GroupMemberRepository groupMemberRepository;
     private final CategoryRepository categoryRepository;
     private final GroupRepository groupRepository;
-    private final FriendService friendService;
-    private final UserRepository userRepository;
 
     @Transactional
     public ChannelCreateResponse createChannel(Long categoryId, Long groupId, CreateChannelRequest request) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new CustomException(ErrorCode.GROUP_NOT_FOUND));
 
-        Channel channel = Channel.builder()
-                .type(request.channelType())
-                .name(request.channelName())
-                .isSecret(request.isSecret())
-                .group(group)
-                .build();
-
+        Channel channel = Channel.create(request.channelName(), request.channelType(), request.isSecret(), group);
         if (categoryId != null) {
             Category category = categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
             channel.updateCategories(category);
         }
 
-        channelRepository.save(channel);
-
-        return ChannelCreateResponse.builder()
-                .channelId(channel.getId())
-                .groupId(groupId)
-                .build();
+        Channel savedChannel = channelRepository.save(channel);
+        return ChannelCreateResponse.from(savedChannel);
     }
-
-
-
-    /*public List<ChatMessageResponse> enterChannel(Long channelId) {
-        List<ChatMessages> chatMessages = chatMessageRepository.findAllByChannelId(channelId);
-
-        List<ChatMessageResponse> responses = new ArrayList<>();
-        for (ChatMessages chatMessage: chatMessages) {
-            ChatMessageResponse response = ChatMessageResponse.builder()
-                    .profile(chatMessage.getSiteUser().getProfile())
-                    .nickname(chatMessage.getSiteUser().getNickname())
-                    .isModified(chatMessage.getIsModified())
-                    .channelId(chatMessage.getChannel().getId())
-                    .content(chatMessage.getContent())
-                    .createdAt(chatMessage.getCreatedAt())
-                    .build();
-
-            responses.add(response);
-        }
-
-        return responses;
-    }*/
-
-    /*public ChatResponse enterChannel(Long channelId) {
-
-        // 채널 response 생성
-        ChatResponse response = new ChatResponse(channel);
-
-        Optional<Chats> chat = chatRepository.findByChannelId(channelId);
-
-        // 채팅이 있으면  : set
-        if (chat.isPresent()) {
-            response.setChat(chat.get());
-        }
-
-        return response;
-    }*/
 
     public List<ChannelResponse> getChannels(Long groupId) {
         List<Channel> channels = channelRepository.findByGroupId(groupId);
-
         return channels.stream()
-                .map(channel -> new ChannelResponse(channel.getId(),
-                        channel.getName(),
-                        channel.getType(),
-                        channel.getIsSecret()))
+                .map(ChannelResponse::from)
                 .collect(Collectors.toList());
     }
 
@@ -117,11 +62,6 @@ public class ChannelService {
 
     public ChannelResponse getChannelInfo(Long channelId) {
         Channel channel = findById(channelId);
-        return ChannelResponse.builder()
-                .id(channel.getId())
-                .name(channel.getName())
-                .type(channel.getType())
-                .isSecret(channel.getIsSecret())
-                .build();
+        return ChannelResponse.from(channel);
     }
 }

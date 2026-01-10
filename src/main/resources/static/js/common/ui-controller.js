@@ -8,23 +8,8 @@ import {
 
 export const UiController = {
     init() {
-        /** ESC 버튼 클릭시 모달 전체 닫기 **/
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape') {
-                closeAllModals();
-            }
-        })
-
-        /** 모달 바깥 클릭시 닫기 **/
-        document.addEventListener('click', function (event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-            }
-        })
-
         /** 채널 드롭다운 클릭시 보이게 **/
         const channelDropdowns = document.querySelectorAll(".categorized-channel-dropdown");
-        //onclick="toggleDropdown(event, this)"
         if (channelDropdowns) {
             channelDropdowns.forEach(dropdown => {
                 dropdown.addEventListener('click', function(event) {
@@ -43,8 +28,43 @@ export const UiController = {
             })
         }
 
-        /* context-menu 클릭시 */
-        /* groupContextMenu 클릭시 */
+        /** 그룹 생성 + 아이콘 클릭시 **/
+        document.getElementById("GroupCreateBtn").addEventListener('click', (event) => {
+            openCreateGroupModal(); // 그룹 생성 모달 열기
+        })
+
+        /** Modal 공통처리 **/
+        /** openModal **/
+        document.addEventListener('click', (event) => {
+            const openBtn = event.target.closest('[data-open="modal"]');
+            if (openBtn) {
+                openModal(openBtn);
+            }
+        })
+        /** close **/
+        document.addEventListener('click', (event) => {
+            const closeBtn = event.target.closest('[data-close="modal"]');
+            if (closeBtn) {
+                closeModal(closeBtn);
+            }
+        })
+
+        /** ESC 버튼 클릭시 모달 전체 닫기 **/
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeAllModals();
+            }
+        })
+
+        /** 모달 바깥 클릭시 닫기 **/
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        })
+
+        /** context-menu 클릭시 **/
+        /** groupContextMenu내 메뉴 클릭시 **/
         document.getElementById("editGroupMenu").addEventListener('click', openEditGroupModal);
         document.getElementById("deleteGroupMenu").addEventListener('click', deleteGroup);
         document.getElementById("createGroupMenu").addEventListener('click', openCreateGroupModal);
@@ -52,7 +72,7 @@ export const UiController = {
             openModal("inviteJoinModal");
         });
 
-        /* channelListContextMenu 클릭시 */
+        /** channelListContextMenu내 메뉴 클릭시 **/
         document.getElementById("createCategoryMenu").addEventListener('click', function () {
             openModal('categoryCreateModal');
         });
@@ -65,8 +85,16 @@ export const UiController = {
 }
 
 /* 모달 제어 함수 */
-export function openModal(element) {
-    const modal = element.closest('.modal');
+export function openModal(idOrElement) {
+    let modal;
+
+    if (typeof idOrElement === 'string') {
+        // ID 값
+        modal = document.getElementById(idOrElement);
+    } else {
+        // HTML 요소
+        modal = idOrElement.closest('.modal');
+    }
     if (modal) {
         modal.style.display = "flex";
     }

@@ -24,7 +24,7 @@ export const ChannelListController = {
 
             const clickedId = channelTarget.getAttribute('data-channel-id');
             try {
-                const html = await ChannelService.enterChannel(clickedId);
+                const html = await ChannelService.getChatList(clickedId);
                 initChatArea(html);
                 ChatController.enterChannel(clickedId);
             } catch (error) {

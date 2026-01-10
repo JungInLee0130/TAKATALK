@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -55,6 +56,7 @@ public class ChatMessageService {
         return responseList;
     }
 
+    @Transactional  // 안붙여도 영속성보장이되긴하는데, 커넥션을 findById 할때마다 계속 반납하고 주고함. 한번에 처리, 그리고 역시 원자성보장.
     public ChatMessage saveSystemMessage(Long channelId, Long siteUserId, String content, ChatMessageType type) {
         Channel channel = channelService.findById(channelId);
         SiteUser siteUser = userService.findById(siteUserId);

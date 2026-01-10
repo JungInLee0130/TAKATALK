@@ -130,15 +130,8 @@ public class UserService {
 
     public UserResponse getUserDetails(Long siteUserId) {
         SiteUser siteUser = findById(siteUserId);
-
-        UserResponse response = UserResponse.builder()
-                .nickname(siteUser.getNickname())
-                .profile(siteUser.getProfile())
-                .build();
-
         log.info("profile : {}", siteUser.getProfile());
-
-        return response;
+        return UserResponse.from(siteUser);
     }
 
     @Transactional(readOnly = true)

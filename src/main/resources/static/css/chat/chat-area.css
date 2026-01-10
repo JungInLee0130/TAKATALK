@@ -61,7 +61,6 @@
 .system-message-wrapper {
     width: 100%;
     display: flex;
-    background-color: #1E55DC;
     margin: 10px 0;
 }
 .system-message-wrapper p{

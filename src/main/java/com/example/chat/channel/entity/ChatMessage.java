@@ -36,7 +36,7 @@ public class ChatMessage extends BaseTimeEntity {
     private ChatMessageType type;
 
     @Builder
-    public ChatMessage(String content,
+    private ChatMessage(String content,
                        Channel channel,
                        SiteUser siteUser,
                        ChatMessageType type) {

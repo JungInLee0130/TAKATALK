@@ -34,19 +34,19 @@ public class GroupIndexController {
     public String accessGroup(@AuthenticationPrincipal CustomUserDetails userDetails,
                               @PathVariable(name = "groupId") Long currentGroupId,
                               Model model) {
-        // 그룹 접속
+        // 현재 그룹 정보
         GroupResponse currentGroup = groupService.getGroupInfo(currentGroupId);
-        // GroupResponse : 기존 채널들 response
+        // 그룹 채널들
         ChannelGroupResponse channelGroupResponse = groupService.accessGroup(currentGroupId);
         // 자신이 속한 그룹 리스트
         List<GroupResponse> groups = groupMemberService.getGroupList(userDetails.getId());
 
         UserResponse user = userService.getUserDetails(userDetails.getId());
 
-        model.addAttribute("user", user);
         model.addAttribute("currentGroup", currentGroup);
         model.addAttribute("channelGroupResponse", channelGroupResponse);
         model.addAttribute("groups", groups);
+        model.addAttribute("user", user);
 
         return "channel/channel";
     }

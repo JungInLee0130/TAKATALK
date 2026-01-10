@@ -9,8 +9,10 @@ import {GroupController} from "../group/group-controller.js";
 import {InviteController} from "../invite/invite-controller.js";
 
 // [1] : 전역 변수
+// export 선언시 읽기전용(ES모듈 규칙)
 export let selectedGroupId = null;
 
+// [2] : 이벤트 리스너
 document.addEventListener('DOMContentLoaded', () => {
     CategoryController.init();
     ChannelListController.init();
@@ -20,6 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
     InviteController.init();
     ChatController.init();
 });
+
+// [3] : 함수
+// 값을 변경해주는 전용 함수
+export function setSelectedGroupId(id) {
+    selectedGroupId = id;
+}
 
 // axios 기본 설정 (CSRF 토큰 자동 포함)
 axios.defaults.headers.common[csrfHeader] = csrfToken;
