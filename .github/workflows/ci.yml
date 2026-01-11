@@ -1,10 +1,10 @@
-name: TAKATALK-CI
+name: TAKATALK CI
 
 on:
   push:
-    branches: ["develop", "master"]
+    branches: [ "main", "develop" ]
   pull_request:
-    branches: ["develop", "master"]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -12,9 +12,8 @@ jobs:
 
     steps:
       - name: Checkout code
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
-      # 1. Java 21 세팅
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -25,11 +24,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # 빌드 및 테스트 진행
       - name: Build with Gradle
         run: ./gradlew build
 
-      # 빌드 성공 후 생성된 JAR 파일을 Github Artifact에 업로드
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
