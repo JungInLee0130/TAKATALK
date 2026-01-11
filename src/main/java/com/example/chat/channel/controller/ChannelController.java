@@ -52,8 +52,8 @@ public class ChannelController {
         model.addAttribute("chatMessageResponseList", chatMessageResponseList);
 
         // 3. 유저 정보
-        //UserResponse user = userService.getUserDetails(userDetails.getId());
-        //model.addAttribute("user", user);
+        UserResponse user = userService.getUserDetails(userDetails.getId());
+        model.addAttribute("user", user);
 
         return "fragments/layout/chat-area :: chatArea";
     }

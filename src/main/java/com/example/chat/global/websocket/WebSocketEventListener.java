@@ -52,8 +52,6 @@ public class WebSocketEventListener {
 
     private static final Pattern FIRST_SUBSCRIBE = Pattern.compile("/sub/channel/(\\d+)$");
     private static final Pattern VISITOR_REGEX = Pattern.compile("/sub/channel/(\\d+)/visitors$");
-
-    private final ChatMessageService chatMessageService;
     private final GroupMemberService groupMemberService;
 
     @EventListener
@@ -92,7 +90,7 @@ public class WebSocketEventListener {
             SESSION_CHANNEL.put(sessionId, channelId);
             log.info("User Entered : {} -> Channel {}", groupMemberResponse.toString(), channelId);
 
-            String[] welcomeMessages = {
+            /*String[] welcomeMessages = {
                     "님을 환영해요. 피자는 가져오셨겠죠?",
                     "님이 착륙했습니다.",
                     "님이 서버에 들어왔어요. 다들 박수!",
@@ -100,14 +98,13 @@ public class WebSocketEventListener {
                     "님이 오셨어요. 환영해주세요!"
             };
             String randomMsg = welcomeMessages[new Random().nextInt(welcomeMessages.length)];
-
             ChatMessage saveSystemMessage = chatMessageService.saveSystemMessage(channelId,
                     groupMember.getSiteUser().getId(),
                     randomMsg,
                     ChatMessageType.ENTER);
             ChatMessageResponse welcomeMsg = ChatMessageResponse.from(saveSystemMessage);
+            messagingTemplate.convertAndSend("/sub/channel/" + channelId, welcomeMsg);*/
 
-            messagingTemplate.convertAndSend("/sub/channel/" + channelId, welcomeMsg);
             sendVisitorDtosToChannel(channelId);
         } else {
             Matcher visitorRegex = VISITOR_REGEX.matcher(destination);
