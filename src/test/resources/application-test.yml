@@ -1,14 +1,26 @@
+# 1. 메인 application.yml에서 사용하는 모든 ${변수}의 값을 여기서 직접 정의합니다.
+# 이렇게 하면 스프링이 변수를 해석할 때 이 값을 가장 먼저 찾아갑니다.
+
+H2_USERNAME: sa
+H2_PASSWORD:
+MAIL_HOST: smtp.test.com
+MAIL_PORT: 587
+MAIL_USERNAME: test_user
+MAIL_PASSWORD: test_password
+BASE_URL: http://localhost:8080
+SECURITY_USERNAME: test_admin
+SECURITY_PASSWORD: test_password
+UPLOAD_DIR: ./test-uploads
+
+# 2. 테스트 전용 설정
 spring:
   application:
     name: chat-test
----
-#DB #h2database
-spring:
+
+  #DB #h2database
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:testdb;MODE=MySQL
-    username: sa
-    password:
 
   jpa:
     hibernate:
@@ -27,51 +39,27 @@ spring:
       enabled: true
       path: /h2-console
 
----
-#에러처리
-spring:
   messages:
     encoding: UTF-8
     basename: errors, messages
----
-# loging level
-logging:
-  level:
-    com.example.chat.user2 :
 
----
-#smtp
-spring:
+  #smtp
   mail:
-    host: smtp.test.com
-    port: 587
-    username: test_user
-    password: test_password
-
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
-  # 보안 설정 (기본 유저)
-  security:
-    user:
-      name: test_admin
-      password: test_password
----
-#BASE_URL
-app:
-  base-url: http://localhost:8080
----
-# FILE UPLOAD PATH
-file:
-  upload:
-    upload-path: ./test-uploads
----
+
 server:
   servlet:
     session:
       timeout: 5m
       cookie:
         http-only: true
+
+# loging level
+logging:
+  level:
+    com.example.chat : debug
