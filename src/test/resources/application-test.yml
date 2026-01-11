@@ -1,0 +1,51 @@
+# 1. 메인 application.yml에서 사용하는 모든 ${변수}의 값을 여기서 직접 정의합니다.
+# 이렇게 하면 스프링이 변수를 해석할 때 이 값을 가장 먼저 찾아갑니다.
+
+H2_USERNAME: sa
+H2_PASSWORD:
+MAIL_HOST: smtp.test.com
+MAIL_PORT: 587
+MAIL_USERNAME: test_user
+MAIL_PASSWORD: test_password
+BASE_URL: http://localhost:8080
+SECURITY_USERNAME: test_admin
+SECURITY_PASSWORD: test_password
+UPLOAD_DIR: ./test-uploads
+
+# 2. 테스트 전용 설정
+spring:
+  application:
+    name: chat-test
+
+  #DB
+  #h2 database
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=MySQL
+
+  # 메인과 다르게 동작할때가 많아서 명시
+  jpa:
+    hibernate:
+      ddl-auto: create-drop   # 테스트 환경에서 drop
+    show-sql: true            # 콘솔에 SQL 출력 (system.println 으로 출력되므로 운영단계에서는 쓰지않는다.)
+    properties:
+      hibernate:
+        format_sql: true      # 가독성좋게 포맷팅
+        jdbc:
+          batch_size: 50      # 한번에 전송할수있는 SQL문의 개수 (일괄처리)
+        order_inserts: true
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  messages:
+    encoding: UTF-8
+    basename: errors, messages
+
+# loging level
+logging:
+  level:
+    com.example.chat : debug

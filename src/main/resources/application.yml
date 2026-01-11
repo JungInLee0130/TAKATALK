@@ -1,15 +1,12 @@
 #env.yml
 spring:
   config:
-    import: env.yml
----
-#h2database
-spring:
+    import: optional:env.yml
+
   application:
     name: chat
----
-#DB
-spring:
+
+  #DB #h2database
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:test
@@ -28,28 +25,17 @@ spring:
         order_inserts: true
     database-platform: org.hibernate.dialect.H2Dialect
 
-
-
   h2:
     console:
       enabled: true
       path: /h2-console
 
----
-#에러처리
-spring:
+  #에러처리
   messages:
     encoding: UTF-8
     basename: errors, messages
----
-# loging level
-logging:
-  level:
-    com.example.chat.user2 :
 
----
-#smtp
-spring:
+  #smtp
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}
@@ -62,28 +48,30 @@ spring:
           starttls:
             enable: true
           auth: true
----
-#BASE_URL
-app:
-  base-url: ${BASE_URL}
 
----
-#SECURITY
-spring:
+  #SECURITY
   security:
     user:
       name: ${SECURITY_USERNAME}
       password: ${SECURITY_PASSWORD}
 
----
+#BASE_URL
+app:
+  base-url: ${BASE_URL}
+
 # FILE UPLOAD PATH
 file:
   upload:
     upload-path: ${UPLOAD_DIR}
----
+
 server:
   servlet:
     session:
       timeout: 5m
       cookie:
         http-only: true
+
+# loging level
+logging:
+  level:
+    com.example.chat :
