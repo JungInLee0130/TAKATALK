@@ -1,23 +1,18 @@
-#env.yml
-spring:
-  config:
-    import: env.yml
----
 spring:
   application:
-    name: chat
+    name: chat-test
 ---
 #DB #h2database
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:test
-    username: ${H2_USERNAME}
-    password: ${H2_PASSWORD}
+    url: jdbc:h2:mem:testdb;MODE=MySQL
+    username: sa
+    password:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     show-sql: true        # 콘솔에 SQL 출력 (system.println 으로 출력되므로 운영단계에서는 쓰지않는다.)
     properties:
       hibernate:
@@ -48,35 +43,31 @@ logging:
 #smtp
 spring:
   mail:
-    host: ${MAIL_HOST}
-    port: ${MAIL_PORT}
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
+    host: smtp.test.com
+    port: 587
+    username: test_user
+    password: test_password
 
     properties:
       mail:
         smtp:
+          auth: true
           starttls:
             enable: true
-          auth: true
+  # 보안 설정 (기본 유저)
+  security:
+    user:
+      name: test_admin
+      password: test_password
 ---
 #BASE_URL
 app:
-  base-url: ${BASE_URL}
-
----
-#SECURITY
-spring:
-  security:
-    user:
-      name: ${SECURITY_USERNAME}
-      password: ${SECURITY_PASSWORD}
-
+  base-url: http://localhost:8080
 ---
 # FILE UPLOAD PATH
 file:
   upload:
-    upload-path: ${UPLOAD_DIR}
+    upload-path: ./test-uploads
 ---
 server:
   servlet:
