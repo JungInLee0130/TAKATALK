@@ -1,7 +1,7 @@
 #env.yml
 spring:
   config:
-    import: env.yml
+    import: optional:env.yml
 ---
 spring:
   application:
