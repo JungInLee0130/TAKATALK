@@ -39,6 +39,11 @@ out/
 ### env.yml
 src/main/resources/env.yml
 src/main/resources/import.sql
+.env
 
 ### node_modules
 node_modules
+
+### docker
+docker/**/data/
+*.log
