@@ -18,6 +18,7 @@ import com.example.chat.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
+@Profile("init")
 @RequiredArgsConstructor
 public class InitData implements CommandLineRunner {
     private final UserRepository userRepository;

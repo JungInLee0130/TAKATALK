@@ -1,0 +1,20 @@
+spring:
+  #DB#h2database
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show-sql: true        # 콘솔에 SQL 출력 (system.println 으로 출력되므로 운영단계에서는 쓰지않는다.)
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console

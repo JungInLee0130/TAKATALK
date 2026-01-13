@@ -1,0 +1,20 @@
+#운영환경
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+    database-platform: org.hibernate.dialect.MariaDBDialect
+
+  #smtp
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+
+# loging level
+logging:
+  level:
+    com.example.chat : info

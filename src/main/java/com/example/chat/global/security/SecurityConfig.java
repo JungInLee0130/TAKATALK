@@ -26,9 +26,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                //.csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console())) // dev : csrf default로 사용. h2console만 해제
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers(PathRequest.toH2Console()).permitAll() // dev : h2 database permitAll
                         .requestMatchers("/images/**", "/css/**", "/js/**").permitAll()     // 정적 리소스 permitAll
                         .requestMatchers("/login/**", "/user/signup").permitAll()   // 로그인, 회원가입 permitAll
                         .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -86,30 +84,8 @@ public class SecurityConfig {
     @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
     public WebSecurityCustomizer webSecurityCustomizer(){
         return web -> web.ignoring()
-                .requestMatchers(PathRequest.toH2Console());
+                .requestMatchers(PathRequest.toH2Console());  // test : h2 database security 관련로직 무시
     }
-
-    /*@Bean
-    public DataSource dataSource() {
-        return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
-                .build();
-    }*/
-
-    /*@Bean
-    public UserDetailsManager users(DataSource dataSource) {
-        UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("user123"))
-                .roles("USER")
-                .build();
-
-        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-        jdbcUserDetailsManager.createUser(user);
-
-        return jdbcUserDetailsManager;
-    }*/
 
     @Bean
     public PasswordEncoder passwordEncoder() {

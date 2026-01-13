@@ -1,3 +1,4 @@
+# 공통설정
 #env.yml
 spring:
   config:
@@ -6,29 +7,14 @@ spring:
   application:
     name: chat
 
-  #DB #h2database
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:test
-    username: ${H2_USERNAME}
-    password: ${H2_PASSWORD}
-
   jpa:
-    hibernate:
-      ddl-auto: create
-    show-sql: true        # 콘솔에 SQL 출력 (system.println 으로 출력되므로 운영단계에서는 쓰지않는다.)
     properties:
       hibernate:
         format_sql: true  # 가독성좋게 포맷팅
         jdbc:
           batch_size: 50  # 한번에 전송할수있는 SQL문의 개수 (일괄처리)
         order_inserts: true
-    database-platform: org.hibernate.dialect.H2Dialect
 
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
 
   #에러처리
   messages:
@@ -41,7 +27,6 @@ spring:
     port: ${MAIL_PORT}
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
-
     properties:
       mail:
         smtp:
@@ -70,8 +55,3 @@ server:
       timeout: 5m
       cookie:
         http-only: true
-
-# loging level
-logging:
-  level:
-    com.example.chat :

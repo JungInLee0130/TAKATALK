@@ -37,6 +37,8 @@ dependencies {
 
     //h2
     runtimeOnly 'com.h2database:h2'
+    // MariaDB 드라이버 추가
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
     //jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
