@@ -16,10 +16,10 @@
             </th:block>
         </div>
         <div class="left-body">
-            <th:block th:if="${channelGroupResponse}">
+            <th:block th:if="${groupChannelResponse}">
             <div class="category-section">
 
-                <div class="category-dropdown" th:each="category : ${channelGroupResponse.categorizedChannels}">
+                <div class="category-dropdown" th:each="category : ${groupChannelResponse.categorizedChannels}">
                     <!--클릭 감지 트리거 토글-->
                     <div class="categorized-channel-dropdown interactive-item">
                         <div class="category-header">
@@ -43,7 +43,7 @@
 
             <!--카테고리 없는 채널-->
             <div class="uncategorized-channel-list channel-list">
-            <th:block th:each="channel : ${channelGroupResponse.uncategorizedChannels}">
+            <th:block th:each="channel : ${groupChannelResponse.uncategorizedChannels}">
                 <div th:replace="~{::channelRow(${channel})}"></div>
             </th:block>
             </div>

@@ -19,7 +19,6 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class IndexController {
-    private final GroupService groupService;
     private final GroupMemberService groupMemberService;
     private final UserService userService;
 

@@ -1,3 +1,6 @@
+server:
+  port: 9000
+
 spring:
   config:
     import: optional:env-dev.yml
@@ -19,5 +22,6 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: debug
+    com.example.chat: info
+    #org.hibernate.SQL: debug
 

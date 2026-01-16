@@ -2,18 +2,23 @@ package com.example.chat.channel.entity;
 
 import com.example.chat.category.entity.Category;
 import com.example.chat.channel.domain.ChannelType;
+import com.example.chat.channel.dto.ChannelEditRequest;
 import com.example.chat.group.entity.Group;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.Objects;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE channel set is_deleted = true where channel_id = ?")
+@SQLRestriction("is_deleted = false")
 public class Channel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +42,9 @@ public class Channel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = true)
     private Category category;
+
+    @Column(name = "is_deleted")
+    private boolean isDeleted = false;
 
     @Builder
     private Channel(String name, ChannelType type, Boolean isSecret, Group group, Category category) {
@@ -85,5 +93,13 @@ public class Channel {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void updateChannel(Group group, Category category, ChannelEditRequest request) {
+        this.group = group != null ? group : this.group;
+        this.category = category != null ? category : this.category;
+        this.type = request.getType();
+        this.isSecret = request.getIsSecret();
+        this.name = request.getName();
     }
 }

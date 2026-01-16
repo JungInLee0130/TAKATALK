@@ -23,6 +23,7 @@ import java.time.LocalDate;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
     private final TokenService tokenService;
@@ -60,6 +61,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public SiteUser create(UserCreateForm userCreateForm){
         /*중복 회원 체크*/
         duplicateUser(userCreateForm.email());
@@ -74,6 +76,7 @@ public class UserService {
                 });
     }
 
+    @Transactional
     private SiteUser createUser(UserCreateForm userCreateForm) {
         int year = Integer.parseInt(userCreateForm.birthYear());
         int month = Integer.parseInt(userCreateForm.birthMonth());
@@ -122,19 +125,15 @@ public class UserService {
     @Transactional
     public void resetPassword(String newPassword, String token) {
         String email = tokenService.validateTokenAndGetEmail(token);
-        // 비밀번호 변경
         updatePassword(email, newPassword);
-        // 토큰은 1회용이므로 삭제
-        tokenService.deleteToken(token);
+        tokenService.deleteToken(token);    // 토큰은 1회용이므로 삭제
     }
 
     public UserResponse getUserDetails(Long siteUserId) {
         SiteUser siteUser = findById(siteUserId);
-        log.info("profile : {}", siteUser.getProfile());
         return UserResponse.from(siteUser);
     }
 
-    @Transactional(readOnly = true)
     public UserProfileResponse getSiteUserProfileInfo(Long siteUserId) {
         SiteUser siteUser = findById(siteUserId);
         return UserProfileResponse.from(siteUser);

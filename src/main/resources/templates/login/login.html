@@ -14,7 +14,7 @@
         </div>
         <div class="login">
             <form th:action="@{/login}" th:object="${userLoginForm}" method="post">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
                 <h2>로그인</h2>
                 <div class="login-email">
                     <label for="email">이메일<span style="color: red;">*</span></label>
@@ -49,10 +49,11 @@
     <div th:replace="~{fragments/modals/login-modal :: passwordChangeNotificationModal}"></div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!--AXIOS-->
 <!--2. 타임리프 변수 선언-->
 <script th:inline="javascript">
-    const csrfToken = [[${_csrf.token}]];
-    const csrfHeader = [[${_csrf.headerName}]];
+    const csrfToken = [[${_csrf?.token}]];
+    const csrfHeader = [[${_csrf?.headerName}]];
 </script>
 <!--3. UI/공통 로직-->
 <script th:src="@{/js/login/login-ui-controller.js}"></script>

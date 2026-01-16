@@ -64,8 +64,8 @@
   const currentGroupId = [[${currentGroup?.id}]];
   const currentCategoryId = [[${categories?.id}]];
   const currentChannelId = [[${currentChannel?.id}]];
-  const csrfToken = [[${_csrf.token}]];
-  const csrfHeader = [[${_csrf.headerName}]];
+  const csrfToken = [[${_csrf?.token}]];
+  const csrfHeader = [[${_csrf?.headerName}]];
 </script>
 <!--4. 메인 실행 파일-->
 <script type="module" th:src="@{/js/common/main.js}"></script>

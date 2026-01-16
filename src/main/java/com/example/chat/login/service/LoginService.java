@@ -14,9 +14,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LoginService {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -24,6 +26,7 @@ public class LoginService {
     private final MailService mailService;
     private final TokenService tokenService;
 
+    @Transactional
     public void login(UserLoginForm userLoginForm) {
         SiteUser siteUser = userService.findByEmail(userLoginForm.getEmail());
 
@@ -43,11 +46,10 @@ public class LoginService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
+    @Transactional
     public void requestPasswordChange(String email) {
         SiteUser siteUser = userService.findByEmail(email);
-
         String token = tokenService.createAndSaveToken(email);
-
         mailService.sendChangePasswordMail(token, siteUser);
     }
 }
