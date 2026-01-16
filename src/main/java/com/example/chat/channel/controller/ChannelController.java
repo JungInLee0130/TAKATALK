@@ -40,7 +40,9 @@ public class ChannelController {
     * */
     @GetMapping("/{channelId}")
     public String enterChannel(@AuthenticationPrincipal CustomUserDetails userDetails,
-                               @PathVariable(name = "channelId") Long channelId, Model model) {
+                               @PathVariable(name = "groupId") Long groupId,
+                               @PathVariable(name = "channelId") Long channelId,
+                               Model model) {
         // 1. 채널 정보
         ChannelResponse currentChannel = channelService.getChannelInfo(channelId);
         model.addAttribute("currentChannel", currentChannel);

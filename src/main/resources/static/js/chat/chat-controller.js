@@ -364,7 +364,7 @@ export function createChannel(groupId, categoryId) {
 
     $.ajax({
         type: "POST",
-        url: "/channel/create",
+        url: "/group/{groupId}/channel/create",
         contentType: "application/Json",
         data: JSON.stringify(requestBodyData),
         statusCode : {
