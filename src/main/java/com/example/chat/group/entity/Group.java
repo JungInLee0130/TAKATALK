@@ -1,5 +1,7 @@
 package com.example.chat.group.entity;
 
+import com.example.chat.global.exception.CustomException;
+import com.example.chat.global.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -52,9 +54,11 @@ public class Group {
     }
 
     public void updateProfile(String profile) {
-        if (profile != null) {
-            this.profile = profile;
-        }
+        this.profile = profile == null ? null : profile;
+    }
+
+    public void validateInviteCode(String inviteCode) {
+        // TODO : inviteCode 유효기간 부여 -> Date 검증
     }
 
     // 초대 코드 업데이트

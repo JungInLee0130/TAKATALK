@@ -3,11 +3,11 @@ package com.example.chat;
 import com.example.chat.category.entity.Category;
 import com.example.chat.category.repository.CategoryRepository;
 import com.example.chat.channel.domain.ChannelType;
-import com.example.chat.channel.domain.ChatMessageType;
+import com.example.chat.chatmessage.domain.ChatMessageType;
 import com.example.chat.channel.entity.Channel;
-import com.example.chat.channel.entity.ChatMessage;
+import com.example.chat.chatmessage.entity.ChatMessage;
 import com.example.chat.channel.repository.ChannelRepository;
-import com.example.chat.channel.repository.ChatMessageRepository;
+import com.example.chat.chatmessage.repository.ChatMessageRepository;
 import com.example.chat.group.repository.GroupRepository;
 import com.example.chat.group.entity.Group;
 import com.example.chat.groupmember.domain.GroupRole;
@@ -18,6 +18,7 @@ import com.example.chat.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
+@Profile("init")
 @RequiredArgsConstructor
 public class InitData implements CommandLineRunner {
     private final UserRepository userRepository;

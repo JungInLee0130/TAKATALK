@@ -1,21 +1,9 @@
 package com.example.chat.global.websocket;
 
-import com.example.chat.channel.domain.ChatMessageType;
-import com.example.chat.channel.dto.ChatMessageResponse;
-import com.example.chat.channel.entity.Channel;
-import com.example.chat.channel.entity.ChatMessage;
-import com.example.chat.channel.service.ChatMessageService;
-import com.example.chat.global.exception.CustomException;
-import com.example.chat.global.exception.ErrorCode;
-import com.example.chat.group.entity.Group;
-import com.example.chat.group.service.GroupService;
-import com.example.chat.groupmember.entity.GroupMember;
-import com.example.chat.groupmember.repository.GroupMemberRepository;
-import com.example.chat.groupmember.service.GroupMemberService;
-import com.example.chat.user.entity.SiteUser;
-import com.example.chat.user.service.CustomUserDetails;
-import com.example.chat.user.service.UserService;
 import com.example.chat.groupmember.dto.GroupMemberResponse;
+import com.example.chat.groupmember.entity.GroupMember;
+import com.example.chat.groupmember.service.GroupMemberService;
+import com.example.chat.user.service.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -29,8 +17,6 @@ import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 import java.security.Principal;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;

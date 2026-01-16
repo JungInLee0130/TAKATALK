@@ -1,29 +1,17 @@
 package com.example.chat.category.dto;
 
-import lombok.Builder;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@NoArgsConstructor
 public class CateGoryCreateRequest {
-    private Long groupId;
-    private String categoryName;
+    @NotNull
+    private String name;
+    @NotNull
     private Boolean isSecret;
 
-    @Builder
-    private CateGoryCreateRequest(Long groupId, String categoryName, Boolean isSecret) {
-        this.groupId = groupId;
-        this.categoryName = categoryName;
+    public CateGoryCreateRequest(String name, Boolean isSecret) {
+        this.name = name;
         this.isSecret = isSecret;
-    }
-
-    public static CateGoryCreateRequest create(Long groupId, String categoryName, Boolean isSecret) {
-        return CateGoryCreateRequest.builder()
-                .groupId(groupId)
-                .categoryName(categoryName)
-                .isSecret(isSecret)
-                .build();
     }
 }

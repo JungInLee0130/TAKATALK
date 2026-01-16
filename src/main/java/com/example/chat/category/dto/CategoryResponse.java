@@ -26,7 +26,7 @@ public class CategoryResponse {
         return CategoryResponse.builder()
                 .id(category.getId())
                 .name(category.getName())
-                .channels(category.getChannels().stream()
+                .channels(category.getChannels().stream() // channel : lazy loading
                         .map(ChannelResponse::from)
                         .toList())
                 .build();

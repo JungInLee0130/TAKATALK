@@ -6,9 +6,11 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
     /*곻통에러*/
-    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "COMMON_001", "INVALID INPUT VALUE"),
-    NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON_002", "정보가 없습니다."),
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON_003", "INTERNAL SERVER ERROR"),
+    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "COMMON_001", "인풋값이 잘못되었습니다."), // 400
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "COMMON_002", "권한이 없습니다."), // 403
+    NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON_003", "정보가 없습니다."), // 404
+    CONFLICT(HttpStatus.CONFLICT, "COMMON_004", "동시성, 무결성 문제입니다."), // 409 : 동시성, 무결성 문제
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON_005", "서버 내부 오류입니다."), // 500
     /*로그인에러*/
     INVALID_INPUT_EMAIL_OR_PASSWORD(HttpStatus.BAD_REQUEST, "LOGIN_001", "유효하지않는 아이디 또는 비밀번호 입니다."),
     SESSION_INVALID_ERROR(HttpStatus.BAD_REQUEST, "LOGIN_002", "로그인이 만료되었습니다. 다시 로그인해주세요."),
@@ -22,15 +24,17 @@ public enum ErrorCode {
     /*그룹 에러*/
     GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "GROUP_001", "해당 그룹이 없습니다."),
     GROUP_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "GROUP_002", "권한이 없습니다."),
+    ALREADY_JOINED_GROUP(HttpStatus.BAD_REQUEST, "GROUP_003", "이미 가입한 그룹입니다."),
+    INVALID_INVITE_CODE(HttpStatus.BAD_REQUEST, "GROUP_004", "초대 코드가 유효하지않습니다"),    // 만료, 불일치
     /*카테고리 에러*/
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "CATEGORY_001", "해당 카테고리가 없습니다."),
     /*채널 에러*/
     CHANNEL_NOT_FOUND(HttpStatus.NOT_FOUND, "CHANNEL_001", "해당 채널이 없습니다."),
     /*그룹멤버 에러*/
     GROUP_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "GROUP_MEMBER_001", "해당 그룹멤버가 없습니다."),
+    GROUP_MEMBER_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "GROUP_MEMBER_002", "권한이 없습니다."),
     /*메일 에러*/
     MAIL_CREATE_ERROR(HttpStatus.BAD_REQUEST, "MAIL_001", "비밀번호 재설정 요청 메일 생성 실패 오류");
-
 
     private final HttpStatus status;
     private final String code;

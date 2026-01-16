@@ -38,6 +38,7 @@ out/
 
 ### env.yml
 src/main/resources/env.yml
+src/main/resources/env-*.yml
 src/main/resources/import.sql
 .env
 

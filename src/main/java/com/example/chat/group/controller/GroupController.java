@@ -60,7 +60,7 @@ public class GroupController {
     public ResponseEntity<Void> editGroup(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @PathVariable(name = "groupId") Long groupId,
                                             @Valid GroupFormRequest request) throws IOException {
-        groupService.editGroup(userDetails, groupId, request);
+        groupService.editGroup(groupId, request);
         return ResponseEntity.created(URI.create("/group/access/" + groupId)).build();
     }
 
@@ -68,9 +68,8 @@ public class GroupController {
      * 그룹 삭제
      * */
     @DeleteMapping("/{groupId}")
-    public ResponseEntity<Void> deleteGroup(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                            @PathVariable(name = "groupId") Long groupId) {
-        groupService.deleteGroup(groupId, userDetails.getId());
+    public ResponseEntity<Void> deleteGroup(@PathVariable(name = "groupId") Long groupId) {
+        groupService.deleteGroup(groupId);
         return ResponseEntity.ok().build();
     }
 
@@ -78,9 +77,8 @@ public class GroupController {
     * 그룹 초대코드 get
     * */
     @GetMapping("/{currentGroupId}/invite-code")
-    public ResponseEntity<String> getInviteCode(@PathVariable(name = "currentGroupId") Long currentGroupId,
-                                                @AuthenticationPrincipal CustomUserDetails userDetails) {
-        String inviteCode = groupService.getInviteCode(currentGroupId, userDetails.getId());
+    public ResponseEntity<String> getInviteCode(@PathVariable(name = "currentGroupId") Long groupId) {
+        String inviteCode = groupService.getInviteCode(groupId);
         return ResponseEntity.ok(inviteCode);
     }
 
@@ -88,9 +86,8 @@ public class GroupController {
     * 그룹 초대코드 reset
     * */
     @GetMapping("/{currentGroupId}/invite-code/reset")
-    public ResponseEntity<String> resetInviteCode(@PathVariable(name = "currentGroupId") Long currentGroupId,
-                                                  @AuthenticationPrincipal CustomUserDetails userDetails) {
-        String newInviteCode = groupService.resetInviteCode(currentGroupId, userDetails.getId());
+    public ResponseEntity<String> resetInviteCode(@PathVariable(name = "currentGroupId") Long groupId) {
+        String newInviteCode = groupService.resetInviteCode(groupId);
         return ResponseEntity.ok(newInviteCode);
     }
 }

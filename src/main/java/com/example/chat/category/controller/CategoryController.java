@@ -1,6 +1,6 @@
 package com.example.chat.category.controller;
 
-import com.example.chat.category.entity.Category;
+import com.example.chat.category.dto.CategoryCreateResponse;
 import com.example.chat.category.service.CategoryService;
 import com.example.chat.category.dto.CateGoryCreateRequest;
 import lombok.RequiredArgsConstructor;
@@ -12,24 +12,16 @@ import java.net.URI;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/category")
+@RequestMapping("/group/{groupId}/category")
 public class CategoryController {
     private final CategoryService categoryService;
-
     /*
     * 카테고리 생성
     * */
     @PostMapping(value = "/create", produces = "application/string;charset=UTF-8")
-    public ResponseEntity<Void> createCategory(@RequestBody CateGoryCreateRequest request) {
-        Category category = categoryService.createCategory(request);
+    public ResponseEntity<CategoryCreateResponse> createCategory(@PathVariable(name = "groupId") Long groupId, @RequestBody CateGoryCreateRequest request) {
+        CategoryCreateResponse response = categoryService.createCategory(groupId, request);
         // STATUS : 201, HEADER : location : URI.create
-        // 그냥 새로고침.
-        return ResponseEntity.created(URI.create("/group/access/" + category.getGroup().getId())).build();
-    }
-
-    @GetMapping
-    public String getCategories(Long groupId) {
-        categoryService.getCategories(groupId);
-        return "category";
+        return ResponseEntity.created(URI.create("/group/access/" + response.getGroupId())).build();
     }
 }

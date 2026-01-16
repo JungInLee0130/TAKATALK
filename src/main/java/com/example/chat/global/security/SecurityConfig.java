@@ -26,11 +26,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                //.csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console())) // dev : csrf default로 사용. h2console만 해제
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers(PathRequest.toH2Console()).permitAll() // dev : h2 database permitAll
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/images/**", "/css/**", "/js/**").permitAll()     // 정적 리소스 permitAll
-                        .requestMatchers("/login/**", "/user/signup").permitAll()   // 로그인, 회원가입 permitAll
+                        .requestMatchers("/login/**", "/user/signup", "/public/**").permitAll()   // 로그인, 회원가입 permitAll
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/mypage/**").hasRole("USER")
                         .anyRequest().authenticated()
@@ -55,9 +55,9 @@ public class SecurityConfig {
 
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")   // post 요청
-                        .logoutSuccessUrl("/login") // logout 성공시 이동할 url
-                        .invalidateHttpSession(true)    // http session 무효화
+                        .logoutUrl("/logout")                           // post 요청
+                        .logoutSuccessUrl("/login")                     // logout 성공시 이동할 url
+                        .invalidateHttpSession(true)                    // http session 무효화
                         .deleteCookies("JSESSIONID")    // 로그아웃시 삭제할 쿠키이름
                 )
                 .exceptionHandling(exceptions -> exceptions
@@ -82,34 +82,21 @@ public class SecurityConfig {
         return new HttpSessionEventPublisher();
     }
 
+    // 1. 공통 외벽 무시
     @Bean
-    @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
-    public WebSecurityCustomizer webSecurityCustomizer(){
+    public WebSecurityCustomizer commonWebSecurityCustomizer() {
         return web -> web.ignoring()
-                .requestMatchers(PathRequest.toH2Console());
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())   // 기본 정적 리소스 경로 외벽 차원에서 무시
+                .requestMatchers("/favicon.ico", "/resources/**", "/error");
     }
 
-    /*@Bean
-    public DataSource dataSource() {
-        return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript(JdbcDaoImpl.DEFAULT_USER_SCHEMA_DDL_LOCATION)
-                .build();
-    }*/
-
-    /*@Bean
-    public UserDetailsManager users(DataSource dataSource) {
-        UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("user123"))
-                .roles("USER")
-                .build();
-
-        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-        jdbcUserDetailsManager.createUser(user);
-
-        return jdbcUserDetailsManager;
-    }*/
+    // 2. H2 콘솔은 켜져있을때만 외벽 무시
+    @Bean
+    @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
+    public WebSecurityCustomizer h2WebSecurityCustomizer(){
+        return web -> web.ignoring()
+                .requestMatchers(PathRequest.toH2Console());  // h2 database 경로 외벽 차원에서 무시
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

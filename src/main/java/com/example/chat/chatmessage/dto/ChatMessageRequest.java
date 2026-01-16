@@ -1,4 +1,4 @@
-package com.example.chat.channel.dto;
+package com.example.chat.chatmessage.dto;
 
 import lombok.Getter;
 

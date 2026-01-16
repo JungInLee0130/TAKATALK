@@ -136,7 +136,7 @@ public class UserController {
     }*/
 
     @GetMapping("/profile")
-    public ResponseEntity<UserProfileResponse> getSiteUserInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<UserProfileResponse> getUserProfileInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
         UserProfileResponse response = userService.getSiteUserProfileInfo(userDetails.getId());
         return ResponseEntity.ok(response);
     }

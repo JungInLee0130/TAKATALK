@@ -1,0 +1,27 @@
+server:
+  port: 9000
+
+spring:
+  config:
+    import: optional:env-dev.yml
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/takatalk # 도커설정 포트, DB이름 확인하기
+    username: ${MARIADB_USER} # 도커에 설정한 username, password
+    password: ${MARIADB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update # 처음엔 update
+    properties:
+      hibernate:
+        #show_sql: true
+    database-platform: org.hibernate.dialect.MariaDBDialect
+
+
+logging:
+  level:
+    com.example.chat: info
+    #org.hibernate.SQL: debug
+

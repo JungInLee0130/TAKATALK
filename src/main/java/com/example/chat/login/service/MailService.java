@@ -14,6 +14,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
@@ -22,6 +23,7 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MailService {
     private final JavaMailSender javaMailSender;
 
@@ -42,6 +44,7 @@ public class MailService {
 
     @Timer
     @Async
+    @Transactional
     public void sendChangePasswordMail(String resetToken, SiteUser siteUser) {
         MimeMessage message = createChangePasswordMail(resetToken, siteUser);
         javaMailSender.send(message);

@@ -286,8 +286,6 @@ function uploadFile() {
 /* 사용자 : 서버 참여*/
 async function joinServer() {
     const inviteCode = document.getElementById("inviteCodeInput").value.trim();
-    //const inviteCode = $("#inviteCodeInput").val().trim();
-
     if (!inviteCode) {
         alert("초대코드를 입력하세요.");
         return;
@@ -318,10 +316,9 @@ export function createCategory(groupId) {
 
     $.ajax({
         type: 'POST',
-        url: `/category/create`,
+        url: `/group/${groupId}/category/create`,
         contentType: 'application/json',
         data: JSON.stringify({
-            groupId : groupId,
             categoryName : categoryName,
             isSecret : isSecret ? isSecret.checked : false
         }),
@@ -367,7 +364,7 @@ export function createChannel(groupId, categoryId) {
 
     $.ajax({
         type: "POST",
-        url: "/channel/create",
+        url: "/group/{groupId}/channel/create",
         contentType: "application/Json",
         data: JSON.stringify(requestBodyData),
         statusCode : {

@@ -1,11 +1,12 @@
-package com.example.chat.channel.service;
+package com.example.chat.chatmessage.service;
 
-import com.example.chat.channel.domain.ChatMessageType;
-import com.example.chat.channel.dto.ChatMessageRequest;
-import com.example.chat.channel.dto.ChatMessageResponse;
+import com.example.chat.channel.service.ChannelService;
+import com.example.chat.chatmessage.domain.ChatMessageType;
+import com.example.chat.chatmessage.dto.ChatMessageRequest;
+import com.example.chat.chatmessage.dto.ChatMessageResponse;
 import com.example.chat.channel.entity.Channel;
-import com.example.chat.channel.entity.ChatMessage;
-import com.example.chat.channel.repository.ChatMessageRepository;
+import com.example.chat.chatmessage.entity.ChatMessage;
+import com.example.chat.chatmessage.repository.ChatMessageRepository;
 import com.example.chat.user.entity.SiteUser;
 import com.example.chat.user.service.CustomUserDetails;
 import com.example.chat.user.service.UserService;

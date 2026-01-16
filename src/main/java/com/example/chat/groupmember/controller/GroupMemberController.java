@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/groupmember")
+@RequestMapping("/group-member")
 public class GroupMemberController {
     private final GroupMemberService groupMemberService;
 
@@ -21,10 +21,10 @@ public class GroupMemberController {
      * 그룹 초대
      * */
     @PostMapping("/join")
-    public ResponseEntity<String> joinGroup(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public ResponseEntity<Void> joinGroup(@AuthenticationPrincipal CustomUserDetails userDetails,
                                        @RequestBody GroupJoinRequest request) {
         groupMemberService.joinGroup(request.getInviteCode(), userDetails.getId());
-        return ResponseEntity.ok("SUCCESS");
+        return ResponseEntity.ok().build();
     }
 
     /*@GetMapping("/invite-channel")

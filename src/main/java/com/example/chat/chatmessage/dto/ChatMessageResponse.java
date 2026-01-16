@@ -1,7 +1,7 @@
-package com.example.chat.channel.dto;
+package com.example.chat.chatmessage.dto;
 
-import com.example.chat.channel.domain.ChatMessageType;
-import com.example.chat.channel.entity.ChatMessage;
+import com.example.chat.chatmessage.domain.ChatMessageType;
+import com.example.chat.chatmessage.entity.ChatMessage;
 import com.example.chat.global.file.FileUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;

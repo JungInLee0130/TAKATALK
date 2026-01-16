@@ -49,10 +49,10 @@ public class GroupMember extends BaseTimeEntity {
                 .build();
     }
 
-    public void validateManagerRole(GroupRole role) {
-        if (role != GroupRole.OWNER
-                && role != GroupRole.ADMIN) {
-            throw new CustomException(ErrorCode.GROUP_PERMISSION_DENIED);
+    // GROUPMEMBER.OWNER && ADMIN 체크
+    public void validateManagerRole() {
+        if (!this.role.hasPermission(GroupRole.OWNER)) { // OWNER 권한이 아니면 : 권한없음
+            throw new CustomException(ErrorCode.GROUP_MEMBER_PERMISSION_DENIED);
         }
     }
 }
