@@ -1,6 +1,7 @@
-package com.example.chat.channel.entity;
+package com.example.chat.chatmessage.entity;
 
-import com.example.chat.channel.domain.ChatMessageType;
+import com.example.chat.channel.entity.Channel;
+import com.example.chat.chatmessage.domain.ChatMessageType;
 import com.example.chat.global.auditing.BaseTimeEntity;
 import com.example.chat.user.entity.SiteUser;
 import jakarta.persistence.*;

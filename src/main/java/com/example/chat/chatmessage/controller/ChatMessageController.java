@@ -1,8 +1,8 @@
-package com.example.chat.channel.controller;
+package com.example.chat.chatmessage.controller;
 
-import com.example.chat.channel.dto.ChatMessageRequest;
-import com.example.chat.channel.dto.ChatMessageResponse;
-import com.example.chat.channel.service.ChatMessageService;
+import com.example.chat.chatmessage.dto.ChatMessageRequest;
+import com.example.chat.chatmessage.dto.ChatMessageResponse;
+import com.example.chat.chatmessage.service.ChatMessageService;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.user.service.CustomUserDetails;

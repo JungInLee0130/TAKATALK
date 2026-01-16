@@ -1,6 +1,6 @@
-package com.example.chat.channel.repository;
+package com.example.chat.chatmessage.repository;
 
-import com.example.chat.channel.entity.ChatMessage;
+import com.example.chat.chatmessage.entity.ChatMessage;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;

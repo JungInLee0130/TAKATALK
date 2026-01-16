@@ -1,4 +1,4 @@
-package com.example.chat.channel.domain;
+package com.example.chat.chatmessage.domain;
 
 public enum ChatMessageType {
     TALK,
