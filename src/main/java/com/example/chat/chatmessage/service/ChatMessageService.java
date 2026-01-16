@@ -23,20 +23,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ChatMessageService {
 
     private final ChatMessageRepository chatMessageRepository;
     private final ChannelService channelService;
     private final UserService userService;
-
-    public ChatMessageResponse save(CustomUserDetails userDetails, ChatMessageRequest request) {
-        Channel channel = channelService.findById(request.getChannelId()); // 중간에 누군가가 채널을 삭제할수있기때문에 직접 불러와야함.
-        SiteUser siteUser = userService.findById(userDetails.getId());
-
-        ChatMessage chatMessage = ChatMessage.create(request.getContent(), channel, siteUser, ChatMessageType.TALK);
-        ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
-        return ChatMessageResponse.from(savedMessage);
-    }
 
     public List<ChatMessageResponse> getOldMessage(Long channelId, Long lastMessageId) {
         Pageable pageable = PageRequest.of(0, 20);

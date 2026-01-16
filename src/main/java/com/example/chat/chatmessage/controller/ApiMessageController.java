@@ -13,21 +13,27 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class ChatMessageController {
-    private final ChatMessageService chatMessageService;
+public class ApiMessageController {
+    private final SimpMessagingTemplate messagingTemplate;
+    private final MessageService messageResponse;
 
-    @GetMapping("/chatmessage/history/{channelId}")
-    @ResponseBody
-    public List<ChatMessageResponse> getChatHistory(
-            @PathVariable(name = "channelId") Long channelId,
-            @RequestParam(required = false) Long lastMessageId) {
-        return chatMessageService.getOldMessage(channelId, lastMessageId);
+    @MessageMapping("/chatmessage/save")
+    public void save(Principal principal,
+                     @Payload ChatMessageRequest request){
+        if (principal == null) {
+            throw new CustomException(ErrorCode.SESSION_INVALID_ERROR); // 세션만료
+        }
+
+        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
+        CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+
+        ChatMessageResponse response = messageResponse.save(userDetails, request);
+        messagingTemplate.convertAndSend("/sub/channel/" + request.getChannelId(), response);
     }
 }
