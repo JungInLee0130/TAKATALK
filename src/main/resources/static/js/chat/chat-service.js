@@ -11,7 +11,7 @@ export const ChatService = {
     },
 
     async joinGroup(groupId, inviteCode) {
-        const response = axios.post(`/group-member/join`, {
+        const response = await axios.post(`/group-member/join`, {
             inviteCode: inviteCode
         });
         return response.data;

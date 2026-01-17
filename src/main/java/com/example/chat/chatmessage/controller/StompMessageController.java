@@ -2,8 +2,7 @@ package com.example.chat.chatmessage.controller;
 
 import com.example.chat.chatmessage.dto.ChatMessageRequest;
 import com.example.chat.chatmessage.dto.ChatMessageResponse;
-import com.example.chat.chatmessage.service.ChatMessageService;
-import com.example.chat.chatmessage.service.MessageService;
+import com.example.chat.chatmessage.service.StompMessageService;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.user.service.CustomUserDetails;
@@ -13,15 +12,14 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
-public class ApiMessageController {
+public class StompMessageController {
     private final SimpMessagingTemplate messagingTemplate;
-    private final MessageService messageResponse;
+    private final StompMessageService stompMessageService;
 
     @MessageMapping("/chatmessage/save")
     public void save(Principal principal,
@@ -33,7 +31,7 @@ public class ApiMessageController {
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
         CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
 
-        ChatMessageResponse response = messageResponse.save(userDetails, request);
+        ChatMessageResponse response = stompMessageService.save(userDetails, request);
         messagingTemplate.convertAndSend("/sub/channel/" + request.getChannelId(), response);
     }
 }

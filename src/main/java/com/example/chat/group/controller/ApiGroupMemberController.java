@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiGroupMemberController {
     private final GroupMemberService groupMemberService;
 
-    @Operation(summary = "그룹 멤버로 참여 (GROUPMEMBER_ROLE : USER)", description = "초대 코드를 입력하여 그룹 멤버로 참여합니다.")
+    @Operation(summary = "그룹 멤버로 참여", description = "초대 코드를 입력하여 그룹 멤버로 참여합니다.")
     @PostMapping("/join")
     public ResponseEntity<Void> joinGroup(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @Valid @RequestBody GroupJoinRequest request) {

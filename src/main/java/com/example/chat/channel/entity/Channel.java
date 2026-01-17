@@ -43,7 +43,7 @@ public class Channel {
     @JoinColumn(name = "category_id", nullable = true)
     private Category category;
 
-    @Column(name = "is_deleted")
+    @Column(name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean isDeleted = false;
 
     @Builder

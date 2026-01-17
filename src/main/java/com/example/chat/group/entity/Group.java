@@ -31,7 +31,7 @@ public class Group {
     @Column(unique = true)
     private String inviteCode;  // 서버별 고유 초대코드
 
-    @Column(name = "is_deleted")
+    @Column(name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isDeleted = false;
 
     @Builder

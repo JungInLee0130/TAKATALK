@@ -1,21 +1,14 @@
 package com.example.chat.chatmessage.controller;
 
-import com.example.chat.chatmessage.dto.ChatMessageRequest;
 import com.example.chat.chatmessage.dto.ChatMessageResponse;
 import com.example.chat.chatmessage.service.ChatMessageService;
-import com.example.chat.chatmessage.service.MessageService;
-import com.example.chat.global.exception.CustomException;
-import com.example.chat.global.exception.ErrorCode;
-import com.example.chat.user.service.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.security.Principal;
 import java.util.List;
 
 @Controller

@@ -18,7 +18,6 @@ public class ApiChatMessageController {
 
     @Operation(summary = "채팅 내역 조회", description = "특정 채널의 과거 메시지를 무한 스크롤(slice)로 가져옵니다.")
     @GetMapping("/history")
-    @ResponseBody
     public List<ChatMessageResponse> getChatHistory(
             @PathVariable(name = "channelId") Long channelId,
             @RequestParam(required = false) Long lastMessageId) {

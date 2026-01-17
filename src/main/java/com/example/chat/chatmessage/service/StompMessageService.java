@@ -12,14 +12,16 @@ import com.example.chat.user.service.CustomUserDetails;
 import com.example.chat.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class MessageService {
+public class StompMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final ChannelService channelService;
     private final UserService userService;
-    
+
+    @Transactional
     public ChatMessageResponse save(CustomUserDetails userDetails, ChatMessageRequest request) {
         Channel channel = channelService.findById(request.getChannelId()); // 중간에 누군가가 채널을 삭제할수있기때문에 직접 불러와야함.
         SiteUser siteUser = userService.findById(userDetails.getId());

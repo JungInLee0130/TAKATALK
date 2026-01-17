@@ -12,28 +12,14 @@ SECURITY_USERNAME: test_admin
 SECURITY_PASSWORD: test_password
 UPLOAD_DIR: ./test-uploads
 
-# 2. 테스트 전용 설정
-spring:
-  application:
-    name: chat-test
 
-  #DB
-  #h2 database
+spring:
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:testdb;MODE=MySQL
-
-  # 메인과 다르게 동작할때가 많아서 명시
   jpa:
     hibernate:
-      ddl-auto: create-drop   # 테스트 환경에서 drop
-    show-sql: true            # 콘솔에 SQL 출력 (system.println 으로 출력되므로 운영단계에서는 쓰지않는다.)
-    properties:
-      hibernate:
-        format_sql: true      # 가독성좋게 포맷팅
-        jdbc:
-          batch_size: 50      # 한번에 전송할수있는 SQL문의 개수 (일괄처리)
-        order_inserts: true
+      ddl-auto: create-drop
     database-platform: org.hibernate.dialect.H2Dialect
 
   h2:
@@ -41,11 +27,8 @@ spring:
       enabled: true
       path: /h2-console
 
-  messages:
-    encoding: UTF-8
-    basename: errors, messages
-
-# loging level
 logging:
   level:
-    com.example.chat : debug
+    #com.example.chat : debug
+    org.hibernate.sql: debug
+

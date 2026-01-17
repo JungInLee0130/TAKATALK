@@ -34,7 +34,7 @@ public class Category {
     @ToString.Exclude
     private List<Channel> channels = new ArrayList<>(); // 연관관계라서 DB열에는 포함안됨.
 
-    @Column(name = "is_deleted")
+    @Column(name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean isDeleted = false;
 
     @Builder
