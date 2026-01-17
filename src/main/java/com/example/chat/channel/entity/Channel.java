@@ -44,7 +44,7 @@ public class Channel {
     private Category category;
 
     @Column(name = "is_deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 
     @Builder
     private Channel(String name, ChannelType type, Boolean isSecret, Group group, Category category) {

@@ -12,7 +12,7 @@ import java.util.List;
 @Tag(name = "ChatMessage Api", description = "채팅메시지 관련 Api")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/channel/{channelId}/chatMessage")
+@RequestMapping("/api/v1/channel/{channelId}/chatmessage")
 public class ApiChatMessageController {
     private final ChatMessageService chatMessageService;
 

@@ -30,5 +30,5 @@ spring:
 logging:
   level:
     #com.example.chat : debug
-    org.hibernate.sql: debug
+    org.hibernate.SQL: debug
 
