@@ -63,7 +63,8 @@ public class ChannelController {
     * 채널 목록
     * */
     @GetMapping("/list")
-    public List<ChannelResponse> getChannels(Long groupId) {
+    @ResponseBody
+    public List<ChannelResponse> getChannels(@PathVariable(name = "groupId") Long groupId) {
         return channelService.getChannels(groupId);
     }
 }

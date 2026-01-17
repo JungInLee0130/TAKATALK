@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const ChatService = {
     async getOldMessage(channelId, firstMessageId) {
-        const response = await axios.get(`/chatmessage/history/${channelId}`, {
+        const response = await axios.get(`/api/v1/channel/${channelId}/chatmessage/history`, {
             params : {
                 lastMessageId : firstMessageId
             }
@@ -11,7 +11,7 @@ export const ChatService = {
     },
 
     async joinGroup(groupId, inviteCode) {
-        const response = axios.post(`/group-member/join`, {
+        const response = await axios.post(`/group-member/join`, {
             inviteCode: inviteCode
         });
         return response.data;

@@ -25,7 +25,7 @@ public class ApiLoginController {
     private final TokenService tokenService;
     private final LoginService loginService;
 
-    @Operation(summary = "비밀번호 변경 메일보내기(비동기처리)", description = "비밀번호 재설정 메일을 보냅니다.")
+    @Operation(summary = "비밀번호 변경 메일보내기", description = "비밀번호 재설정 메일을 보냅니다.")
     @PostMapping("/send-change-password")
     public ResponseEntity<Void> sendChangePasswordMail(@Valid @RequestBody MailRequest request) {
         loginService.requestPasswordChange(request.mail());
