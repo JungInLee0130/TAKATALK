@@ -26,5 +26,27 @@ services:
       retries: 5 # 5번 연속 실패하면 'unhealthy' 상태로 표시
       start_period: 30s # 초기부팅시 30초 동안은 실패해도 봐줌. (초기화 시간 배려)
       # mariadb-admin 명령어로 접속이 가능한지 10초마다 확인한다.
+  controller:
+    image: ngrinder/controller:latest
+    container_name: ngrinder-controller
+    restart: always
+    mem_limit: 1g     # 메모리 제한 추가
+    ports:
+      - "${NGRINDER_PORT}:80"     # 웹 UI 접속포트
+      - "${NGRINDER_AGENT_PORT}:16001" # Agent 연결 포트
+      - "${NGRINDER_AGENT_TRANS_PORT}:12000-12010" # 테스트 실행시 컨트롤러-에이전트 통신 포트
+    volumes:
+      - ${NGRINDER_DATA_PATH}:/opt/ngrinder-controller
+  agent:  # 실제로 부하를 발생시키는 담당
+    image: ngrinder/agent:latest
+    container_name: ngrinder-agent
+    restart: always
+    mem_limit: 512m     # 메모리 제한 추가
+    environment:
+      - GRINDER_CONTROLLER_IP=ngrinder-controller
+      - GRINDER_CONTROLLER_PORT=${NGRINDER_AGENT_PORT}
+    links:
+      - controller
+
 
 

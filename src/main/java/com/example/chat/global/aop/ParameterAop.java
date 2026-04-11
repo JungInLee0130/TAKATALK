@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 
 @Aspect // AOP를 정의하는 클래스를 지칭함.
-@Component
+//@Component
 public class ParameterAop {
 
     private final ObjectMapper objectMapper;

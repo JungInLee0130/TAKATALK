@@ -7,6 +7,7 @@ import {ApiErrorHandler} from "./service.js";
 import {UiController} from "./ui-controller.js";
 import {GroupController} from "../group/group-controller.js";
 import {InviteController} from "../invite/invite-controller.js";
+import {SocketService} from "./socket-service.js";
 
 // [1] : 전역 변수
 // export 선언시 읽기전용(ES모듈 규칙)
@@ -21,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     GroupController.init();
     InviteController.init();
     ChatController.init();
+    // 웹소켓 연결
+    console.log("소켓을 연결합니다.");
+    SocketService.initConnection();
 });
 
 // [3] : 함수

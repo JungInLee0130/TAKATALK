@@ -1,6 +1,6 @@
 import {ChatService} from "./chat-service.js";
+import {ChatSocketService} from "./chat-socket-service.js";
 
-let stompClient = null;
 let chatBox = null;   // 초기값은 null로 설정
 let isFetching = false; // 채팅 내역 조회 상태 저장
 let firstMessageId = null;  // 채팅 상단 아이디 상태 저장
@@ -9,21 +9,23 @@ let currentChannelId = null;    // 채널입장시 파일 전역변수 저장
 /* 채널 접속시 channelId 할당*/
 // 이건 기본적으로 채널 접속시 실행되어야함.
 export const ChatController = {
+    currentSubscription: null,
     // 1. 처음 DOM 생성시 : 한번만 실행
     init() {
         /* 채팅 메시지 전송 */
+        // 전송버튼 클릭시
         const mainChatWrapper = document.getElementById("mainChatWrapper");
         mainChatWrapper.addEventListener('click', event => {
-            /* 1. 전송버튼 클릭시 */
             if (event.target.closest("#sendMsgBtn")) {
-                sendMessage(currentChannelId);  // 클릭되는 시점에 추가가능
+                handleSendMessage();
             }
         })
+        // chatInput 엔터 클릭시
         mainChatWrapper.addEventListener('keydown', event => {
             if (event.target.closest("#chatInput")) {
-                /* 2. chatInput 엔터 클릭시 */
                 if (event.key === "Enter") {
-                    sendMessage(currentChannelId);
+                    event.preventDefault();
+                    handleSendMessage();
                 }
             }
         })
@@ -36,19 +38,16 @@ export const ChatController = {
     },
     // 2. 채널 접속시
     enterChannel(channelId) {
+        if (this.currentSubscription) {
+            this.currentSubscription.unsubscribe();
+        }
         ChatController.resetChatState(channelId);
         chatBox = document.getElementById('chatBox');
         if (chatBox) {
             chatBox.scrollTop = chatBox.scrollHeight; // 스크롤 맨 아래로
         }
-
-        // 소켓 연결
-        if (channelId) {
-            console.log("채널에 접속하여 소켓을 연결합니다. ID : ", channelId);
-            connect(channelId);
-        } else {
-            console.log("현재 선택된 채널이 없습니다.");
-        }
+        // 구독
+        this.currentSubscription = ChatSocketService.subscribeChannel(channelId, chatHandler);
     },
     resetChatState(channelId) {
         currentChannelId = channelId;
@@ -58,17 +57,25 @@ export const ChatController = {
     }
 }
 
+/* inputBox 메시지 전송 처리 */
+const handleSendMessage = () => {
+    const inputBox = document.getElementById("chatInput");
+    ChatSocketService.sendMessage(currentChannelId, inputBox.value);  // 클릭되는 시점에 추가가능
+    inputBox.value = ''; // inputBox 초기화
+    inputBox.focus();
+}
+
 /* 무한 스크롤 로직 */
-const handleScroll = function (currentChannelId) {
+const handleScroll = async (currentChannelId) => {
     // scroll이 위쪽 끝에서 10px 아래에 도달했을때
     if (chatBox.scrollTop <= 10) {
         console.log("현재 스크롤 위치 : ", chatBox.scrollTop);
-        fetchOldMessages(currentChannelId); // message 가져오기
+        await fetchOldMessages(currentChannelId); // message 가져오기
     }
 }
 
 /* 이전 메시지 가져오기 */
-async function fetchOldMessages(currentChannelId) {
+const fetchOldMessages = async (currentChannelId) => {
     console.log("isFetching : ", isFetching);
     console.log("currentChannelId : ", currentChannelId);
     console.log("상단 ID: ", firstMessageId);
@@ -129,7 +136,7 @@ async function fetchOldMessages(currentChannelId) {
     }
 }
 
-function renderOldMessages(data) {
+const renderOldMessages = (data) => {
     /* type: TALK + ENTER*/
     let oldMessage;
 
@@ -165,36 +172,24 @@ function renderOldMessages(data) {
     $("#chatBoxBody").prepend(oldMessage);
 }
 
-/* 소켓 연결 함수 */
-function connect(currentChannelId) {
-    const socket = new SockJS('/ws-stomp');
-    stompClient = Stomp.over(socket);
-
-    stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
-
-        // 1. 구독
-        stompClient.subscribe('/sub/channel/' + currentChannelId, function (response) {
-            const message = JSON.parse(response.body);
-            if (message.type === "ENTER") {
-                renderSystemMessage(message);
-            } else if (message.type === "TALK"){
-                renderMessage(message);
-            } else if (message.type === "EXIT") {
-                //renderSystemMessage(message);
-            }
-        });
-
-        // 2. [추가] 접속자 목록 구독
-        stompClient.subscribe('/sub/channel/' + currentChannelId + '/visitors', function (response) {
-            const visitors = JSON.parse(response.body);
-            renderVisitorList(visitors);
-            updateVisitorCount(visitors.length);
-        })
-    }, function (error) {
-        console.log('Error: ' + error);
+export const chatHandler = {
+    onMessageReceived(message) {
+        if (message.type === "ENTER") {
+            renderSystemMessage(message);
+        } else if (message.type === "TALK"){
+            renderMessage(message);
+        } else if (message.type === "EXIT") {
+            //renderSystemMessage(message);
+        }
+    },
+    onVisitorsUpdated(visitors) {
+        renderVisitorList(visitors);
+        updateVisitorCount(visitors.length);
+    },
+    onError(error) {
+        console.error('socker error : ', error);
         // status == 401 : window.location.href = "/login"
-    });
+    }
 }
 
 function updateVisitorCount(count) {
@@ -264,141 +259,19 @@ function renderMessage(data) {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-/* sendMessage 함수 */
-function sendMessage(currentChannelId) {
-    const inputBox = document.getElementById("chatInput");
-    if (!inputBox.value || !stompClient) return;
-
-    // payload
-    const chatRequest = {
-        channelId : currentChannelId,
-        content : inputBox.value,
-    }
-    stompClient.send("/pub/chatmessage/save", {}, JSON.stringify(chatRequest));
-    /*inputBox 초기화*/
-    inputBox.value = '';
-}
-
 /* 파일 업로드 함수 */
 function uploadFile() {
     alert('upload!')
 }
-/* 사용자 : 서버 참여*/
-async function joinServer() {
-    const inviteCode = document.getElementById("inviteCodeInput").value.trim();
-    if (!inviteCode) {
-        alert("초대코드를 입력하세요.");
-        return;
-    }
-
-    try {
-        const response = await ChatService.joinGroup(inviteCode);
-        // created URI
-        alert(response?.message);
-        location.reload();  // 성공시 새로고침하여 왼쪽바에 새 서버 아이콘 표시
-    } catch (error) {
-        const status = error?.response?.status;
-        const errorMsg = error?.response?.data?.message || "가입에 실패했습니다.";
-        console.error("서버 참여 에러 : ", status, errorMsg);
-        alert(errorMsg);
-    }
-}
-
-/* 카테고리 생성 */
-export function createCategory(groupId) {
-    const categoryName = document.getElementById("categoryNameInput").value;
-    const isSecret = document.getElementById("isSecretCategoryToggle");
-
-    if (!categoryName) {
-        alert("비어있는 항목이 있습니다!");
-        return;
-    }
-
-    $.ajax({
-        type: 'POST',
-        url: `/group/${groupId}/category/create`,
-        contentType: 'application/json',
-        data: JSON.stringify({
-            categoryName : categoryName,
-            isSecret : isSecret ? isSecret.checked : false
-        }),
-        statusCode: {
-            201 : function (data,textStatus,jqXHR) {
-                console.log(jqXHR);
-                const newLocation = jqXHR.getResponseHeader('Location');
-                if (newLocation) {
-                    window.location.href = newLocation;
-                } else {
-                    alert("location is null");
-                }
-            },
-        },
-        success : function () {
-            console.log("category create success");
-        },
-        error : function (jqXHR) {
-            console.log(jqXHR.status);
-            console.log(jqXHR);
-        }
-    })
-}
-
-/*채널 생성*/
-export function createChannel(groupId, categoryId) {
-    const channelName = document.getElementById("channelNameInput").value;
-    const channelType = document.querySelector('input[name = "channelType"]:checked').value;
-    const isSecret = document.getElementById("isSecretToggle");
-
-    if (!channelName || !channelType) { // isSecret은 default = false
-        alert("비어있는 항목이 있습니다!");
-        return;
-    }
-    /* requestbody */
-    const requestBodyData = {
-        groupId : groupId,
-        categoryId : categoryId,    // currentCategoryId ? categories.id : null
-        channelName : channelName,
-        channelType : channelType,
-        isSecret : isSecret ? isSecret.checked : false
-    }
-
-    $.ajax({
-        type: "POST",
-        url: "/group/{groupId}/channel/create",
-        contentType: "application/Json",
-        data: JSON.stringify(requestBodyData),
-        statusCode : {
-            201 : function (data,textStatus,jqXHR) {
-                /*let newLocation = jqXHR.getResponseHeader('Location');
-                if (newLocation) {
-                    console.log(newLocation);
-                    window.location.href = newLocation;
-                } else {
-                    console.log("Location 헤더를 찾을수 없습니다.")
-                }*/
-                window.location.reload();
-            }
-        },
-        success: function (response) {
-            if (response === "SUCCESS") {
-                console.log(response);
-            }
-        },
-        error : function (request, error) {
-            // parameter id == null 일때 예외처리
-            console.log(request);
-        }
-    });
-}
 
 /* 환영(초기) 메시지를 보이게하는함수 */
-function visibleWelcomeMessage() {
+const visibleWelcomeMessage = () => {
     chatBox.removeEventListener('scroll', handleScroll);
     document.querySelector('.chatbox-welcome-wrapper').style.display = "flex";
 }
 
 /* 채널 접속시 처음 채팅 메시지 출력 */
-export function initChatArea(htmlResponse) {
+export const initChatArea = (htmlResponse) => {
     // fragment의 부모에 붙이기
     const mainChatWrapper = document.getElementById("mainChatWrapper");
 

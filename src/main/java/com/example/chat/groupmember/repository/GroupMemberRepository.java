@@ -30,8 +30,8 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> 
     @Query("select m " +
             "from GroupMember m " +
             "inner join fetch m.group g " +
-            "inner join fetch m.siteUser u " +  // DTO.from에서 필요함
-            "inner join Channel ch " +  // 채널과 그룹을 논리적 연결
+            "inner join fetch m.siteUser u " +
+            "inner join Channel ch " +
             "on ch.group.id = g.id " +
             "where ch.id = :channelId and u.id = :siteUserId")
     Optional<GroupMember> getGroupMemberWithChannelId(@Param("siteUserId") Long siteUserId, @Param("channelId") Long channelId);

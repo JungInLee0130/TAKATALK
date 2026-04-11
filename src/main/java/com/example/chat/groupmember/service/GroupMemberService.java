@@ -1,6 +1,8 @@
 package com.example.chat.groupmember.service;
 
 import com.example.chat.channel.dto.InviteChannelResponse;
+import com.example.chat.channel.entity.Channel;
+import com.example.chat.channel.repository.ChannelRepository;
 import com.example.chat.friends.FriendsResponse;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
@@ -57,7 +59,7 @@ public class GroupMemberService {
         GroupMember groupMember = GroupMember.create(siteUser, group, role);
         groupMemberRepository.save(groupMember);
     }
-    
+
     // 채널ID, 유저 ID를 이용하여 그룹멤버 찾기
     public GroupMember getGroupMemberWithChannelId(Long siteUserId, Long channelId) {
         return groupMemberRepository.getGroupMemberWithChannelId(siteUserId, channelId)

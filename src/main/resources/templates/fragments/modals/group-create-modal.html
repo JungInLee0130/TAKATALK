@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <div th:fragment="groupModal" class="modal" id="groupFormModal">
+  <div th:fragment="groupFormModal" class="modal" id="groupFormModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 id="modalTitle" class="modal-title">서버 커스터마이즈 하기</h2>
+        <h2 id="modalTitle" class="modal-title">서버 생성하기</h2>
         <div class="modal-close-btn" data-close="modal">
           <svg width="24" height="24" viewBox="0 0 24 24">
             <path fill="currentColor"
@@ -33,7 +33,7 @@
               </svg>
             </div>
             <!-- 이미지 미리보기용 (이미지 선택 시 보임) -->
-            <img id="imagePreview" src="" style="display: none;">
+            <img id="imagePreview" class="image-preview" src="">
           </div>
         </div>
 

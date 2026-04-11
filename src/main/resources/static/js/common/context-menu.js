@@ -12,11 +12,11 @@ export const ContextMenu = {
                 console.log(groupTarget);
 
                 if (groupTarget) {
-                    selectedGroupId = setSelectedGroupId(groupTarget.getAttribute('data-group-id'));
+                    setSelectedGroupId(groupTarget.getAttribute('data-group-id'));
                     console.log("selectedGroupId : ", selectedGroupId);
                     toggleGroupMenu(true);
                 } else {
-                    selectedGroupId = null;
+                    setSelectedGroupId(null);
                     toggleGroupMenu(false);
                 }
             })

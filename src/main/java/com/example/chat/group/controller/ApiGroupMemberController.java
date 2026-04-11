@@ -1,6 +1,7 @@
 package com.example.chat.group.controller;
 
 import com.example.chat.group.dto.GroupJoinRequest;
+import com.example.chat.groupmember.entity.GroupMember;
 import com.example.chat.groupmember.service.GroupMemberService;
 import com.example.chat.user.service.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,10 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "GroupMember Api", description = "그룹멤버와 관련된 Api")
 @RestController
@@ -28,4 +26,11 @@ public class ApiGroupMemberController {
         groupMemberService.joinGroup(request.getInviteCode(), userDetails.getId());
         return ResponseEntity.ok().build();
     }
+
+    /*@GetMapping("/{channelId}")
+    public ResponseEntity<GroupMember> getGroupMemberWithChannelId(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                   @PathVariable(name = "channelId") Long channelId) {
+        GroupMember groupMember = groupMemberService.getGroupMemberWithChannelId(userDetails.getId(), channelId);
+        return ResponseEntity.ok(groupMember);
+    }*/
 }

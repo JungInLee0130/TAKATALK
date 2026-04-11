@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Getter
 public class ErrorResponse {
     private String message;
-    private HttpStatus status;
+    private int status;
     private List<FieldError> errors;
     private String code;
 
@@ -25,10 +25,18 @@ public class ErrorResponse {
         this.errors = errors;
     }
 
+
     private ErrorResponse(final ErrorCode errorCode) {
         this.message = errorCode.getMessage();
         this.code = errorCode.getCode();
         this.status = errorCode.getStatus();
+        this.errors = new ArrayList<>();
+    }
+
+    // websocket errorresponse
+    private ErrorResponse(String message, String code) {
+        this.message = message;
+        this.code = code;
         this.errors = new ArrayList<>();
     }
 
@@ -43,6 +51,9 @@ public class ErrorResponse {
 
     public static ErrorResponse of(final ErrorCode code, final List<FieldError> errors) {
         return new ErrorResponse(code, errors);
+    }
+    public static ErrorResponse of(String code, String message) {
+        return new ErrorResponse(code, message);
     }
 
     @Getter

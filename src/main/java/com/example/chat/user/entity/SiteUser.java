@@ -30,6 +30,10 @@ public class SiteUser extends BaseTimeEntity {
     @Column(unique = true)
     private String email;
 
+    private String provider; // LOCAL, KAKAO 등
+
+    private String providerId; // 소셜 서비스의 고유 ID
+
     private LocalDate birthday;
 
     @Enumerated(EnumType.STRING)
@@ -41,11 +45,13 @@ public class SiteUser extends BaseTimeEntity {
     // 생성자 : 대입만. 외부 호출 차단
     @Builder
     private SiteUser(String nickname, String username, String password, String email
-            , LocalDate birthday, SiteUserRole role, String profile) {
+            , String provider, String providerId, LocalDate birthday, SiteUserRole role, String profile) {
         this.nickname = nickname;
         this.username = username;
         this.password = password;
         this.email = email;
+        this.provider = provider;
+        this.providerId = providerId;
         this.birthday = birthday;
         this.role = role;
         this.profile = profile;
@@ -68,8 +74,24 @@ public class SiteUser extends BaseTimeEntity {
                 .username(username)
                 .nickname(nickname)
                 .email(email)
-                .password(passwordEncoder.encode(rawPassword))
+                .password(passwordEncoder != null && rawPassword != null ? passwordEncoder.encode(rawPassword) : null)
+                .provider("LOCAL")
                 .birthday(birthDay)
+                .role(SiteUserRole.USER)
+                .profile(profile)
+                .build();
+    }
+
+    // OAuth2 전용 생성 메서드
+    public static SiteUser createOAuth2(String username, String nickname, String email,
+                                        String provider, String providerId, String profile) {
+        return SiteUser.builder()
+                .username(username)
+                .nickname(nickname)
+                .email(email)
+                .password(null) // 소셜 로그인은 비밀번호 없음
+                .provider(provider)
+                .providerId(providerId)
                 .role(SiteUserRole.USER)
                 .profile(profile)
                 .build();

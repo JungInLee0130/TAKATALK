@@ -1,10 +1,10 @@
 import {
-    deleteGroup,
-    openCreateGroupModal,
-    openEditGroupModal,
+    deleteGroup, handleGroup,
     openInviteGroupModal,
     openInviteManageModal
 } from "../group/group-controller.js";
+import {GroupService} from "../group/group-service.js";
+import {selectedGroupId} from "./main.js";
 
 export const UiController = {
     init() {
@@ -29,8 +29,8 @@ export const UiController = {
         }
 
         /** 그룹 생성 + 아이콘 클릭시 **/
-        document.getElementById("GroupCreateBtn").addEventListener('click', (event) => {
-            openCreateGroupModal(); // 그룹 생성 모달 열기
+        document.getElementById("GroupCreateBtn").addEventListener('click', async (event) => {
+            openModal("groupCreateModal");
         })
 
         /** Modal 공통처리 **/
@@ -65,9 +65,13 @@ export const UiController = {
 
         /** context-menu 클릭시 **/
         /** groupContextMenu내 메뉴 클릭시 **/
-        document.getElementById("editGroupMenu").addEventListener('click', openEditGroupModal);
+        document.getElementById("editGroupMenu").addEventListener('click', async () => {
+            await openEditGroupModal();
+        });
         document.getElementById("deleteGroupMenu").addEventListener('click', deleteGroup);
-        document.getElementById("createGroupMenu").addEventListener('click', openCreateGroupModal);
+        document.getElementById("createGroupMenu").addEventListener('click', async () => {
+            await openCreateGroupModal();
+        })
         document.getElementById("joinGroupMenu").addEventListener('click', function () {
             openModal("inviteJoinModal");
         });
@@ -105,10 +109,49 @@ export function closeModal(element) {
         modal.style.display = "none";
     }
 }
-export function closeAllModals() {
+export const closeAllModals = () => {
     const modals = document.querySelectorAll('.modal');
     modals.forEach(modal => {
         modal.style.display = 'none';
     })
 }
 
+export const setCreateOrEditGroupEvent = (addEvent, removeEvent) => {
+    const createGroupBtn = document.getElementById("groupSubmitBtn");
+    // 그룹 생성
+    createGroupBtn.removeEventListener('click', removeEvent);
+    createGroupBtn.addEventListener('click', addEvent);
+}
+
+export const openCreateGroupModal = () => {
+    setCreateOrEditGroupEvent(handleGroup.createGroup, handleGroup.editGroup);
+    openModal("groupCreateModal");
+}
+
+// 그룹 편집 모달 UI
+export const openEditGroupModal = async () => {
+    try {
+        // 그룹 조회
+        const response = await GroupService.getGroupInfo(selectedGroupId);
+        setEditGroupUI(response, selectedGroupId);
+        openModal("groupFormModal"); // groupFormModal 열기
+    } catch (error) {
+        handleGroup.handleError(error, "그룹 단일 조회 실패")
+    }
+}
+
+const setEditGroupUI = (response, groupId) => {
+    // 1. 초기화
+    // 1-1. h2
+    document.getElementById("modalTitle").textContent = "서버 수정하기";
+    // 1-1. 그룹 이름
+    document.getElementById("groupNameInput").value = response.name;
+    // 1-3. 프로필
+    document.getElementById("imagePreview").style.display = "block";
+    document.getElementById("imagePreview").src = response.profile;
+    document.querySelector('.upload-content').style.visibility = "hidden";
+    document.querySelector('.plus-badge').style.display = "none";
+    const groupEditBtn = document.getElementById("groupSubmitBtn");
+    groupEditBtn.textContent = "수정하기";
+    setCreateOrEditGroupEvent(handleGroup.editGroup(groupId), handleGroup.createGroup);
+}

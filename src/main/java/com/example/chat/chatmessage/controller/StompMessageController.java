@@ -6,6 +6,7 @@ import com.example.chat.chatmessage.service.StompMessageService;
 import com.example.chat.global.exception.CustomException;
 import com.example.chat.global.exception.ErrorCode;
 import com.example.chat.user.service.CustomUserDetails;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -23,15 +24,14 @@ public class StompMessageController {
 
     @MessageMapping("/chatmessage/save")
     public void save(Principal principal,
-                     @Payload ChatMessageRequest request){
+                     @Valid @Payload ChatMessageRequest request){
         if (principal == null) {
             throw new CustomException(ErrorCode.SESSION_INVALID_ERROR); // 세션만료
         }
 
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) principal;
         CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
-
-        ChatMessageResponse response = stompMessageService.save(userDetails, request);
-        messagingTemplate.convertAndSend("/sub/channel/" + request.getChannelId(), response);
+        ChatMessageResponse response = stompMessageService.save(userDetails, request);  // 저장
+        messagingTemplate.convertAndSend("/sub/channel/" + request.getChannelId(), response);   // send
     }
 }

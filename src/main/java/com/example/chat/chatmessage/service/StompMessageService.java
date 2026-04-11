@@ -1,13 +1,16 @@
 package com.example.chat.chatmessage.service;
 
 import com.example.chat.channel.entity.Channel;
+import com.example.chat.channel.repository.ChannelRepository;
 import com.example.chat.channel.service.ChannelService;
 import com.example.chat.chatmessage.domain.ChatMessageType;
 import com.example.chat.chatmessage.dto.ChatMessageRequest;
 import com.example.chat.chatmessage.dto.ChatMessageResponse;
 import com.example.chat.chatmessage.entity.ChatMessage;
 import com.example.chat.chatmessage.repository.ChatMessageRepository;
+import com.example.chat.user.dto.UserResponse;
 import com.example.chat.user.entity.SiteUser;
+import com.example.chat.user.repository.UserRepository;
 import com.example.chat.user.service.CustomUserDetails;
 import com.example.chat.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,16 +21,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class StompMessageService {
     private final ChatMessageRepository chatMessageRepository;
-    private final ChannelService channelService;
-    private final UserService userService;
+    private final ChannelRepository channelRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public ChatMessageResponse save(CustomUserDetails userDetails, ChatMessageRequest request) {
-        Channel channel = channelService.findById(request.getChannelId()); // 중간에 누군가가 채널을 삭제할수있기때문에 직접 불러와야함.
-        SiteUser siteUser = userService.findById(userDetails.getId());
-
+        Channel channel = channelRepository.getReferenceById(request.getChannelId());
+        SiteUser siteUser = userRepository.getReferenceById(userDetails.getId());
         ChatMessage chatMessage = ChatMessage.create(request.getContent(), channel, siteUser, ChatMessageType.TALK);
-        ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
-        return ChatMessageResponse.from(savedMessage);
+        return ChatMessageResponse.from(chatMessageRepository.save(chatMessage));
     }
 }

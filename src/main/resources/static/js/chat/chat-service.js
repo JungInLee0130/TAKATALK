@@ -9,11 +9,4 @@ export const ChatService = {
         });
         return response.data;
     },
-
-    async joinGroup(groupId, inviteCode) {
-        const response = await axios.post(`/group-member/join`, {
-            inviteCode: inviteCode
-        });
-        return response.data;
-    }
 }

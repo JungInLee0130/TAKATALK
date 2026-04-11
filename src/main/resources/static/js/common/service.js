@@ -1,5 +1,5 @@
 export const ApiErrorHandler = {
-    handle: function (xhr) {
+    handle (xhr) {
         const errorResponse = xhr.responseJSON;
         let message = "알 수 없는 오류가 발생했습니다.";
 
@@ -27,7 +27,7 @@ export const ApiErrorHandler = {
     }
 }
 
-function handleAjaxError(jqXHR) {
+const handleAjaxError = (jqXHR) => {
     console.log(jqXHR.status, jqXHR);
 }
 

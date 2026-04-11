@@ -1,5 +1,6 @@
 package com.example.chat.group.controller;
 
+import com.example.chat.group.dto.GroupEditResponse;
 import com.example.chat.group.dto.GroupResponse;
 import com.example.chat.group.service.GroupService;
 import com.example.chat.group.dto.GroupFormRequest;
@@ -57,11 +58,11 @@ public class GroupController {
     * 그룹 수정
     * */
     @PatchMapping("/{groupId}")
-    public ResponseEntity<Void> editGroup(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public ResponseEntity<GroupEditResponse> editGroup(@AuthenticationPrincipal CustomUserDetails userDetails,
                                             @PathVariable(name = "groupId") Long groupId,
                                             @Valid GroupFormRequest request) throws IOException {
-        groupService.editGroup(groupId, request);
-        return ResponseEntity.created(URI.create("/group/access/" + groupId)).build();
+        GroupEditResponse response = groupService.editGroup(groupId, request);
+        return ResponseEntity.ok(response);
     }
 
     /*

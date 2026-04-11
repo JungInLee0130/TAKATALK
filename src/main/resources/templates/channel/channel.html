@@ -14,6 +14,11 @@
     }
   }
   </script>
+  <!--1. 외부 js 로직-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script> <!--SOCKJS-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script> <!--STOMP-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> <!--JQUERY, AJAX-->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!--AXIOS-->
   <title>channel</title>
 </head>
 <body>
@@ -44,7 +49,7 @@
   <div th:replace="~{fragments/modals/invite-modal :: inviteManageModal}"></div>
   <div th:replace="~{fragments/modals/invite-modal :: inviteGroupmodal}"></div>
   <!-- 그룹 생성 모달 -->
-  <div th:replace="~{fragments/modals/group-create-modal :: groupModal}"></div>
+  <div th:replace="~{fragments/modals/group-create-modal :: groupFormModal}"></div>
   <!-- 카테고리 생성 모달 -->
   <div th:replace="~{fragments/modals/category-create-modal :: categoryCreateModal}"></div>
   <!-- 채널 생성 모달 -->
@@ -54,11 +59,6 @@
   <!-- 채널 우클릭 이벤트 모달 -->
   <div th:replace="~{fragments/common/context-menu :: channelListContextMenu}"></div>
 </body>
-<!--1. 외부 js 로직-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script> <!--SOCKJS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script> <!--STOMP-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> <!--JQUERY, AJAX-->
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!--AXIOS-->
 <!--2. 타임리프 변수 선언-->
 <script th:inline="javascript">
   const currentGroupId = [[${currentGroup?.id}]];

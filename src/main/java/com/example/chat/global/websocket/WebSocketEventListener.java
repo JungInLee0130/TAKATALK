@@ -30,14 +30,20 @@ public class WebSocketEventListener {
     private final SimpMessageSendingOperations messagingTemplate;
 
     // 어떤 방에, 어떤 유저가 있는지 저장
-    // 멀티스레드 환경에서 안전하게 concurrentHashmap 사용
     private static final Map<Long, Set<GroupMemberResponse>> CHANNEL_USERS = new ConcurrentHashMap<>();
+
+    // 전체 온라인 유저 (SiteUserId -> Nickname)
+    private static final Map<Long, String> ONLINE_USERS = new ConcurrentHashMap<>();
 
     // 어떤 세션ID가 어떤 방을 보고있는지 저장(퇴장 처리용)
     private static final Map<String, Long> SESSION_CHANNEL = new ConcurrentHashMap<>();
 
+    // 세션ID -> 유저ID (전역 온라인 상태 해제용)
+    private static final Map<String, Long> SESSION_USER = new ConcurrentHashMap<>();
+
     private static final Pattern FIRST_SUBSCRIBE = Pattern.compile("/sub/channel/(\\d+)$");
     private static final Pattern VISITOR_REGEX = Pattern.compile("/sub/channel/(\\d+)/visitors$");
+    private static final Pattern GLOBAL_ONLINE_REGEX = Pattern.compile("/sub/global/online$");
     private final GroupMemberService groupMemberService;
 
     @EventListener
@@ -53,11 +59,19 @@ public class WebSocketEventListener {
             return;
         }
         
-        // 채팅방 구독이 아니면 무시
-        if (destination == null || !destination.startsWith("/sub/channel")) {
-            log.info("채팅방 구독이 아님.");
+        // 전역 온라인 상태 구독 처리
+        if (destination != null && destination.equals("/sub/global/online")) {
+            log.info("전역 온라인 상태 구독");
+            sendGlobalOnlineUsers();
             return;
         }
+
+        // 채팅방 구독이 아니면 무시
+        if (destination == null || !destination.startsWith("/sub/channel")) {
+            return;
+        }
+
+        // ... 기존 코드 (채널 구독 처리) ...
 
         // 이건 한번 들어왔을때 날리면됨. && groupmember가 아닐때
         Matcher firstSubscribe = FIRST_SUBSCRIBE.matcher(destination);
@@ -106,57 +120,67 @@ public class WebSocketEventListener {
     // 1. 연결 감지 (입장)
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        // 누가 들어왔는지 로그 찍어보기
-        log.info("유저가 서버와 소켓 연결을 맺음.");
+        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+        Principal user = headerAccessor.getUser();
+
+        if (user != null) {
+            UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) user;
+            CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
+
+            String sessionId = headerAccessor.getSessionId();
+            ONLINE_USERS.put(userDetails.getId(), userDetails.getNickname());
+            SESSION_USER.put(sessionId, userDetails.getId());
+
+            log.info("User Online: {} (ID: {})", userDetails.getNickname(), userDetails.getId());
+            sendGlobalOnlineUsers();
+        }
     }
 
     // 2. 연결 해제 감지 (퇴장)
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
-        // 누가 나갔는지 확인하고, 같은 방 사람들에게 "00님 나감" 알려주기
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
 
+        // 전역 온라인 목록에서 제거
+        Long userId = SESSION_USER.remove(sessionId);
+        if (userId != null) {
+            String nickname = ONLINE_USERS.remove(userId);
+            log.info("User Offline: {} (ID: {})", nickname, userId);
+            sendGlobalOnlineUsers();
+        }
+
+        // 기존 채널 방문자 목록 처리
         Long channelId = SESSION_CHANNEL.get(sessionId);
         if (channelId == null) {
-            log.info("채널 없음.");
             return;
         }
 
         Principal user = headerAccessor.getUser();
+        if (user != null) {
+            UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) user;
+            CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
 
-        if (user == null) {
-            log.info("세션 만료");
-            return;
-        }
+            GroupMemberResponse targetToRemove = GroupMemberResponse.builder()
+                    .siteUserId(userDetails.getId())
+                    .build();
 
-        UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) user;
-        CustomUserDetails userDetails = (CustomUserDetails) authenticationToken.getPrincipal();
-
-        GroupMemberResponse targetToRemove = GroupMemberResponse.builder()
-                .siteUserId(userDetails.getId())
-                .profile(null)
-                .nickname(null)
-                .build();
-
-        Set<GroupMemberResponse> visitors = CHANNEL_USERS.get(channelId);
-
-        if (visitors != null) {
-            boolean removed = visitors.remove(targetToRemove);
-
-            if (removed) {
-                log.info("User Left : {} -> Channel {}", userDetails.getNickname(), channelId);
-
-                sendVisitorDtosToChannel(channelId);
-
-                if (visitors.isEmpty()) {
-                    CHANNEL_USERS.remove(channelId);
+            Set<GroupMemberResponse> visitors = CHANNEL_USERS.get(channelId);
+            if (visitors != null) {
+                if (visitors.remove(targetToRemove)) {
+                    sendVisitorDtosToChannel(channelId);
+                    if (visitors.isEmpty()) {
+                        CHANNEL_USERS.remove(channelId);
+                    }
                 }
             }
         }
-
-        // 세션채널에서 세션아이디삭제
         SESSION_CHANNEL.remove(sessionId);
+    }
+
+    /* 전역 온라인 유저 명단 발송 */
+    private void sendGlobalOnlineUsers() {
+        messagingTemplate.convertAndSend("/sub/global/online", ONLINE_USERS.keySet());
     }
 
     /* 방문자 명단 구독자 전체에게 발송 */
